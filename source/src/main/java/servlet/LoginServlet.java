@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/* ---------- GET：ログイン画面へ ---------- */
-	@Override
+//	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet {
 	}
 
 	/* ---------- POST：認証処理 ---------- */
-	@Override
+//	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -54,7 +54,7 @@ public class LoginServlet extends HttpServlet {
 		if (ok) { // ===== ログイン成功 =====
 			HttpSession session = request.getSession();
 			session.setAttribute("id", new LoginUser(userId));
-			response.sendRedirect("HomeServlet");
+			response.sendRedirect("/webapp/HomeServlet");
 
 		} else { // ===== ログイン失敗 =====
 			request.setAttribute("result", new Result("ログイン失敗！", "ID またはパスワードが間違っています。", "/webapp/LoginServlet"));
