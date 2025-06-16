@@ -10,54 +10,55 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import dao.IdPwDAO;
-import dto.IdPw;
+import dao.UserDAO;
 import dto.LoginUser;
 import dto.Result;
+import dto.users;
 
 /**
- * Servlet implementation class LoginServlet
+ * ログイン画面表示＆認証 Servlet
  */
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	/* ---------- GET：ログイン画面へ ---------- */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// ログインページにフォワードする
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
 		dispatcher.forward(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	/* ---------- POST：認証処理 ---------- */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// リクエストパラメータを取得する
+
 		request.setCharacterEncoding("UTF-8");
-		String id = request.getParameter("id");
-		String pw = request.getParameter("pw");
 
-		// ログイン処理を行う
-		IdPwDAO iDao = new IdPwDAO();
-		if (iDao.isLoginOK(new IdPw(id, pw))) { // ログイン成功
-			// セッションスコープにIDを格納する
+		// フォーム name="id", name="pw"
+		String userId = request.getParameter("id");
+		String password = request.getParameter("pw");
+
+		// DTO に詰める（id と password だけ使う）
+		users dto = new users();
+		dto.setUser_id(userId);
+		dto.setPassword(password);
+
+		// 認証
+		UserDAO dao = new UserDAO();
+		boolean ok = dao.isLoginOK(dto);
+
+		if (ok) { // ===== ログイン成功 =====
 			HttpSession session = request.getSession();
-			session.setAttribute("id", new LoginUser(id));
+			session.setAttribute("id", new LoginUser(userId));
+			response.sendRedirect("HomeServlet");
 
-			// メニューサーブレットにリダイレクトする
-			response.sendRedirect("/webapp/MenuServlet");
-		} else { // ログイン失敗
-			// リクエストスコープに、タイトル、メッセージ、戻り先を格納する
-			request.setAttribute("result", new Result("ログイン失敗！", "IDまたはPWに間違いがあります。", "/webapp/LoginServlet"));
+		} else { // ===== ログイン失敗 =====
+			request.setAttribute("result", new Result("ログイン失敗！", "ID またはパスワードが間違っています。", "/webapp/LoginServlet"));
 
-			// 結果ページにフォワードする
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");
 			dispatcher.forward(request, response);
 		}
