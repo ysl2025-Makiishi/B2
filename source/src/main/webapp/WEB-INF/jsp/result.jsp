@@ -4,9 +4,9 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>名刺管理</title>
-<link rel="stylesheet" type="text/css" href="/webapp/css/style.css">
-<link rel="stylesheet" type="text/css" href="/webapp/css/result.css">
+<title>K-Manage</title>
+<link rel="stylesheet" href="<c:url value='/css/K-style.css' />">
+<link rel="stylesheet" href="<c:url value='/css/result.css' />">
 
 </head>
 <body>

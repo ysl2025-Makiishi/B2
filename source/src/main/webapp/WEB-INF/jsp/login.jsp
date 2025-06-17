@@ -25,7 +25,7 @@
 
     <!-- ===== ログインフォーム ===== -->
     <h2 class="page-title">ログイン</h2>
-<h3 >ID=wataame, PASSWORD=Wataame0</h3>
+	<h3 >ID=wataame, PASSWORD=Wataame0</h3>
     <form id="login_form" method="POST" action="<c:url value='/LoginServlet' />">
         <table>
             <tr>
