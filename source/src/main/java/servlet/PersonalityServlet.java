@@ -9,10 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//後でdaoとdtoをimportする。詳しくはサンプル
-
-@WebServlet("/RegistServlet")
-public class RegistServlet extends HttpServlet{
+@WebServlet("/PersonalityServlet")
+public class PersonalityServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -29,7 +27,7 @@ public class RegistServlet extends HttpServlet{
 //		}
 
 		// 登録ページにフォワードする
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/regist.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/personality.jsp");
 		dispatcher.forward(request, response);
 	}
 

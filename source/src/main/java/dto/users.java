@@ -7,22 +7,20 @@ import java.util.Date;
 public class users {
 	private int id;
 	private String user_id;
-	private String user_name;
 	private String password;
 	private Date created_at;
 	private Date updated_at;
 	
-	public users(int id, String user_id, String user_name, String password, Date created_at, Date updated_at) {
+	public users(int id, String user_id, String password, Date created_at, Date updated_at) {
 		this.id = id;
 		this.user_id = user_id;
-		this.user_name = user_name;
 		this.password = password;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 	}
 	
 	public users() {
-		this(0, "","","", null, null);
+		this(0, "","", null, null);
 	}
 
 	public int getId() {
@@ -39,14 +37,6 @@ public class users {
 
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
-	}
-
-	public String getUser_name() {
-		return user_name;
-	}
-
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
 	}
 
 	public String getPassword() {

@@ -7,21 +7,19 @@ public class exams {
 	private int id;
 	private int exam_name_id;
 	private Date exam_date;
-	private int exam_score_id;
 	private Date created_at;
 	private Date updated_at;
 	
-	public exams(int id, int exam_name_id, Date exam_date, int exam_score_id, Date created_at, Date updated_at) {
+	public exams(int id, int exam_name_id, Date exam_date, Date created_at, Date updated_at) {
 		this.id = id;
 		this.exam_name_id = exam_name_id;
 		this.exam_date = exam_date;
-		this.exam_score_id = exam_score_id;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 	}
 	
 	public exams() {
-		this(0,0,null,0,null,null);
+		this(0,0,null,null,null);
 	}
 
 	public int getId() {
@@ -46,14 +44,6 @@ public class exams {
 
 	public void setExam_date(Date exam_date) {
 		this.exam_date = exam_date;
-	}
-
-	public int getExam_score_id() {
-		return exam_score_id;
-	}
-
-	public void setExam_score_id(int exam_score_id) {
-		this.exam_score_id = exam_score_id;
 	}
 
 	public Date getCreated_at() {
