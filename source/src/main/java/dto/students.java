@@ -8,6 +8,7 @@ public class students {
 	private String name;
 	private String furigana;
 	private int school_id;
+	private String school_name;
 	private Date birthday;
 	private String gender;
 	private int aspiration_school1_id;	//志望校（3つ登録できるようにするので3つ用意）
@@ -17,7 +18,7 @@ public class students {
 	private Date created_at;
 	private Date updated_at;
 	
-	public students(int id, String name, String furigana, int school_id, Date birthday, String gender,
+	public students(int id, String name, String furigana, int school_id, String school_name, Date birthday, String gender,
 			int aspiration_school1_id, int aspiration_school2_id, int aspiration_school3_id, int personality_id,
 			Date created_at, Date updated_at) {
 		this.id = id;
@@ -35,7 +36,7 @@ public class students {
 	}
 	
 	public students() {
-		this(0, "","",0,null,"",0,0,0,0, null, null);
+		this(0, "","",0,null,null,"",0,0,0,0, null, null);
 	}
 
 	public int getId() {
@@ -65,7 +66,15 @@ public class students {
 	public int getSchool_id() {
 		return school_id;
 	}
+	
+	public String getSchool_name() {
+	    return school_name;
+	}
 
+	public void setSchool_name(String school_name) {
+	    this.school_name = school_name;
+	}
+	
 	public void setSchool_id(int school_id) {
 		this.school_id = school_id;
 	}
@@ -133,4 +142,5 @@ public class students {
 	public void setUpdated_at(Date updated_at) {
 		this.updated_at = updated_at;
 	}
+	
 }

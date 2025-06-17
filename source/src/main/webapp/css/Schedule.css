@@ -1,3 +1,4 @@
+@charset "UTF-8";
 :root {
     --color-bg: #b9e2ec;
     /* 明るめのネイビーブルー */
@@ -21,15 +22,7 @@ body {
     margin: 0;
     padding: 0;
 }
-#logo {
-  text-align: center;   /* h1 内のインライン要素を中央寄せ */
-  /* 追加で余白調整したい場合はここで */
-}
 
-/* ロゴ画像の余白を微調整したい場合 */
-#logo img {
-  display: inline-block; /* ← text-align と相性が良い */
-}
 .wrapper {
     max-width: 1400px;
     /* 横幅をさらに拡大 */
@@ -126,4 +119,22 @@ h2 {
     margin-top: 2rem;
     color: var(--color-muted);
     font-size: 0.9rem;
+}
+
+/* スケジュール作成の結果のフォントサイズ */
+#result {
+  font-size: 1.2em;
+}
+
+#form_and_register_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 横方向中央揃え */
+  gap: 1rem; /* フォームと登録ボタンの間隔 */
+  width: 100%; /* 親幅にフィット */
+  max-width: 600px; /* 好みで幅制限 */
+  margin: 0 auto; /* ページ中央に配置 */
+  line-height: 2;
+}
+
 }

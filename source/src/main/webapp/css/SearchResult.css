@@ -1,3 +1,58 @@
+@charset "UTF-8";
+body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .student-grid {
+	  display: grid;
+	  grid-template-columns: repeat(3, 1fr); /* 3列固定 */
+	  gap: 15px;
+	  max-width: 1280px; /* 必要に応じて調整 */
+	  margin: 20px auto 0; /* 中央寄せ */
+	}
+    
+    table {
+    width: 100%;
+    }
+    .student-card {
+	  width: 100%;
+	  max-width: 400px;  /* これでカードが広すぎないように調整 */
+	  border: 1px solid #aaa;
+	  padding: 10px;
+	  box-sizing: border-box;
+	  background-color: #F9F9F9;
+	  min-width: 100px;
+	  margin: 0 auto; /* カード中央寄せ（必要に応じて） */
+	}
+    
+    .student-card p {
+      margin: 5px 0;
+    }
+    .sort-btn {
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+    .pagination {
+      margin-top: 10px;
+    }
+    .pagination button {
+      margin: 0 2px;
+    }
+    #backToTop {
+      margin-top: 30px;
+      display: none;
+    }
+    table {
+     width: 600px; /* 固定幅に変更 */
+     margin: 20px auto; /* 中央寄せ */
+     border-collapse: collapse;
+    }
+    @media (max-width: 600px) {
+      .student-card {
+        flex: 1 1 100%;
+      }
+    }
+    
 :root {
     --color-bg: #b9e2ec;
     /* 明るめのネイビーブルー */
@@ -21,15 +76,7 @@ body {
     margin: 0;
     padding: 0;
 }
-#logo {
-  text-align: center;   /* h1 内のインライン要素を中央寄せ */
-  /* 追加で余白調整したい場合はここで */
-}
 
-/* ロゴ画像の余白を微調整したい場合 */
-#logo img {
-  display: inline-block; /* ← text-align と相性が良い */
-}
 .wrapper {
     max-width: 1400px;
     /* 横幅をさらに拡大 */
@@ -126,4 +173,33 @@ h2 {
     margin-top: 2rem;
     color: var(--color-muted);
     font-size: 0.9rem;
+}
+
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.student-row {
+  display: flex;
+  gap: 10px;
+  margin: 4px 0;
+}
+
+.label {
+  width: 60px;
+  font-weight: normal;
+}
+
+.value {
+  flex: 1;
+}
+
+.name {
+  font-weight: bold; /* 氏名だけ太字に */
+}
+
+.name {
+  font-weight: bold;     /* 太字 */
+  font-size: 1.2rem;     /* 通常より少し大きく */
 }
