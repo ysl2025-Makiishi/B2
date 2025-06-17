@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>テキスト選出システム | K-manage</title>
+  <link rel="stylesheet" type="text/css" href="K-style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    select {
+      width: 300px;
+      padding: 8px;
+      font-size: 16px;
+    }
+    .buttons {
+      margin: 20px 0;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+    .result {
+      display: none; /* 初期状態では非表示 */
+      margin-top: 30px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #1685e6;
+    }
+    #footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 14px;
+      color: #999;
+    }
+    #nav {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    #nav li a {
+      text-decoration: none;
+      font-size: 16px;
+      color: #1685e6;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- ロゴ -->
+    <h1 id="logo">
+      <div style="text-align: center;">
+        <a href="K-Manage_home.html">
+          <img src="K-Manage_logo.png" width="200" height="200" alt="K-Manage">
+        </a>
+      </div>
+    </h1>
+
+    <!-- ナビゲーション -->
+    <ul id="nav">
+      <li><a href="home.html">ホーム</a></li>
+      <li><a href="#">生徒一覧</a></li>
+      <li><a href="#">登録</a></li>
+      <li><a href="#">検索</a></li>
+      <!-- <li><a href="text.html">テキスト選出</a></li> -->
+      <li><a href="#">宿題提案</a></li>
+      <li><a href="#">ログアウト</a></li>
+    </ul>
+
+    <!-- メインタイトル -->
+    <h2>テキスト選出</h2>
+
+    <!-- 入力フォーム -->
+    <form id="textForm">
+      <label for="subject">学習したい教科</label>
+      <select id="subject" name="subject">
+        <option value="">-- 教科を選んでください --</option>
+        <option value="国語">国語</option>
+        <option value="数学">数学</option>
+        <option value="英語">英語</option>
+        <option value="理科">理科</option>
+        <option value="社会">社会</option>
+      </select>
+
+      <label for="personality">生徒の性格</label>
+      <select id="personality" name="personality">
+        <option value="">-- 性格を選んでください --</option>
+        <option value="開放性">開放性</option>
+        <option value="勤勉性">勤勉性</option>
+        <option value="神経症傾向">神経症傾向</option>
+        <option value="外向性">外向性</option>
+      </select>
+
+      <div class="buttons">
+        <button type="button" onclick="search()">検索</button>
+        <button type="reset">リセット</button>
+      </div>
+
+      <!-- 結果表示 -->
+      <div class="result" id="result"></div>
+    </form>
+
+    <!-- フッター -->
+    <div id="footer">
+      <p>&copy;Copyright wataamekun. All rights reserved.</p>
+    </div>
+
+    <!-- 戻るボタン -->
+    <div style="margin-top: 20px;">
+      <a href="subject_result.html">
+        <button type="button">科目ごと個人結果に戻る</button>
+      </a>
+    </div>
+  </div>
+
+  <!-- スクリプト -->
+  <script>
+    function search() {
+      const subject = document.getElementById('subject').value;
+      const personality = document.getElementById('personality').value;
+      const result = document.getElementById('result');
+
+      result.style.display = 'block'; // 検索時に表示
+
+      if (!subject && !personality) {
+        result.textContent = '結果：情報を入力してください。';
+        return;
+      }
+
+      if (!subject && personality) {
+        result.textContent = '結果：教科を入力してください。';
+        return;
+      }
+
+      if (subject && !personality) {
+        result.textContent = '結果：性格を入力してください。';
+        return;
+      }
+
+      result.textContent = `結果：${subject} をやろう！（${personality}向け）`;
+    }
+
+    // リセット時に非表示にする
+    document.getElementById('textForm').addEventListener('reset', function () {
+      const result = document.getElementById('result');
+      result.textContent = '';
+      result.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
