@@ -1,99 +1,110 @@
-/* --- レイアウト全体 --- */
-body {
-    margin: 0;
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    background: #f6f8fa;
-    color: #333;
+/* =========================================
+   login.css ― ログイン画面専用の上書きスタイル
+   ========================================= */
+
+/* ---------- コンテナ（ラッパー） ---------- */
+.wrapper--narrow {
+  width: 92%;
+  max-width: 260px;          /* スマホ〜小型タブレットでかなりスリム */
+  margin: 3.5rem auto 2rem;  /* 常に中央寄せ */
+  padding: 1.4rem 1rem;      /* 適度な内側余白 */
+  box-sizing: border-box;
+  background: var(--color-surface);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
 }
 
-.wrapper {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 0 20px;
+/* 端末幅に応じて段階的に広げる */
+@media (min-width: 600px) {  /* 中型タブレット以上 */
+  .wrapper--narrow { max-width: 300px; }
+}
+@media (min-width: 992px) {  /* デスクトップ */
+  .wrapper--narrow { max-width: 340px; }
 }
 
-/* --- ヘッダー --- */
-.header #logo img {
-    width: 200px;
-    height: auto;
-}
 
-/* --- タイトル／ラベル --- */
-.page-title {
-    font-size: 1.6rem;
-    text-align: center;
-    margin: 24px 0 8px;
-}
 
+/* ---------- 見出し・テーブル ---------- */
+.page-title { margin: 0 0 .5rem; }
+table       { width: 100%; border-collapse: separate; border-spacing: 0 1rem; }
+td          { text-align: center; }
+
+/* ---------- ラベル ---------- */
 .form-label {
-    color: #00c350;          /* rgb(0,255,85) に近いグリーン */
-    font-weight: 700;
-    font-size: 1.25rem;      /* 25px 相当 */
-    line-height: 1.4;
+  display: block;        /* 中央寄せを効かせる */
+  font-weight: 600;
+  margin-bottom: .4rem;
 }
 
-/* --- 入力欄・ボタン --- */
+/* ---------- 共通インプット ---------- */
 input[type="text"],
 input[type="password"] {
-    width: 100%;
-    max-width: 400px;
-    padding: 8px;
-    margin-top: 4px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
+  width: 200px;          /* 入力欄をさらにスリムに */
+  padding: .45rem .65rem;
+  font-size: .9rem;
+  border: 2px solid var(--color-muted);
+  border-radius: 6px;
+  transition: border-color .2s, box-shadow .2s;
+}
+input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(51, 102, 204, .25);
+  outline: none;
 }
 
-.btn-row {
-    padding-top: 16px;
+/* ---------- パスワード欄：入力＋アイコン横並び ---------- */
+.input-group {
+  display: flex;          /* 横並びの基本 */
+  justify-content: center;
+  align-items: center;
+  gap: .6rem;             /* 入力欄とアイコンの間隔 */
 }
 
-.btn-primary,
-.btn-secondary,
+/* 👁 アイコンボタン */
 .toggle-btn {
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
-    padding: 8px 20px;
-    font-size: 1rem;
-    margin-right: 8px;
-    transition: transform .1s ease, box-shadow .1s ease;
+  border: none;
+  background: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--color-primary);
+  padding: 0;
 }
+.toggle-btn:focus { outline: none; }
 
+/* ---------- ボタン ---------- */
+.btn-row { text-align: center; }
+
+.button {
+  display: inline-block;
+  padding: .6rem 1.6rem;  /* ラッパー幅に合わせ少し短く */
+  font-size: 1rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+  white-space: nowrap;
+}
 .btn-primary {
-    background: linear-gradient(135deg, #23c863, #0ba84f);
-    color: #fff;
+  background-image: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: #fff;
 }
-
 .btn-secondary {
-    background: #e0e0e0;
-    color: #333;
+  background: var(--color-muted);
+  color: var(--color-surface);
 }
+.btn-row .button + .button { margin-left: .6rem; }
 
-.toggle-btn {
-    background: transparent;
-    padding-left: 10px;
-    font-size: 1.2rem;
-}
+.button:hover  { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0, 0, 0, .35); }
+.button:active { transform: none;              box-shadow: 0 3px  6px rgba(0, 0, 0, .30); }
 
-/* --- ボタン共通ホバー効果 --- */
-.btn-primary:hover,
-.btn-secondary:hover,
-.toggle-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,.1);
-}
-
-.btn-primary:active,
-.btn-secondary:active,
-.toggle-btn:active {
-    transform: translateY(0);
-    box-shadow: none;
-}
-
-/* --- エラーメッセージ --- */
+/* ---------- エラーメッセージ ---------- */
 .error-message {
-    color: #91ff00;
-    font-size: 1.2rem;       /* 30px → 1.2rem で可読性維持 */
-    margin-left: 8px;
+  display: block;
+  margin-top: .6rem;
+  min-height: 1.4em;      /* 非表示時の高さ確保 */
+  color: #d9534f;
+  font-weight: 600;
 }
+
+/* ---------- ヘッダー下余白 ---------- */
+.header { margin-bottom: 1rem; }

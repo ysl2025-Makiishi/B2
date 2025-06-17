@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>ホーム | K-manage</title>
-    <link rel="stylesheet" type="text/css" href="css/K-style.css">
+    <link rel="stylesheet" type="text/css" href="/B2/css/K-style.css">
 </head>
 
 <body id="home">
@@ -15,16 +15,17 @@
         <header class="header">
         <h1 id="logo">
             <a href="HomeServlet">
-                <img src="img/K-Manage_logo.png" alt="K-Manage">
+                <img src="/B2/img/K-Manage_logo.png" alt="K-Manage">
+                <!--<img src="img/K-Manage_logo.png" alt="K-Manage">-->
             </a>
         </h1>
     </header>
         <ul id="nav">
-            <li><a href="HomeServlet">ホーム</a></li>
-            <li><a href="/webapp/HomeServlet">生徒一覧</a></li>
-            <li><a href="/webapp/HomeServlet">登録</a></li>
-            <li><a href="/webapp/HomeServlet">検索</a></li>
-            <li><a href="/webapp/HomeServlet" onclick="return confirm('本当に実行しますか？');">ログアウト</a></li>
+            <li><a href="/B2/HomeServlet">ホーム</a></li>
+            <li><a href="/B2/ervlet">生徒一覧</a></li>
+            <li><a href="/B2/Servlet">登録</a></li>
+            <li><a href="/B2/Servlet">検索</a></li>
+            <li><a href="/B2/LoginServlet" onclick="return confirm('本当に実行しますか？');">ログアウト</a></li>
         </ul>
         <!-- ヘッダー（ここまで） -->
 
