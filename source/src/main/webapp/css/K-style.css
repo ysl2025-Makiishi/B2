@@ -21,7 +21,15 @@ body {
     margin: 0;
     padding: 0;
 }
+#logo {
+  text-align: center;   /* h1 内のインライン要素を中央寄せ */
+  /* 追加で余白調整したい場合はここで */
+}
 
+/* ロゴ画像の余白を微調整したい場合 */
+#logo img {
+  display: inline-block; /* ← text-align と相性が良い */
+}
 .wrapper {
     max-width: 1400px;
     /* 横幅をさらに拡大 */
