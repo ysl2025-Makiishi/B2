@@ -1,4 +1,4 @@
-const students = [
+/*const students = [
   { name: "田中 太郎", school: "東京中学校", gender: "男" },
   { name: "鈴木 花子", school: "大阪中学校", gender: "女" },
   { name: "佐藤 次郎", school: "名古屋中学校", gender: "男" },
@@ -22,7 +22,14 @@ const students = [
   { name: "遠藤 奈緒", school: "札幌中学校", gender: "女" },
   { name: "金子 健太", school: "東京中学校", gender: "男" },
   { name: "中川 美咲", school: "大阪中学校", gender: "女" }
-]
+]*/
+
+// StudentList.js
+console.log(students); // ← JSPで定義された配列がここで使える
+
+document.getElementById("studentCount").textContent = students.length;
+// 以下はソートや描画処理だけを書いてOK（すでにstudentsは定義済み）
+
 
   const rowsPerPage = 18;
   let currentPage = 1;

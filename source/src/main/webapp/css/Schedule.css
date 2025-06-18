@@ -74,7 +74,8 @@ body {
 
 /* ——— 見出し ——— */
 h2 {
-    color: var(--color-primary);
+	text-align: left;
+    color: var(--color-text);
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
     border-bottom: 2px solid var(--color-accent);
@@ -123,18 +124,23 @@ h2 {
 
 /* スケジュール作成の結果のフォントサイズ */
 #result {
-  font-size: 1.2em;
+  color: var(--color-text);
+  font-size: 1.2em !important;
+  font-weight: bold;
+  margin: 0; /* ← マージンを完全にリセット */
+}
+
+#register_container {
+  margin: 0; /* ← こちらも同様にリセット */
 }
 
 #form_and_register_wrapper {
   display: flex;
   flex-direction: column;
   align-items: center; /* 横方向中央揃え */
-  gap: 1rem; /* フォームと登録ボタンの間隔 */
+  gap: 0.5rem; /* フォームと登録ボタンの間隔 */
   width: 100%; /* 親幅にフィット */
   max-width: 600px; /* 好みで幅制限 */
   margin: 0 auto; /* ページ中央に配置 */
   line-height: 2;
-}
-
 }
