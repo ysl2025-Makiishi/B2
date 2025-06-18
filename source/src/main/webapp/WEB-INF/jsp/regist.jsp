@@ -67,13 +67,12 @@
   </style>
 </head>
     <body>
-  <script src="resist.js"></script> <!-- input が存在してから読み込まれる -->
   <div class="wrapper">
     <!-- ヘッダー -->
     <div style="text-align: center;">
     <h1 id="logo" >
       
-        <a href="K-Manage_home.html">
+        <a href="<c:url value='/HomeServlet' />">
           <img src="<c:url value='/img/K-Manage_logo.png' />" alt="K-Manage">
         </a>
       
@@ -83,18 +82,19 @@
     </div>
 
     <ul id="nav">
-      <li><a href="home.html">ホーム</a></li>
-      <li><a href="#">生徒一覧</a></li>
-      <li><a href="#">登録</a></li>
-      <li><a href="#">検索</a></li>
-      <li><a href="#">宿題提案</a></li>
-      <li><a href="#">ログアウト</a></li>
+      <li><a href="<c:url value='/HomeServlet' />">ホーム</a></li>
+      <li><a href="<c:url value='/StudentListServlet' />">生徒一覧</a></li>
+      <li><a href="<c:url value='/RegistServlet' />">登録</a></li>
+      <li><a href="<c:url value='/SearchServlet' />">検索</a></li>
+      <!--  <li><a href="<c:url value='/LoginServlet' />">宿題提案</a></li> -->
+      <li><a href="<c:url value='/LoginServlet' />">ログアウト</a></li>
     </ul>
 
 
   <h2>登録</h2>
 
-  <form id="registerForm" method="POST" action="/B2/RegistServlet">
+  <!-- ここに送り先サーブレット -->
+  <form id="registerForm" method="POST" action="<c:url value='/RegistServlet'/>">
     
     <!-- 氏名・ふりがな -->
     <div class="form-row">
@@ -104,7 +104,7 @@
       </div>
       <div class="form-group">
         <label for="furigana">ふりがな <span style="color:red;">※</span></label>
-        <input type="text" id="furigana" name="furigana" required>
+        <input type="text" id="furigana" name="furigana" onblur="validateHiragana(this)" required>
       </div>
     </div>
 
@@ -125,8 +125,8 @@
       <div class="form-group">
         <label>性別 <span style="color:red;">※</span></label>
         <div class="radio-group">
-          <label><input type="radio" name="gender" value="男性" required> 男性</label>
-          <label><input type="radio" name="gender" value="女性"> 女性</label>
+          <label><input type="radio" name="gender" value="男" required> 男性</label>
+          <label><input type="radio" name="gender" value="女"> 女性</label>
           <label><input type="radio" name="gender" value="無回答"> 無回答</label>
         </div>
       </div>
@@ -361,12 +361,12 @@
 
     <!-- ボタンとエラーメッセージ -->
     <div class="buttons">
-      <button type="submit">登録</button>
+      <button type="submit" value="登録">登録</button>
       <button type="reset">リセット</button>
       <span class="error-message" id="errorMessage"></span>
     </div>
 
   </form>
-<script src="regist.js"></script>
+<script src="<c:url value='/js/regist.js' />"></script>
 </body>
 </html>
