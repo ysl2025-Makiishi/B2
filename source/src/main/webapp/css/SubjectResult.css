@@ -1,0 +1,257 @@
+/* ===============================
+   リセット & ベース
+   =============================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Helvetica Neue", Arial, "ヒラギノ角ゴ ProN W3", Meiryo, sans-serif;
+  /*background-color: #f5f7fa;*/
+  margin: 0;
+  padding: 2rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+h2, h3 {
+  margin-bottom: 0.75em;
+  font-weight: 600;
+}
+
+section {
+  background: #fff;
+  border: 1px solid #e0e4ea;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ===============================
+   フォーム共通要素
+   =============================== */
+label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.25em;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+textarea {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.45em 0.6em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* ===============================
+   レイアウトユーティリティ
+   =============================== */
+.flex-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+}
+
+.centered {
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button-row,
+.section-btn-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.edit-btn {
+  background-color: #96a1b9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5em 1.2em;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.edit-btn:hover {
+  filter: brightness(1.05);
+}
+
+/* ===============================
+   グラフチャート表示枠
+   =============================== */
+.chart-wrapper {
+  width: 320px;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  border-radius: 6px;
+  background: #fafafa;
+  margin-top: 1rem;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ===============================
+   ボタン
+   =============================== */
+button {
+  appearance: none;
+  border: none;
+  border-radius: 4px;
+  padding: 0.6em 1.6em;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+button[type="submit"] {
+  background: #3d6dd8;
+  color: #fff;
+}
+
+button[type="reset"] {
+  background: #ccc;
+  color: #333;
+}
+
+button:hover {
+  filter: brightness(1.05);
+}
+
+/* ===============================
+   レスポンシブ対応
+   =============================== */
+@media (max-width: 599px) {
+  .flex-row {
+    flex-direction: column;
+  }
+
+  .field {
+    min-width: 100%;
+  }
+
+  .chart-wrapper {
+    width: 100%;
+    aspect-ratio: auto;
+    height: 280px;
+  }
+}
+
+/* ===============================
+   セクション共通枠スタイル
+   =============================== */
+section {
+  background: #fff;
+  border: 2px solid #e0e4ea;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  position: relative;
+}
+
+/* セクション見出し（h3）デザインを枠と一体化 */
+section > h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: #f0f2f7;
+  padding: 0.6rem 1rem;
+  margin: -1.5rem -1.5rem 1rem;
+  border-bottom: 1px solid #d3d7e0;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+
+/* ============================================
+   指定された4つのtextareaだけを大きくする
+   ============================================ */
+textarea.large-textbox {
+  width: 100%;
+  max-width: 100%;
+  min-height: 200px;          /* 高さを大きく */
+  padding: 1em;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+
+.centered {
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ========================
+   小さいボタン用スタイル
+   ======================== */
+.small-btn {
+  font-size: 0.75rem;
+  padding: 0.3em 0.8em;
+  line-height: 1.2;
+  min-width: 50px;
+}
+
+.subject-nav {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem 0;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.subject-nav li {
+    margin: 0;
+}
+
+.subject-nav li a {
+    display: inline-block;
+    padding: 1rem 2.5rem;             /* 高さ・横幅を大きく */
+    font-size: 1.3rem;                /* 文字サイズアップ */
+    font-weight: bold;
+    text-decoration: none;
+    background-color: #0066cc;
+    color: white;
+    border-radius: 12px;             /* 丸みを少し大きめに */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* 影を追加して立体感 */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.subject-nav li a:hover {
+    background-color: #004c99;
+    transform: scale(1.05);          /* ホバー時に拡大 */
+}

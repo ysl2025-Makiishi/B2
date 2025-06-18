@@ -16,6 +16,7 @@ import dto.LoginUser; // ← セッション用に ID だけ保持する簡易 D
 import dto.Result;
 
 @WebServlet("/LoginServlet")
+//@WebServlet(urlPatterns = { "", "/LoginServlet" })
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
