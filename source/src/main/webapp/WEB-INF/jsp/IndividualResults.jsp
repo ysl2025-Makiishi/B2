@@ -12,7 +12,22 @@
 </head>
 
 <body>
+<div class="wrapper">
+<!-- ヘッダー（ここから） -->
+        <h1 id="logo">
+            <a href="<c:url value='/HomeServlet' />">
+                <img src="<c:url value='/img/K-Manage_logo.png' />"  alt="K-Manage">
+            </a>
+        </h1>
 
+        <ul id="nav">
+            <li><a href="<c:url value='/HomeServlet' />">ホーム</a></li>
+            <li><a href="<c:url value='/StudentListServlet' />">生徒一覧</a></li>
+            <li><a href="<c:url value='/RegistServlet' />">登録</a></li>
+            <li><a href="<c:url value='/SerachServlet' />">検索</a></li>
+            <li><a href="<c:url value='/LoginServlet' />">ログアウト</a></li>
+        </ul>
+        <!-- ヘッダー（ここまで） -->
     <h2>個人結果</h2>
 
     <form id="studentForm" method="post" action="<c:url value='/IndividualResultsServlet' />">
@@ -42,7 +57,7 @@
 
             <div class="section-btn-row">
                 <button type="button" id="basicEdit" class="edit-btn">編集</button>
-                <a href="<c:url value='/personality-test.html' />" target="_blank" rel="noopener" class="diag-link">性格診断はこちら</a>
+                <a href="<c:url value='/PersonalityServlet' />" target="_blank" rel="noopener" class="diag-link-button">性格診断はこちら</a>
             </div>
         </section>
 
@@ -65,31 +80,23 @@
             <h3>GPA 一覧（9 教科）</h3>
 
             <div class="gpa-list">
-                <div class="gpa-item"><label for="gpa_jp">国語</label><input id="gpa_jp" min="0" max="5" step="0.1"
-                        type="number" /></div>
-                <div class="gpa-item"><label for="gpa_ss">社会</label><input id="gpa_ss" min="0" max="5" step="0.1"
-                        type="number" /></div>
-                <div class="gpa-item"><label for="gpa_ma">数学</label><input id="gpa_ma" min="0" max="5" step="0.1"
-                        type="number" /></div>
-                <div class="gpa-item"><label for="gpa_sc">理科</label><input id="gpa_sc" min="0" max="5" step="0.1"
-                        type="number" /></div>
-                <div class="gpa-item"><label for="gpa_en">英語</label><input id="gpa_en" min="0" max="5" step="0.1"
-                        type="number" /></div>
-                <div class="gpa-item"><label for="gpa_mu">音楽</label><input id="gpa_mu" min="0" max="5" step="0.1"
-                        type="number" /></div>
-                <div class="gpa-item"><label for="gpa_ar">美術</label><input id="gpa_ar" min="0" max="5" step="0.1"
-                        type="number" /></div>
-                <div class="gpa-item"><label for="gpa_pe">保体</label><input id="gpa_pe" min="0" max="5" step="0.1"
-                        type="number" /></div>
-                <div class="gpa-item"><label for="gpa_te">技家</label><input id="gpa_te" min="0" max="5" step="0.1"
-                        type="number" /></div>
-            </div>
+    <div class="gpa-item"><label for="gpa_jp">国語</label><input id="gpa_jp" min="1" max="5" step="1" type="number" /></div>
+    <div class="gpa-item"><label for="gpa_ss">社会</label><input id="gpa_ss" min="1" max="5" step="1" type="number" /></div>
+    <div class="gpa-item"><label for="gpa_ma">数学</label><input id="gpa_ma" min="1" max="5" step="1" type="number" /></div>
+    <div class="gpa-item"><label for="gpa_sc">理科</label><input id="gpa_sc" min="1" max="5" step="1" type="number" /></div>
+    <div class="gpa-item"><label for="gpa_en">英語</label><input id="gpa_en" min="1" max="5" step="1" type="number" /></div>
+    <div class="gpa-item"><label for="gpa_mu">音楽</label><input id="gpa_mu" min="1" max="5" step="1" type="number" /></div>
+    <div class="gpa-item"><label for="gpa_ar">美術</label><input id="gpa_ar" min="1" max="5" step="1" type="number" /></div>
+    <div class="gpa-item"><label for="gpa_pe">保体</label><input id="gpa_pe" min="1" max="5" step="1" type="number" /></div>
+    <div class="gpa-item"><label for="gpa_te">技家</label><input id="gpa_te" min="1" max="5" step="1" type="number" /></div>
+</div>
+            
 
             <!-- 内申点を中央寄せで同じ枠内に配置 -->
             <div class="flex-row center-row">
                 <div class="field naishin-field">
                     <label for="naishin">内申点</label>
-                    <input id="naishin" name="naishin" min="0" max="135" type="number" />
+                    <input id="naishin" name="naishin" readonly type="number" />
                 </div>
             </div>
 
@@ -198,7 +205,8 @@
             </div>
         </section>
     </form>
-
+ </div>
+ <script src="<c:url value='/js/IndividualResults.js' />"></script>
 </body>
 
 </html>

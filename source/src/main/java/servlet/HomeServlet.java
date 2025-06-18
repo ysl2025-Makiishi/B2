@@ -8,11 +8,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/home")
+@WebServlet("/HomeServlet")
 public class HomeServlet extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-        // WEB-INF内のhome.jspにフォワード
-        request.getRequestDispatcher("/WEB-INF/jsp/home.jsp").forward(request, response);
-    }
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+//		// もしもログインしていなかったらログインサーブレットにリダイレクトする
+//				HttpSession session = request.getSession();
+//				if (session.getAttribute("id") == null) {
+//					response.sendRedirect("/webapp/LoginServlet");
+//					return;
+//				}
+		// WEB-INF内のhome.jspにフォワード
+		request.getRequestDispatcher("/WEB-INF/jsp/home.jsp").forward(request, response);
+	}
 }
