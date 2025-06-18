@@ -29,10 +29,24 @@ import dto.students;
 	            throws ServletException, IOException {
 	
 	        request.setCharacterEncoding("UTF-8");
-	
-	        String nameKeyword = getOrDefault(request.getParameter("nameKeyword"));
-	        String furiganaKeyword = getOrDefault(request.getParameter("furiganaKeyword"));
-	        String schoolNameKeyword = getOrDefault(request.getParameter("schoolNameKeyword"));
+	        
+	        String deleteIdStr = request.getParameter("deleteId");
+	        if (deleteIdStr != null && deleteIdStr.matches("\\d+")) {
+	            int deleteId = Integer.parseInt(deleteIdStr);
+	            boolean deleted = SearchResultDAO.deleteById(deleteId);
+	            if (deleted) {
+	                System.out.println("削除成功: ID = " + deleteId);
+	            } else {
+	                System.out.println("削除失敗: ID = " + deleteId);
+	            }
+	            // 削除後はリダイレクトでリロード（フォーム再送信防止）
+	            response.sendRedirect("SearchResultServlet");
+	            return;
+	        }
+	        
+	        String name = getOrDefault(request.getParameter("name"));
+	        String furigana = getOrDefault(request.getParameter("furigana"));
+	        String schoolName = getOrDefault(request.getParameter("schoolName"));
 	
 	        String sort = request.getParameter("sort");
 	        if (sort == null || !(sort.equals("createdDesc") || sort.equals("createdAsc")
@@ -47,21 +61,21 @@ import dto.students;
 	        }
 	
 	        // 総件数をDAOで取得
-	        int totalRecords = SearchResultDAO.countByName(nameKeyword, furiganaKeyword, schoolNameKeyword);
+	        int totalRecords = SearchResultDAO.countByName(name, furigana, schoolName);
 	        int totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
 	
 	        int offset = (currentPage - 1) * PAGE_SIZE;
 	
 	        // ページサイズと開始位置をDAOに渡して必要分だけ取得
 	        List<students> studentList = SearchResultDAO.searchByName(
-	            nameKeyword, furiganaKeyword, schoolNameKeyword, sort, PAGE_SIZE, offset
+	            name, furigana, schoolName, sort, PAGE_SIZE, offset
 	        );
 	
 	        // JSPにセット
 	        request.setAttribute("studentList", studentList);
-	        request.setAttribute("nameKeyword", nameKeyword);
-	        request.setAttribute("furiganaKeyword", furiganaKeyword);
-	        request.setAttribute("schoolNameKeyword", schoolNameKeyword);
+	        request.setAttribute("name", name);
+	        request.setAttribute("furigana", furigana);
+	        request.setAttribute("schoolName", schoolName);
 	        request.setAttribute("currentPage", currentPage);
 	        request.setAttribute("totalPages", totalPages);
 	        request.setAttribute("sort", sort);
