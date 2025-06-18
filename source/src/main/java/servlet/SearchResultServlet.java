@@ -35,7 +35,10 @@ import dto.students;
 	        String schoolNameKeyword = getOrDefault(request.getParameter("schoolNameKeyword"));
 	
 	        String sort = request.getParameter("sort");
-	        if (sort == null) sort = "createdDesc";
+	        if (sort == null || !(sort.equals("createdDesc") || sort.equals("createdAsc")
+	                || sort.equals("nameAsc") || sort.equals("nameDesc"))) {
+	            sort = "createdDesc";
+	        }
 	
 	        int currentPage = 1;
 	        String pageParam = request.getParameter("page");

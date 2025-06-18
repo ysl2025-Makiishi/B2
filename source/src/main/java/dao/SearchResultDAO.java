@@ -29,11 +29,20 @@ public class SearchResultDAO {
 
         String orderBy;
         switch (sort) {
-            case "nameAsc": orderBy = " ORDER BY students.name ASC"; break;
-            case "nameDesc": orderBy = " ORDER BY students.name Desc"; break;
-            case "createdAsc": orderBy = " ORDER BY students.created_at ASC"; break;
-            default: orderBy = " ORDER BY students.created_at Desc"; break;
-        }
+        case "nameAsc":
+            orderBy = " ORDER BY students.furigana COLLATE utf8mb4_unicode_ci ASC";
+            break;
+        case "nameDesc":
+            orderBy = " ORDER BY students.furigana COLLATE utf8mb4_unicode_ci DESC";
+            break;
+        case "createdAsc":
+            orderBy = " ORDER BY students.created_at ASC";
+            break;
+        case "createdDesc":
+        default:
+            orderBy = " ORDER BY students.created_at DESC";
+            break;
+    }
 
         // LIMIT と OFFSET を追加
         String sql = baseSql + orderBy + " LIMIT ? OFFSET ?";

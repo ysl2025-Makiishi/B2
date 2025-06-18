@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>検索結果</title>
-    <link rel="stylesheet" href="/B2/css/SearchResult.css">
+    <link rel="stylesheet" href="<c:url value='/css/SearchResult.css' />">
     <style>
         /* 省略: スタイルは元のまま */
     </style>
@@ -13,53 +13,58 @@
 <div class="wrapper">
     <!-- ヘッダー -->
     <h1 id="logo" style="text-align: center;">
-        <a href="K-Manage_home.html">
-            <img src="/B2/img/K-Manage_logo.png" width="200" height="200" alt="K-Manage">
-        </a>
-    </h1>
-    <ul id="nav">
-        <li><a href="home.html">ホーム</a></li>
-        <li><a href="">生徒一覧</a></li>
-        <li><a href="">登録</a></li>
-        <li><a href="">検索</a></li>
-        <li><a href="">宿題提案</a></li>
-        <li><a href="">ログアウト</a></li>
-    </ul>
+            <a href="<c:url value='/HomeServlet' />">
+                <img src="<c:url value='/img/K-Manage_logo.png' />"  alt="K-Manage">
+            </a>
+            
+        </h1>
+       <ul id="nav">
+            <li><a href="<c:url value='/HomeServlet' />">ホーム</a></li>
+            <li><a href="<c:url value='/StudentListServlet' />">生徒一覧</a></li>
+            <li><a href="<c:url value='/RegistServlet' />">登録</a></li>
+            <li><a href="<c:url value='/SearachServlet' />">検索</a></li>
+            <li><a href="<c:url value='/LoginServlet' />">ログアウト</a></li>
+        </ul>
 
     <h2>検索結果</h2>
 
     <p>検索結果：${totalRecords} 件</p>
 
     <form method="get" action="SearchResultServlet" style="text-align: right; margin-top: 10px;">
-        <input type="hidden" name="nameKeyword" value="${nameKeyword}" />
-        <input type="hidden" name="furiganaKeyword" value="${furiganaKeyword}" />
-        <input type="hidden" name="schoolNameKeyword" value="${schoolNameKeyword}" />
-        <input type="hidden" name="page" value="1" />
-        <select name="sort" onchange="this.form.submit()" style="padding: 5px; font-size: 1rem;">
-            <option value="" disabled ${sort == null || sort == '' ? 'selected' : ''}>並び替え</option>
-            <option value="createdDesc" ${sort eq 'createdDesc' ? 'selected' : ''}>登録順（新しい順）</option>
-            <option value="createdAsc" ${sort eq 'createdAsc' ? 'selected' : ''}>登録順（古い順）</option>
-            <option value="nameAsc" ${sort eq 'nameAsc' ? 'selected' : ''}>名前順（昇順）</option>
-            <option value="nameDesc" ${sort eq 'nameDesc' ? 'selected' : ''}>名前順（降順）</option>
-        </select>
-    </form>
+    <input type="hidden" name="nameKeyword" value="${nameKeyword}" />
+    <input type="hidden" name="furiganaKeyword" value="${furiganaKeyword}" />
+    <input type="hidden" name="schoolNameKeyword" value="${schoolNameKeyword}" />
+    <input type="hidden" name="page" value="1" />
+    
+    <select name="sort" onchange="this.form.submit()" style="padding: 5px; font-size: 1rem;">
+        <option value="" disabled <c:if test="${empty sort}">selected</c:if>>並び替え</option>
+        <option value="createdDesc" <c:if test="${sort eq 'createdDesc'}">selected</c:if>>登録順（新しい順）</option>
+        <option value="createdAsc" <c:if test="${sort eq 'createdAsc'}">selected</c:if>>登録順（古い順）</option>
+        <option value="nameAsc" <c:if test="${sort eq 'nameAsc'}">selected</c:if>>名前順（昇順）</option>
+        <option value="nameDesc" <c:if test="${sort eq 'nameDesc'}">selected</c:if>>名前順（降順）</option>
+    </select>
+</form>
 
     <c:choose>
         <c:when test="${not empty studentList}">
             <div class="student-grid">
                 <c:forEach var="s" items="${studentList}">
-                    <div class="student-card">
-                        <p><strong>氏名:</strong> 
-                            <a href="StudentDetailServlet?studentId=${s.id}">${s.name}</a>
-                        </p>
-                        <p><strong>学校名:</strong> ${s.school_name}</p>
-                        <p><strong>性別:</strong> ${s.gender}</p>
-                        <form action="DeleteStudentServlet" method="post" onsubmit="return confirm('本当にこの生徒を削除しますか？');">
-                            <input type="hidden" name="studentId" value="${s.id}" />
-                            <input type="submit" value="削除" />
-                        </form>
-                    </div>
-                </c:forEach>
+    <div class="student-card-wrapper" style="position: relative;">
+        <a href="StudentDetailServlet?studentId=${s.id}" style="text-decoration: none; color: inherit;">
+            <div class="student-card" style="cursor: pointer;">
+                <p><strong>氏名:</strong> ${s.name}</p>
+                <p><strong>学校名:</strong> ${s.school_name}</p>
+                <p><strong>性別:</strong> ${s.gender}</p>
+            </div>
+        </a>
+        <form action="DeleteStudentServlet" method="post"
+              onsubmit="return confirm('本当にこの生徒を削除しますか？');"
+              style="position: absolute; top: 10px; right: 10px;">
+            <input type="hidden" name="studentId" value="${s.id}" />
+            <input type="submit" value="削除" />
+        </form>
+    </div>
+</c:forEach>
             </div>
 
             <!-- ページネーション -->
@@ -101,6 +106,6 @@
     </c:choose>
 </div>
 
-<script src="/B2/js/SearchResult.js"></script>
+<script></script>
 </body>
 </html>
