@@ -11,23 +11,17 @@
 	<div class="wrapper">
         <!-- ヘッダー（ここから） -->
         <div id="logo" style="text-align: center;">
-		  <h1>
-		    <a href="<c:url value='/home.jsp' />">
-		      <img src="<c:url value='/img/K-Manage_logo.png'/>" width="200" height="200" alt="K-Manage">
-		    </a>
-		  </h1>
-		</div>
+		  <h1 id="logo">
+            <a href="<c:url value='/HomeServlet' />">
+                <img src="<c:url value='/img/K-Manage_logo.png' />"  alt="K-Manage">
+            </a>
+        </h1>
         <ul id="nav">
-            <li><a href="home.html">ホーム</a></li>
-            <!-- <li><a href="home.html"><img src="images/a.jpg" width="100" height="100" alt="K-Manage"></a></li> -->
-            <li><a href="">生徒一覧</a></li>
-            <li><a href="">登録</a></li>
-            <li><a href="">検索</a></li>
-            <!--<li><a href="">性格診断</a></li>
-            <li><a href="">テキスト選出</a></li>
-            <li><a href="">スケジュール作成</a></li>-->
-            <li><a href="">宿題提案</a></li>
-            <li><a href="">ログアウト</a></li>
+            <li><a href="<c:url value='/HomeServlet' />">ホーム</a></li>
+            <li><a href="<c:url value='/StudentListServlet' />">生徒一覧</a></li>
+            <li><a href="<c:url value='/RegistServlet' />">登録</a></li>
+            <li><a href="<c:url value='/SearchServlet' />">検索</a></li>
+            <li><a href="<c:url value='/LoginServlet' />">ログアウト</a></li>
         </ul>
         <!-- ヘッダー（ここまで） -->
         <!-- メイン（ここから） -->
@@ -38,7 +32,7 @@
             <tr>
                 <td>
                 <label>目標日
-                <input type="date" name="target_date">
+                <input type="date" name="target_date" id="target_date">
                 </label>
                 </td>
             </tr>
@@ -103,7 +97,7 @@
         </div>
 
         <!-- 戻るボタン -->
-        <div style="margin-top: 20px;">
+        <div style="margin-top: 20px; text-align: left;">
             <a href="subject_result.html">
                 <button type="button">科目ごと個人結果に戻る</button>
             </a>
@@ -116,5 +110,6 @@
         <!-- フッター（ここまで） -->
     </div>
     <script src="<c:url value='/js/Schedule.js' />"></script>
+    </div>
 </body>
 </html>

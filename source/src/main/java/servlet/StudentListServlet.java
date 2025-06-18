@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import dao.StudentListDAO;
+import dto.students;
 
 /**
  * Servlet implementation class SearchServlet
@@ -23,6 +27,8 @@ public class StudentListServlet extends HttpServlet {
 	// GETメソッドで一覧を表示
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		
 		// もしもログインしていなかったらログインサーブレットにリダイレクトする
 		/*HttpSession session = request.getSession();
 		if (session.getAttribute("id") == null) {
@@ -31,18 +37,17 @@ public class StudentListServlet extends HttpServlet {
 		}*/
 
 		// 遷移元メッセージ取得
-        /*String message = request.getParameter("message");
-        if (message != null && !message.isEmpty()) {
-            request.setAttribute("message", message);
-        }
+        //String message = request.getParameter("message");
+        //if (message != null && !message.isEmpty()) {
+        //    request.setAttribute("message", message);
+        //}
         
      // 生徒一覧を取得
         StudentListDAO dao = new StudentListDAO();
-		List<Student> list = dao.findAll();
+		List<students> studentList = dao.findAll();
+		
+		request.setAttribute("studentList", studentList);
 
-
-        // リクエストスコープに格納
-        request.setAttribute("studentList", studentList);*/
 
         // 一覧ページにフォワード
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/StudentList.jsp");

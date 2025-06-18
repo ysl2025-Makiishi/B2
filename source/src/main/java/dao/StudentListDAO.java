@@ -8,51 +8,45 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dto.students;
+
 public class StudentListDAO {
 
     // 生徒一覧を全件取得するメソッド
-    public List<Student> findAll() {
-        List<Student> studentList = new ArrayList<>();
-        Connection conn = null;
+	public List<students> findAll() {
+	    List<students> studentList = new ArrayList<>();
+	    Connection conn = null;
 
-        try {
-            // JDBCドライバの読み込み
-            Class.forName("com.mysql.cj.jdbc.Driver");
+	    try {
+	        Class.forName("com.mysql.cj.jdbc.Driver");
+	        conn = DriverManager.getConnection(
+	                "jdbc:mysql://localhost:3306/B2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo",
+	                "root", "password"
+	        );
 
-            // DB接続
-            conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/webapp2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9",
-                "root",
-                "password"
-            );
+	        String sql = "SELECT name, gender, school_id FROM students ORDER BY id ASC";
+	        PreparedStatement pStmt = conn.prepareStatement(sql);
+	        ResultSet rs = pStmt.executeQuery();
 
-            // SQLの準備・実行
-            String sql = "SELECT name, school_id, gender FROM students ORDER BY id ASC";
-            PreparedStatement pStmt = conn.prepareStatement(sql);
-            ResultSet rs = pStmt.executeQuery();
+	        while (rs.next()) {
+	            students s = new students();
+	            s.setName(rs.getString("name"));
+	            s.setGender(rs.getString("gender"));
+	            s.setSchool_name("仮の学校名");
+	            studentList.add(s);
+	        }
 
-            // 結果をリストに追加
-            while (rs.next()) {
-                Student student = new Student(
-                    rs.getInt("name"),
-                    rs.getString("school_id"),
-                    rs.getString("gender")
-                );
-                studentList.add(student);
-            }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        studentList = null;
+	    } finally {
+	        try {
+	            if (conn != null) conn.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            studentList = null;
-        } finally {
-            try {
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return studentList;
-    }
+	    return studentList;
+	}
 }
-

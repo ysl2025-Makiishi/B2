@@ -1,35 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>生徒一覧</title>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <link rel="stylesheet" href="<c:url value='/css/StudentList.css' />">
 </head>
 <body>
 <!-- ヘッダー -->
 <div class="wrapper">
   <div id="logo" style="text-align: center;">
-	  <h1>
-	    <a href="<c:url value='/home.jsp' />">
-	      <img src="<c:url value='/img/K-Manage_logo.png'/>" width="200" height="200" alt="K-Manage">
-	    </a>
-	  </h1>
-	</div>
-  
-  <ul id="nav">
-    <li><a href="home.html">ホーム</a></li>
-    <li><a href="">生徒一覧</a></li>
-    <li><a href="">登録</a></li>
-    <li><a href="">検索</a></li>
-    <!-- <li><a href="">性格診断</a></li>
-    <li><a href="">テキスト選出</a></li>
-    <li><a href="">スケジュール作成</a></li> -->
-    <li><a href="">宿題提案</a></li>
-    <li><a href="">ログアウト</a></li>
-  </ul>
+		  <h1 id="logo">
+            <a href="<c:url value='/HomeServlet' />">
+                <img src="<c:url value='/img/K-Manage_logo.png' />"  alt="K-Manage">
+            </a>
+        </h1>
+        </div>
+        <ul id="nav">
+            <li><a href="<c:url value='/HomeServlet' />">ホーム</a></li>
+            <li><a href="<c:url value='/StudentListServlet' />">生徒一覧</a></li>
+            <li><a href="<c:url value='/RegistServlet' />">登録</a></li>
+            <li><a href="<c:url value='/SearchServlet' />">検索</a></li>
+            <li><a href="<c:url value='/LoginServlet' />">ログアウト</a></li>
+        </ul>
  <h1 style="border-bottom: 2px solid #1685E6; padding-bottom: 5px; margin-bottom: 20px;">生徒一覧</h1>
   <div>現在の登録人数: <span id="studentCount">0</span> 人</div>
   <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
@@ -41,7 +37,6 @@
 	    <option value="name-desc">名前：降順</option>
 	  </select>
   </div>
-  
   
   <!-- 生徒カード表示 -->
   <div class="student-grid" id="studentGrid"></div>
@@ -57,6 +52,18 @@
                 ↑ TOP
             </button>
 </div>
-<script src="<c:url value='/js/StudentList.js' />"></script>
+<script>
+  const students = [];
+  <c:forEach var="s" items="${studentList}">
+    students.push({
+      name: "${fn:escapeXml(s.name)}",
+      school: "${fn:escapeXml(s.school_name)}",
+      gender: "${fn:escapeXml(s.gender)}"
+    });
+  </c:forEach>
+</script>
+
+<script src="<c:url value='/js/StudentList.js' />">
+</script>
 </body>
 </html>
