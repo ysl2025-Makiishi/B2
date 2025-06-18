@@ -203,3 +203,45 @@ h2 {
   font-weight: bold;     /* 太字 */
   font-size: 1.2rem;     /* 通常より少し大きく */
 }
+
+.student-card-wrapper {
+    position: relative;
+}
+
+.student-card,
+.student-card-wrapper form input[type="submit"] {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* カードも削除ボタンも通常時 */
+.student-card {
+	border: 1px solid #333; /* 太さと色 */
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.student-card-wrapper form input[type="submit"] {
+     background-color: #e74c3c; /* 明るめの赤 */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 12px rgba(192, 57, 43, 0.5);
+}
+
+/* 親の .student-card-wrapper にホバーが来たら、カードと削除ボタン両方に動きをつける */
+.student-card-wrapper:hover .student-card {
+    transform: translateY(3px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.student-card-wrapper:hover form input[type="submit"] {
+    transform: translateY(3px);
+    box-shadow: 0 2px 6px rgba(192, 57, 43, 0.3);
+    background-color: #c0392b; /* ボタン色もホバー時に変える */
+}
+

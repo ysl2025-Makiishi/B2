@@ -1,4 +1,8 @@
-document.addEventListener("DOMContentLoaded", function () {
+/**
+ * 
+ */
+ 
+ document.addEventListener("DOMContentLoaded", function () {
   const birthdayInput = document.getElementById("birthday");
   if (birthdayInput) {
     const today = new Date().toISOString().split('T')[0];
@@ -55,3 +59,4 @@ function validateHiragana(input) {
 		document.getElementById("warning").textContent = "";
 	}
 }
+ 

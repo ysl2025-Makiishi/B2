@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>ホーム | K-manage</title>
-  <link rel="stylesheet" type="text/css" href="<c:url value='/css/K-style.css' />">
+  <link rel="stylesheet" type="text/css" href="<c:url value='/css/personality.css' />">
 </head>
 
 <body id="home">
@@ -16,7 +16,8 @@
         <div style="text-align: center;">
     <h1 id="logo" >
       
-        <a href="K-Manage_home.html">
+      	<a href="<c:url value='/HomeServlet' />">
+        <!--  <a href="K-Manage_home.html">-->
           <img src="<c:url value='/img/K-Manage_logo.png' />" alt="K-Manage">
         </a>
       
@@ -25,19 +26,16 @@
     </div>
     </div>
         <ul id="nav">
-            <li><a href="home.html">ホーム</a></li>
-            <!-- <li><a href="home.html"><img src="images/a.jpg" width="100" height="100" alt="K-Manage"></a></li> -->
-            <li><a href="">生徒一覧</a></li>
-            <li><a href="">登録</a></li>
-            <li><a href="">検索</a></li>
-            <!--<li><a href="">性格診断</a></li>
-            <li><a href="">テキスト選出</a></li>
-            <li><a href="">スケジュール作成</a></li>-->
-            <li><a href="">宿題提案</a></li>
-            <li><a href="">ログアウト</a></li>
+            <li><a href="<c:url value='/HomeServlet' />">ホーム</a></li>
+      <li><a href="<c:url value='/StudentListServlet' />">生徒一覧</a></li>
+      <li><a href="<c:url value='/RegistServlet' />">登録</a></li>
+      <li><a href="<c:url value='/SearchServlet' />">検索</a></li>
+      <!--  <li><a href="<c:url value='/LoginServlet' />">宿題提案</a></li> -->
+      <li><a href="<c:url value='/LoginServlet' />">ログアウト</a></li>
         </ul>
         <!-- ヘッダー（ここまで） -->
         <!-- メイン（ここから） -->
+        <div class="changeColor">
         <h2>性格診断</h2>
         <h2>性格の説明</h2>
         <p>
@@ -46,10 +44,12 @@
             ・神経症傾向：ストレスや不安に対して敏感。<br>
             ・外向性：能動的で、変化を好む。<br>
         </p>
-        
+        </div>
         <!-- アンケート　ラジオボタンで選択 -->
         <h2>アンケート</h2>
+        <div class="changeColor">
         <p>当てはまると思うものを選択してください。（当てはまらない～当てはまる）</p>
+        </div>
         <form id="quiz-form">
             1. 新しいことを学ぶのが好きだ
             <label><input type="radio" name="q1" value="1" required> 1</label>
@@ -126,8 +126,15 @@
                 <span style="font-size: 24px; font-weight: bold;">結果：</span>
                 <span id="personality-result" style="font-size: 24px; font-weight: bold;"></span>
             </div> 
-            <button>登録</button><br><br>
+            
+            
+            <button onclick="showMessage()">登録</button><br><br>
+            
+            <p id="message" style="color: red; display: none;">登録しました！</p>
+            
+            <a href="<c:url value='/IndividualResultServlet'/>">
             <button>個人結果ページへ戻る</button>
+            </a>
 
             <div style="text-align: center;">
 
@@ -142,7 +149,7 @@
             <p>&copy;Copyright wataamekun. All rights reserved.</p>
         </div>
         <!-- フッター（ここまで） -->
-    </div>
+<script src="<c:url value='/js/personality.js' />"></script>
 </body>
 
 </html>
