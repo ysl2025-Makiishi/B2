@@ -10,8 +10,12 @@ import java.util.List;
 import dto.students;
 
 public class SearchResultDAO {
+	
+		private static final String JDBC_URL = "jdbc:mysql://localhost:3306/B2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo";
+	    private static final String DB_USER = "root";
+	    private static final String DB_PASS = "password";
 
-    public static List<students> searchByName(String nameKeyword, String furiganaKeyword, String schoolNameKeyword,
+    public static List<students> searchByName(String name, String furigana, String schoolName,
                                               String sort, int limit, int offset) {
         List<students> resultList = new ArrayList<>();
         Connection conn = null;
@@ -54,9 +58,9 @@ public class SearchResultDAO {
                 "root", "password"
             );
             pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, "%" + nameKeyword + "%");
-            pstmt.setString(2, "%" + furiganaKeyword + "%");
-            pstmt.setString(3, "%" + schoolNameKeyword + "%");
+            pstmt.setString(1, "%" + name + "%");
+            pstmt.setString(2, "%" + furigana + "%");
+            pstmt.setString(3, "%" + schoolName + "%");
             pstmt.setInt(4, limit);
             pstmt.setInt(5, offset);
 
@@ -95,7 +99,7 @@ public class SearchResultDAO {
     /**
      * 総件数取得用（ページネーションのため）
      */
-    public static int countByName(String nameKeyword, String furiganaKeyword, String schoolNameKeyword) {
+    public static int countByName(String name, String furigana, String schoolName) {
         int count = 0;
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -118,9 +122,9 @@ public class SearchResultDAO {
             );
 
             pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, "%" + nameKeyword + "%");
-            pstmt.setString(2, "%" + furiganaKeyword + "%");
-            pstmt.setString(3, "%" + schoolNameKeyword + "%");
+            pstmt.setString(1, "%" + name + "%");
+            pstmt.setString(2, "%" + furigana + "%");
+            pstmt.setString(3, "%" + schoolName + "%");
 
             rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -136,4 +140,36 @@ public class SearchResultDAO {
 
         return count;
     }
+    
+ // 追加：生徒をIDで削除するメソッド
+    public static boolean deleteById(int studentId) {
+        Connection conn = null;
+        boolean success = false;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+
+            String sql = "DELETE FROM students WHERE id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, studentId);
+
+            int rowsAffected = ps.executeUpdate();
+            success = (rowsAffected > 0);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return success;
+    }
+    
+    
 }
+

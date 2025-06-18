@@ -31,9 +31,9 @@
     <p>検索結果：${totalRecords} 件</p>
 
     <form method="get" action="SearchResultServlet" style="text-align: right; margin-top: 10px;">
-    <input type="hidden" name="nameKeyword" value="${nameKeyword}" />
-    <input type="hidden" name="furiganaKeyword" value="${furiganaKeyword}" />
-    <input type="hidden" name="schoolNameKeyword" value="${schoolNameKeyword}" />
+    <input type="hidden" name="name" value="${name}" />
+    <input type="hidden" name="furigana" value="${furigana}" />
+    <input type="hidden" name="schoolName" value="${schoolName}" />
     <input type="hidden" name="page" value="1" />
     
     <select name="sort" onchange="this.form.submit()" style="padding: 5px; font-size: 1rem;">
@@ -50,19 +50,20 @@
             <div class="student-grid">
                 <c:forEach var="s" items="${studentList}">
     <div class="student-card-wrapper" style="position: relative;">
-        <a href="StudentDetailServlet?studentId=${s.id}" style="text-decoration: none; color: inherit;">
+        <a href="<c:url value='/IndividualResultsServlet' />?studentId=${s.id}" style="text-decoration: none; color: inherit;">
             <div class="student-card" style="cursor: pointer;">
                 <p><strong>氏名:</strong> ${s.name}</p>
                 <p><strong>学校名:</strong> ${s.school_name}</p>
                 <p><strong>性別:</strong> ${s.gender}</p>
             </div>
         </a>
-        <form action="DeleteStudentServlet" method="post"
-              onsubmit="return confirm('本当にこの生徒を削除しますか？');"
-              style="position: absolute; top: 10px; right: 10px;">
-            <input type="hidden" name="studentId" value="${s.id}" />
-            <input type="submit" value="削除" />
-        </form>
+        <form action="SearchResultServlet" method="post"
+     		 onsubmit="return confirm('本当にこの生徒を削除しますか？');"
+     		 style="position: absolute; top: 10px; right: 30px;">
+    		<input type="hidden" name="deleteId" value="${s.id}" />
+   			 <input type="submit" value="削除" />
+		</form>
+        
     </div>
 </c:forEach>
             </div>
@@ -73,9 +74,9 @@
                     <!-- 前へボタン -->
                     <c:if test="${currentPage > 1}">
                         <form method="get" action="SearchResultServlet" style="display: inline;">
-                            <input type="hidden" name="nameKeyword" value="${nameKeyword}" />
-                            <input type="hidden" name="furiganaKeyword" value="${furiganaKeyword}" />
-                            <input type="hidden" name="schoolNameKeyword" value="${schoolNameKeyword}" />
+                            <input type="hidden" name="name" value="${name}" />
+                            <input type="hidden" name="furigana" value="${furigana}" />
+                            <input type="hidden" name="schoolName" value="${schoolName}" />
                             <input type="hidden" name="sort" value="${sort}" />
                             <input type="hidden" name="page" value="${currentPage - 1}" />
                             <input type="submit" value="前へ" />
@@ -88,9 +89,9 @@
                     <!-- 次へボタン -->
                     <c:if test="${currentPage < totalPages}">
                         <form method="get" action="SearchResultServlet" style="display: inline;">
-                            <input type="hidden" name="nameKeyword" value="${nameKeyword}" />
-                            <input type="hidden" name="furiganaKeyword" value="${furiganaKeyword}" />
-                            <input type="hidden" name="schoolNameKeyword" value="${schoolNameKeyword}" />
+                            <input type="hidden" name="name" value="${name}" />
+                            <input type="hidden" name="furigana" value="${furigana}" />
+                            <input type="hidden" name="schoolName" value="${schoolName}" />
                             <input type="hidden" name="sort" value="${sort}" />
                             <input type="hidden" name="page" value="${currentPage + 1}" />
                             <input type="submit" value="次へ" />

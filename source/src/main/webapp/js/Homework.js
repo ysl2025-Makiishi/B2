@@ -32,3 +32,4 @@ function resetForm() {
     document.getElementById("result").textContent = "";
     document.getElementById("registerBtn").style.display = "none"; 
 }
+
