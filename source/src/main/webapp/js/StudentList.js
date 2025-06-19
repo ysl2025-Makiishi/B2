@@ -68,8 +68,9 @@ document.getElementById("studentCount").textContent = students.length;
 
 	card.addEventListener("click", () => {
 	  const encodedName = encodeURIComponent(student.name);
-	  window.location.href = `/studentDetail.jsp?name=${encodedName}`;
+	  window.location.href = `/IndividualResultsServlet?name=${encodedName}`;
 	});
+
       
       studentGrid.appendChild(card);
     }
@@ -101,6 +102,7 @@ document.getElementById("studentCount").textContent = students.length;
 
   // ▼ 3. 「1 / 2」 のようなページ情報表示
   const pageInfo = document.createElement("span");
+  pageInfo.className = "page-info";
   pageInfo.textContent = `${currentPage} / ${totalPages}`;
   wrapper.appendChild(pageInfo);
 
@@ -125,6 +127,9 @@ document.getElementById("studentCount").textContent = students.length;
       window.scrollY > 100 ? "block" : "none";
   });
   renderGrid();
+  
+ 
+
   
   document.getElementById("sortSelect").addEventListener("change", (e) => {
   const value = e.target.value;

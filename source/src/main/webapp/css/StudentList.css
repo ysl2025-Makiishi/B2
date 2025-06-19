@@ -213,3 +213,19 @@ h2 {
   transform: scale(1.02);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
+
+#backToHome {
+  padding: 1px 6px;   /* ← 少し大きめに調整 */
+  font-size: 1rem;    /* ← テキストも少し拡大 */
+}
+
+
+.pagination button {
+  padding: 1px 7px;    /* ← ボタンの余白を大きめに */
+  font-size: 1rem;     /* ← 文字サイズを少し拡大 */
+}
+
+.page-info {
+  font-size: 1.1rem;      /* ← サイズを大きく */
+  color: var(--color-text);  /* ← 既存の色と統一（任意） */
+}

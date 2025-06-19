@@ -24,17 +24,22 @@ public class StudentListDAO {
 	                "root", "password"
 	        );
 
-	        String sql = "SELECT name, gender, school_id FROM students ORDER BY id ASC";
-	        PreparedStatement pStmt = conn.prepareStatement(sql);
-	        ResultSet rs = pStmt.executeQuery();
+	        String sql = "SELECT s.name, s.gender, sc.school_name AS school_name " +
+	                "FROM students s " +
+	                "JOIN schools sc ON s.school_id = sc.id " +
+	                "ORDER BY s.id ASC";
 
-	        while (rs.next()) {
-	            students s = new students();
-	            s.setName(rs.getString("name"));
-	            s.setGender(rs.getString("gender"));
-	            s.setSchool_name("仮の学校名");
-	            studentList.add(s);
-	        }
+	   PreparedStatement pStmt = conn.prepareStatement(sql);
+	   ResultSet rs = pStmt.executeQuery();
+
+	   while (rs.next()) {
+	       students s = new students();
+	       s.setName(rs.getString("name"));
+	       s.setGender(rs.getString("gender"));
+	       s.setSchool_name(rs.getString("school_name")); // ← 本物の学校名に変更！
+	       studentList.add(s);
+	   }
+
 
 	    } catch (Exception e) {
 	        e.printStackTrace();
