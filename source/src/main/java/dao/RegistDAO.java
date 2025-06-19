@@ -6,120 +6,169 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Date;
 import java.util.Map;
+
+import dto.aspiration_schools;
+import dto.schools;
+import dto.students;
 
 public class RegistDAO {
 	
-	//生徒・学校・成績の一括登録
-	public boolean registAll(String name, String furigana, String schoolName, 
-			Date birthday, String gender, String aspiration1, 
-			String aspiration2, String aspiration3, 
-			Map<Integer, Integer> gpasMap // subject_id →gpa
-			) {
-		Connection conn = null;
-		boolean success = false;
+	//データベース接続
+	 static {
+	        try {
+	            // MySQL用ドライバクラス名（JDBC 8以降）
+	            Class.forName("com.mysql.cj.jdbc.Driver");
+	        } catch (ClassNotFoundException e) {
+	            // ドライバが見つからない場合、詳細を表示
+	            e.printStackTrace();
+	        }
+	    }
+	private Connection  getConnection() throws SQLException {
+		String url = "jdbc:mysql://localhost:3306/B2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo";
+		String user = "root";
+		String password = "password";
+		return DriverManager.getConnection(url, user, password);
+	}
+	
+	//studentsテーブルへの挿入
+	public int insertStudent(students student) {
+		String sql = "INSERT INTO students (name, furigana, school_id, birthday,"
+				+ " gender, aspiration_school1_id, aspiration_school2_id, "
+				+ "aspiration_school3_id, personality_id, created_at, updated_at)"
+				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 		
-		try {
-			conn = getConnection();
-			conn.setAutoCommit(false);	//トランザクション開始
+		int generatedId = -1;
+		
+		try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+			ps.setString(1, student.getName());
+            ps.setString(2, student.getFurigana());
+            ps.setInt(3, student.getSchool_id());
+            ps.setDate(4, new java.sql.Date(student.getBirthday().getTime()));
+            ps.setString(5, student.getGender());
+            ps.setInt(6, student.getAspiration_school1_id());
+            ps.setInt(7, student.getAspiration_school2_id());
+            ps.setInt(8, student.getAspiration_school3_id());
+            ps.setInt(9, student.getPersonality_id()); // 空欄の場合は0やnull管理
+            ps.executeUpdate();
+            
+            ResultSet keys = ps.getGeneratedKeys();
+            if (keys.next()) {
+                generatedId = keys.getInt(1);
+            }
 			
-			int school_id = insertOrGetSchoolId(conn, schoolName);	//学校を登録または取得
-			int student_id = insertStudent(conn, name, furigana, school_id, birthday, gender,
-                    aspiration1, aspiration2, aspiration3);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return generatedId;
+	}
+	
+	//schoolsテーブルへの挿入（既にあるかチェック）
+	public int insertOrGetSchoolId(schools school) {
+		int schoolId = -1;
+		
+		try (Connection conn = getConnection()) {
+			//存在チェック
+			String checkSql = "SELECT id FROM schools WHERE school_name = ?";
+			try(PreparedStatement checkPs = conn.prepareStatement(checkSql)) {
+				checkPs.setString(1, school.getSchool_name());
+				
+				ResultSet rs = checkPs.executeQuery();
+				if(rs.next()) {
+					return rs.getInt("id");
+				}
+			}
 			
-			insertGpas(conn, student_id, gpasMap);	//成績9件を登録
+			//存在しないなら挿入
+			String insertSql = "INSERT INTO schools (school_name) VALUES (?)";
+			try (PreparedStatement insertPs = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
+				insertPs.setString(1, school.getSchool_name());
+				insertPs.executeUpdate();
+				
+				ResultSet keys = insertPs.getGeneratedKeys();
+				if (keys.next()) {
+					schoolId = keys.getInt(1);
+				}
+			}
 			
-			conn.commit();  //全て成功したらコミット
-			success = true;
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			
-			try {
-				if(conn != null) conn.rollback();   //エラー時はロールバック 
-			} catch (SQLException ex) {
-				ex.printStackTrace();
-			}
 		}
-		
-		return success;
+		return schoolId;
 	}
 	
-	//学校を登録orID取得
-	private int insertOrGetSchoolId(Connection conn, String schoolName) throws SQLException {
-		int id = 0;
-		String sql = "SELECT id FROM schools WHERE school_name = ?";
+	//aspiration_schoolsテーブルへの挿入（既にあるかチェック）
+	public int insertOrGetAspirationSchoolId(aspiration_schools asp) {
+		int aspirationSchoolsId = -1;
 		
-		try (PreparedStatement stmt = conn.prepareStatement(sql)){
-			stmt.setString(1, schoolName);
-			ResultSet rs = stmt.executeQuery();
+		try (Connection conn = getConnection()) {
+			//存在チェック
 			
-			if(rs.next()) return rs.getInt("id");
-		}
-		
-		//登録がなければinsert
-		sql = "INSERT INTO schools (school_name, created_at, updated_at) VALUES (?, NOW(), NOW())";
-		
-		try(PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-			stmt.setString(1, schoolName);
-			stmt.executeUpdate();
+			String checkSql = "SELECT id FROM aspiration_schools WHERE "
+					+ "aspiration_school_name = ?";
 			
-			ResultSet rs =stmt.getGeneratedKeys();
-			if(rs.next()) id = rs.getInt(1);
-		}
-		
-		return id;
-	}
-	
-	//生徒を登録し、生成を返す
-	private int insertStudent(Connection conn, String name, String furigana,
-			int school_id, Date birthday, String gender, String asp1, String asp2, 
-			String asp3) throws SQLException {
-		String sql = "INSERT INTO students " + "(name, furigana, school_id, "
-				+ "birthday, gender, personality_id, aspiration_school1_id, "
-				+ "aspiration_school2_id, aspiration_school3_id, created_at, "
-				+ "updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		
-		try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-			stmt.setString(1, name);
-            stmt.setString(2, furigana);
-            stmt.setInt(3, school_id);
-            stmt.setDate(4, new java.sql.Date(birthday.getTime()));
-            stmt.setString(5, gender);
-            stmt.setInt(6, 0); // 性格IDは未入力
-            stmt.setString(7, asp1);
-            stmt.setString(8, asp2);
-            stmt.setString(9, asp3);
-            stmt.setDate(10, null);
-            stmt.setDate(11, null);
-            
-            stmt.executeUpdate();
-            ResultSet rs = stmt.getGeneratedKeys();
-            
-            if (rs.next()) return rs.getInt(1);
-		}
-		
-		return 0; 
-	}
-	
-	//GPAを複数件登録
-	private void insertGpas(Connection conn, int student_id, Map<Integer, Integer> gpasMap) throws SQLException {
-		String sql = "INSERT INTO gpas(student_id, subject_id, gpa, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())";
-		
-		try(PreparedStatement stmt = conn.prepareStatement(sql)) {
-			for(Map.Entry<Integer, Integer> entry : gpasMap.entrySet()) {
-				stmt.setInt(1, student_id);
-				stmt.setInt(2, entry.getKey()); 	//subject_id
-				stmt.setInt(3, entry.getValue()); 	//gpa
-				stmt.executeUpdate();
+			try (PreparedStatement checkPs = conn.prepareStatement(checkSql)) {
+				checkPs.setString(1, asp.getAspiration_school_name());
+				ResultSet rs = checkPs.executeQuery();
+				if (rs.next()) {
+					return rs.getInt("id");
+				}
 			}
+			
+			// 存在しないなら挿入
+			String insertSql = "INSERT INTO aspiration_schools (aspiration_school_name) VALUES (?)";
+			
+			try (PreparedStatement insertPs = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
+				insertPs.setString(1, asp.getAspiration_school_name());
+				insertPs.executeUpdate();
+				ResultSet keys = insertPs.getGeneratedKeys();
+				
+				if(keys.next()) {
+					aspirationSchoolsId = keys.getInt(1);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return aspirationSchoolsId;
+	}
+	
+	
+	//gpaテーブルへの挿入（複数科目）
+	public void insertGrades(int studentId, Map<Integer, Integer> subjectGrades) {
+		String sql = "INSERT INTO gpas (student_id, subject_id, score) VALUES"
+				+ " (?, ?, ?)";
+		
+		try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			for (Map.Entry<Integer, Integer> entry : subjectGrades.entrySet()) {
+				ps.setInt(1, studentId);
+                ps.setInt(2, entry.getKey());   // subject_id
+                ps.setInt(3, entry.getValue()); // score
+                ps.addBatch();
+			}
+			
+			ps.executeBatch();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	
-	private Connection getConnection() throws SQLException {
-	    String url = "jdbc:mysql://localhost:3306/b2"; // ←DB名
-	    String user = "root";   // ←ユーザー名
-	    String password = "password"; // ←パスワード
-	    return DriverManager.getConnection(url, user, password);
-	}
+	//Studentのidを取得するメソッド
+//	public int getLastInsertedStudentId() {
+//		int id = -1;
+//		String sql = "SELECT LAST_INSERT_ID()";
+//		
+//		try(Connection conn = getConnection();
+//			PreparedStatement ps = conn.prepareStatement(sql);
+//			ResultSet rs = ps.executeQuery()) {
+//				if(rs.next()) {
+//					id = rs.getInt(1);
+//				}
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		return id;
+//	}
 }

@@ -8,10 +8,13 @@
   <link rel="stylesheet" href="<c:url value='/css/K-style.css' />">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 40px;
-    }
-
+  font-family: Arial, sans-serif;
+  padding-top: 0;
+  padding-right: 40px;
+  padding-bottom: 100px;
+  padding-left: 40px;
+}
+    
     h1 {
       font-size: 24px;
       margin-bottom: 20px;
@@ -105,12 +108,17 @@
       <li><a href="<c:url value='/StudentListServlet' />">生徒一覧</a></li>
       <li><a href="<c:url value='/RegistServlet' />">登録</a></li>
       <li><a href="<c:url value='/SearchServlet' />">検索</a></li>
-      <li><a href="<c:url value='/LoginServlet' />">ログアウト</a></li>
+     <li><a href="<c:url value='/LogoutServlet' />"
+					onclick="return confirm('本当に実行しますか？');">ログアウト</a></li>
     </ul>
 
     <h2>検索（入力した項目を含む生徒を検索します）</h2>
 
     <div class="search-form">
+    <c:if test="${not empty error}">
+ 	 <p style="color:red;">${error}</p>
+	</c:if>
+    
       <form action="SearchServlet" method="post">
         <label>
           <span class="label-text">氏名：</span>

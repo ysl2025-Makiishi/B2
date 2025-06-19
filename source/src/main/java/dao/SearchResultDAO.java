@@ -1,6 +1,6 @@
 package dao;
 
-import java.sql.Connection;
+	import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dto.students;
-
-public class SearchResultDAO {
 	
-		private static final String JDBC_URL = "jdbc:mysql://localhost:3306/B2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo";
-	    private static final String DB_USER = "root";
-	    private static final String DB_PASS = "password";
+	public class SearchResultDAO {
+		
+			private static final String JDBC_URL = "jdbc:mysql://localhost:3306/B2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo";
+		    private static final String DB_USER = "root";
+		    private static final String DB_PASS = "password";
 
-    public static List<students> searchByName(String name, String furigana, String schoolName,
+    public static List<students> searchByName(int id, String name, String furigana, String schoolName,
                                               String sort, int limit, int offset) {
         List<students> resultList = new ArrayList<>();
         Connection conn = null;
@@ -149,27 +149,41 @@ public class SearchResultDAO {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+            conn.setAutoCommit(false); // トランザクション開始
 
-            String sql = "DELETE FROM students WHERE id = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, studentId);
+            // ① homeworks テーブルから該当生徒の宿題を削除
+            String deleteHomeworkSql = "DELETE FROM homeworks WHERE student_id = ?";
+            try (PreparedStatement ps1 = conn.prepareStatement(deleteHomeworkSql)) {
+                ps1.setInt(1, studentId);
+                ps1.executeUpdate(); // 件数は気にしなくてOK（0件でも問題なし）
+            }
 
-            int rowsAffected = ps.executeUpdate();
-            success = (rowsAffected > 0);
+            // ② students テーブルから生徒を削除
+            String deleteStudentSql = "DELETE FROM students WHERE id = ?";
+            try (PreparedStatement ps2 = conn.prepareStatement(deleteStudentSql)) {
+                ps2.setInt(1, studentId);
+                int rowsAffected = ps2.executeUpdate();
+                success = (rowsAffected > 0);
+            }
+
+            conn.commit(); // 正常終了でコミット
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback(); // エラー時にロールバック
+                } catch (Exception rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
             }
+        } finally {
+            try { if (conn != null) conn.close(); } catch (Exception e) { e.printStackTrace(); }
         }
 
         return success;
     }
-    
+
     
 }
 

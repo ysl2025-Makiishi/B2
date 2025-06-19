@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>宿題提案</title>
-    <link rel="stylesheet" href="<c:url value='/css/K-style.css' />">
+    <link rel="stylesheet" href="<c:url value='/css/Homework.css' />">
 
     <style>
         body {
@@ -30,12 +30,13 @@
             <li><a href="<c:url value='/HomeServlet' />">ホーム</a></li>
             <li><a href="<c:url value='/StudentListServlet' />">生徒一覧</a></li>
             <li><a href="<c:url value='/RegistServlet' />">登録</a></li>
-            <li><a href="<c:url value='/SearachServlet' />">検索</a></li>
-            <li><a href="<c:url value='/LoginServlet' />">ログアウト</a></li>
+            <li><a href="<c:url value='/SearchServlet' />">検索</a></li>
+            <li><a href="<c:url value='/LogoutServlet' />"
+					onclick="return confirm('本当に実行しますか？');">ログアウト</a></li>
         </ul>
         <!-- ヘッダー（ここまで） -->
 
-        <h1>宿題提案</h1>
+        <h2>宿題提案</h2>
 
         <label for="nextDate">次に塾に行く日を選んでください</label><br>
         <input type="date" id="nextDate"><br>
@@ -48,7 +49,7 @@
 
         <h2 id="result"></h2>
         
-        <button id="registerBtn" type="button" style="display: none;">登録</button>
+        <button id="registerBtn" type="button" style="display: none;"onclick="alert('登録しました');">登録</button>
 
         
     </div>
