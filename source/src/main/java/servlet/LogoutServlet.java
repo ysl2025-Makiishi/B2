@@ -17,15 +17,17 @@ public class LogoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// セッションスコープを破棄する
 		HttpSession session = request.getSession();
 		session.invalidate();
 
 		// ログインページにリダイレクトする
-		response.sendRedirect("/webapp/LoginServlet");
+		response.sendRedirect(request.getContextPath() + "/LoginServlet");
 	}
 
 }
