@@ -15,7 +15,7 @@ public class SearchResultDAO {
 	    private static final String DB_USER = "root";
 	    private static final String DB_PASS = "password";
 
-    public static List<students> searchByName(String name, String furigana, String schoolName,
+    public static List<students> searchByName(int id, String name, String furigana, String schoolName,
                                               String sort, int limit, int offset) {
         List<students> resultList = new ArrayList<>();
         Connection conn = null;

@@ -31,7 +31,8 @@
             <li><a href="<c:url value='/StudentListServlet' />">生徒一覧</a></li>
             <li><a href="<c:url value='/RegistServlet' />">登録</a></li>
             <li><a href="<c:url value='/SearachServlet' />">検索</a></li>
-            <li><a href="<c:url value='/LoginServlet' />">ログアウト</a></li>
+            <li><a href="<c:url value='/LogoutServlet' />"
+					onclick="return confirm('本当に実行しますか？');">ログアウト</a></li>
         </ul>
         <!-- ヘッダー（ここまで） -->
 

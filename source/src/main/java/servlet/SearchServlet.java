@@ -1,7 +1,8 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.List;
+import java.net.URLEncoder;
+// ← 追加！
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,11 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import dao.SearchDAO;          // ← 追加！
-import dto.students; 
-import java.net.URLEncoder;
-// ← 追加！
 
 @WebServlet("/SearchServlet")
 public class SearchServlet extends HttpServlet {
@@ -30,10 +26,16 @@ public class SearchServlet extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-
+        
+        
         String name = request.getParameter("name");
         String furigana = request.getParameter("furigana");
         String school = request.getParameter("school");
+        
+     // nullチェックして空文字にする
+        name = name == null ? "" : name;
+        furigana = furigana == null ? "" : furigana;
+        school = school == null ? "" : school;
 
         String redirectUrl = "SearchResultServlet?name=" + URLEncoder.encode(name, "UTF-8")
                 + "&furigana=" + URLEncoder.encode(furigana, "UTF-8")

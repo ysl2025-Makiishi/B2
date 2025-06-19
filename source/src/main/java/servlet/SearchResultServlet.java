@@ -43,7 +43,11 @@ import dto.students;
 	            response.sendRedirect("SearchResultServlet");
 	            return;
 	        }
-	        
+	        int id = 0;
+	        String idStr = request.getParameter("id");
+	        if (idStr != null && idStr.matches("\\d+")) {
+	         id = Integer.parseInt(idStr);
+	        }
 	        String name = getOrDefault(request.getParameter("name"));
 	        String furigana = getOrDefault(request.getParameter("furigana"));
 	        String schoolName = getOrDefault(request.getParameter("schoolName"));
@@ -68,10 +72,11 @@ import dto.students;
 	
 	        // ページサイズと開始位置をDAOに渡して必要分だけ取得
 	        List<students> studentList = SearchResultDAO.searchByName(
-	            name, furigana, schoolName, sort, PAGE_SIZE, offset
+	            id, name, furigana, schoolName, sort, PAGE_SIZE, offset
 	        );
 	
 	        // JSPにセット
+	        request.setAttribute("studentid", id);
 	        request.setAttribute("studentList", studentList);
 	        request.setAttribute("name", name);
 	        request.setAttribute("furigana", furigana);
