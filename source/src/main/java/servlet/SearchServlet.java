@@ -2,7 +2,11 @@ package servlet;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+<<<<<<< HEAD
 import java.nio.charset.StandardCharsets;
+=======
+// ← 追加！
+>>>>>>> 0f6577cc56a3c84cb64069570f8e1550e227c62f
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,11 +31,24 @@ public class SearchServlet extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
+<<<<<<< HEAD
 
         // パラメータ取得（null対策付き）
         String name = getSafeParam(request.getParameter("name"));
         String furigana = getSafeParam(request.getParameter("furigana"));
         String school = getSafeParam(request.getParameter("school"));
+=======
+        
+        
+        String name = request.getParameter("name");
+        String furigana = request.getParameter("furigana");
+        String school = request.getParameter("school");
+        
+     // nullチェックして空文字にする
+        name = name == null ? "" : name;
+        furigana = furigana == null ? "" : furigana;
+        school = school == null ? "" : school;
+>>>>>>> 0f6577cc56a3c84cb64069570f8e1550e227c62f
 
         try {
             // URLエンコードして検索結果画面にリダイレクト
