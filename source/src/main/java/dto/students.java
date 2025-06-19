@@ -65,19 +65,7 @@ public class students {
 	public int getSchool_id() {
 		return school_id;
 	}
-<<<<<<< HEAD
 
-	public String getSchool_name() {
-		return school_name;
-	}
-
-	public void setSchool_name(String school_name) {
-		this.school_name = school_name;
-	}
-
-=======
-	
->>>>>>> 2c41478e3611510be5856f1b4feb698c94e0e5f4
 	public void setSchool_id(int school_id) {
 		this.school_id = school_id;
 	}
