@@ -8,10 +8,13 @@
   <link rel="stylesheet" href="<c:url value='/css/K-style.css' />">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 40px;
-    }
-
+  font-family: Arial, sans-serif;
+  padding-top: 0;
+  padding-right: 40px;
+  padding-bottom: 100px;
+  padding-left: 40px;
+}
+    
     h1 {
       font-size: 24px;
       margin-bottom: 20px;
