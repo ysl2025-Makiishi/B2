@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,138 +11,141 @@ import dto.texts;
 
 public class TextDAO {
 
-    private Connection getConnection() throws SQLException {
-    	String url = "jdbc:mysql://localhost:3306/student";
-    	String user = "root";
-    	String password = "password";
-        return DriverManager.getConnection(url, user, password);
-    }
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/B2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo";
+    private static final String DB_USER = "root";
+    private static final String DB_PASS = "password";
 
-    // 全件取得
-    public List<texts> findBySubjectAndPersonality(int subjectId, int personalityId) {
-        List<texts> list = new ArrayList<>();
-        String sql = "SELECT * FROM texts WHERE subject_id = ? AND personality_id = ?";
+    // 指定された教科と性格によるテキスト検索
+    public List<texts> getTextsBySubjectAndPersonality(int subjectId, int personalityId) {
+        List<texts> resultList = new ArrayList<>();
 
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-        	 // ★ 検索条件のデバッグ表示
-            System.out.println("★SQL実行: subjectId = " + subjectId + ", personalityId = " + personalityId);
+        String sql = """
+            SELECT * FROM texts 
+            WHERE subject_id = ? AND personality_id = ?
+        """;
 
-            stmt.setInt(1, subjectId);
-            stmt.setInt(2, personalityId);
-            ResultSet rs = stmt.executeQuery();
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, subjectId);
+            ps.setInt(2, personalityId);
+
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                texts text = new texts();
-                text.setId(rs.getInt("id"));
-                text.setTextName(rs.getString("text_name"));
-                text.setSubjectId(rs.getInt("subject_id"));
-                text.setPersonalityId(rs.getInt("personality_id"));
-                text.setPages(rs.getInt("pages"));
-                text.setNote(rs.getString("note"));
-                text.setCreatedAt(rs.getTimestamp("created_at"));
-                text.setUpdatedAt(rs.getTimestamp("updated_at"));
-                list.add(text);
+                texts t = new texts();
+                t.setId(rs.getInt("id"));
+                t.setTextName(rs.getString("text_name"));
+                t.setSubjectId(rs.getInt("subject_id"));
+                t.setPersonalityId(rs.getInt("personality_id"));
+                t.setPages(rs.getInt("pages"));
+                t.setNote(rs.getString("note"));
+                t.setCreatedAt(rs.getTimestamp("created_at"));
+                t.setUpdatedAt(rs.getTimestamp("updated_at"));
+                resultList.add(t);
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("★SQLエラー：" + e.getMessage());
         }
-     // ★ 検索結果の件数を出力
-        System.out.println("★取得件数：" + list.size());
 
-        return list;
+        return resultList;
     }
 
-
-    // IDで1件取得
+    // ID指定でテキストを取得
     public texts findById(int id) {
+        texts t = null;
+
         String sql = "SELECT * FROM texts WHERE id = ?";
-        texts text = null;
 
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                text = new texts();
-                text.setId(rs.getInt("id"));
-                text.setTextName(rs.getString("text_name"));
-                text.setSubjectId(rs.getInt("subject_id"));
-                text.setPersonalityId(rs.getInt("personality_id"));
-                text.setPages(rs.getInt("pages"));
-                text.setNote(rs.getString("note"));
-                text.setCreatedAt(rs.getTimestamp("created_at"));
-                text.setUpdatedAt(rs.getTimestamp("updated_at"));
+                t = new texts();
+                t.setId(rs.getInt("id"));
+                t.setTextName(rs.getString("text_name"));
+                t.setSubjectId(rs.getInt("subject_id"));
+                t.setPersonalityId(rs.getInt("personality_id"));
+                t.setPages(rs.getInt("pages"));
+                t.setNote(rs.getString("note"));
+                t.setCreatedAt(rs.getTimestamp("created_at"));
+                t.setUpdatedAt(rs.getTimestamp("updated_at"));
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return text;
+        return t;
     }
 
-    // 登録
-    public boolean insert(texts text) {
-        String sql = "INSERT INTO texts (text_name, subject_id, personality_id, pages, note, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())";
+    // テキストの新規登録
+    public boolean insert(texts t) {
+        String sql = """
+            INSERT INTO texts (text_name, subject_id, personality_id, pages, note, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, NOW(), NOW())
+        """;
 
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, text.getTextName());
-            stmt.setInt(2, text.getSubjectId());
-            stmt.setInt(3, text.getPersonalityId());
-            stmt.setInt(4, text.getPages());
-            stmt.setString(5, text.getNote());
+            ps.setString(1, t.getTextName());
+            ps.setInt(2, t.getSubjectId());
+            ps.setInt(3, t.getPersonalityId());
+            ps.setInt(4, t.getPages());
+            ps.setString(5, t.getNote());
 
-            int rows = stmt.executeUpdate();
+            int rows = ps.executeUpdate();
             return rows > 0;
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    // 更新
-    public boolean update(texts text) {
-        String sql = "UPDATE texts SET text_name = ?, subject_id = ?, personality_id = ?, pages = ?, note = ?, updated_at = NOW() WHERE id = ?";
+    // テキストの更新
+    public boolean update(texts t) {
+        String sql = """
+            UPDATE texts SET text_name = ?, subject_id = ?, personality_id = ?, pages = ?, note = ?, updated_at = NOW()
+            WHERE id = ?
+        """;
 
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, text.getTextName());
-            stmt.setInt(2, text.getSubjectId());
-            stmt.setInt(3, text.getPersonalityId());
-            stmt.setInt(4, text.getPages());
-            stmt.setString(5, text.getNote());
-            stmt.setInt(6, text.getId());
+            ps.setString(1, t.getTextName());
+            ps.setInt(2, t.getSubjectId());
+            ps.setInt(3, t.getPersonalityId());
+            ps.setInt(4, t.getPages());
+            ps.setString(5, t.getNote());
+            ps.setInt(6, t.getId());
 
-            int rows = stmt.executeUpdate();
+            int rows = ps.executeUpdate();
             return rows > 0;
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    // 削除
+    // テキストの削除
     public boolean delete(int id) {
         String sql = "DELETE FROM texts WHERE id = ?";
 
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, id);
-            int rows = stmt.executeUpdate();
+            ps.setInt(1, id);
+            int rows = ps.executeUpdate();
             return rows > 0;
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

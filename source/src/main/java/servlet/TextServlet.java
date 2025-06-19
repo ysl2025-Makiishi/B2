@@ -14,6 +14,7 @@ import dao.TextDAO;
 import dto.texts;
 
 
+
 @WebServlet("/TextServlet")
 public class TextServlet extends HttpServlet {
 
@@ -25,29 +26,23 @@ public class TextServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         request.setCharacterEncoding("UTF-8");
 
-        String subject = request.getParameter("subject");
-        String personality = request.getParameter("personality");
+        int subjectId = Integer.parseInt(request.getParameter("subject"));
+        int personalityId = Integer.parseInt(request.getParameter("personality"));
 
-        int subjectId = 0;
-        int personalityId = 0;
+        TextDAO dao = new TextDAO();
+        List<texts> textsList = dao.getTextsBySubjectAndPersonality(subjectId, personalityId);
 
-        if (subject != null && !subject.isEmpty()) {
-            subjectId = Integer.parseInt(subject);
-        }
-        if (personality != null && !personality.isEmpty()) {
-            personalityId = Integer.parseInt(personality);
-        }
-
-        System.out.println("subjectId = " + subjectId);
-        System.out.println("personalityId = " + personalityId);
-
-        List<texts> textsList = new TextDAO().findBySubjectAndPersonality(subjectId, personalityId);
-        System.out.println("textsList.size() = " + textsList.size());
+        // ここに追加
+        System.out.println("検索結果件数: " + textsList.size());
 
         request.setAttribute("textsList", textsList);
         request.setAttribute("searched", true);
-        request.getRequestDispatcher("/WEB-INF/jsp/Text.jsp").forward(request, response);
-}}
+        request.setAttribute("subject", subjectId);
+        request.setAttribute("personality", personalityId);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/Text.jsp");
+        dispatcher.forward(request, response);
+    }
+}
