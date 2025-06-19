@@ -23,15 +23,15 @@
       
 
     </h1>
-    </div>
-    </div>
+    <!-- ここここここここ -->
         <ul id="nav">
             <li><a href="<c:url value='/HomeServlet' />">ホーム</a></li>
       <li><a href="<c:url value='/StudentListServlet' />">生徒一覧</a></li>
       <li><a href="<c:url value='/RegistServlet' />">登録</a></li>
       <li><a href="<c:url value='/SearchServlet' />">検索</a></li>
       <!--  <li><a href="<c:url value='/LoginServlet' />">宿題提案</a></li> -->
-      <li><a href="<c:url value='/LoginServlet' />">ログアウト</a></li>
+      <li><a href="<c:url value='/LogoutServlet' />"
+					onclick="return confirm('本当に実行しますか？');">ログアウト</a></li>
         </ul>
         <!-- ヘッダー（ここまで） -->
         <!-- メイン（ここから） -->
@@ -143,6 +143,8 @@
                 
 
         </div>
+        </div>
+    </div>
         <!-- メイン（ここまで） -->
         <!-- フッター（ここから） -->
         <div id="footer">

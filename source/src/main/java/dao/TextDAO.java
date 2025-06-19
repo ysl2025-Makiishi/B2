@@ -11,18 +11,23 @@ import dto.texts;
 
 public class TextDAO {
 
+    static {
+        try {
+            // MySQL JDBCドライバ読み込み
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/B2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo";
     private static final String DB_USER = "root";
     private static final String DB_PASS = "password";
 
-    // 指定された教科と性格によるテキスト検索
+    // 教科と性格でテキスト取得
     public List<texts> getTextsBySubjectAndPersonality(int subjectId, int personalityId) {
         List<texts> resultList = new ArrayList<>();
-
-        String sql = """
-            SELECT * FROM texts 
-            WHERE subject_id = ? AND personality_id = ?
-        """;
+        String sql = "SELECT * FROM texts WHERE subject_id = ? AND personality_id = ?";
 
         try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -44,7 +49,6 @@ public class TextDAO {
                 t.setUpdatedAt(rs.getTimestamp("updated_at"));
                 resultList.add(t);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,10 +56,9 @@ public class TextDAO {
         return resultList;
     }
 
-    // ID指定でテキストを取得
+    // ID指定でテキスト取得
     public texts findById(int id) {
         texts t = null;
-
         String sql = "SELECT * FROM texts WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
@@ -75,7 +78,6 @@ public class TextDAO {
                 t.setCreatedAt(rs.getTimestamp("created_at"));
                 t.setUpdatedAt(rs.getTimestamp("updated_at"));
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -83,12 +85,9 @@ public class TextDAO {
         return t;
     }
 
-    // テキストの新規登録
+    // 新規登録
     public boolean insert(texts t) {
-        String sql = """
-            INSERT INTO texts (text_name, subject_id, personality_id, pages, note, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, NOW(), NOW())
-        """;
+        String sql = "INSERT INTO texts (text_name, subject_id, personality_id, pages, note, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())";
 
         try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -108,12 +107,9 @@ public class TextDAO {
         }
     }
 
-    // テキストの更新
+    // 更新
     public boolean update(texts t) {
-        String sql = """
-            UPDATE texts SET text_name = ?, subject_id = ?, personality_id = ?, pages = ?, note = ?, updated_at = NOW()
-            WHERE id = ?
-        """;
+        String sql = "UPDATE texts SET text_name = ?, subject_id = ?, personality_id = ?, pages = ?, note = ?, updated_at = NOW() WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -134,7 +130,7 @@ public class TextDAO {
         }
     }
 
-    // テキストの削除
+    // 削除
     public boolean delete(int id) {
         String sql = "DELETE FROM texts WHERE id = ?";
 

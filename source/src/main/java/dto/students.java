@@ -8,7 +8,6 @@ public class students {
 	private String name;
 	private String furigana;
 	private int school_id;
-	private String school_name;
 	private Date birthday;
 	private String gender;
 	private int aspiration_school1_id;	//志望校（3つ登録できるようにするので3つ用意）
@@ -65,14 +64,6 @@ public class students {
 
 	public int getSchool_id() {
 		return school_id;
-	}
-	
-	public String getSchool_name() {
-	    return school_name;
-	}
-
-	public void setSchool_name(String school_name) {
-	    this.school_name = school_name;
 	}
 	
 	public void setSchool_id(int school_id) {
