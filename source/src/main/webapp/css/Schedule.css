@@ -21,6 +21,7 @@ body {
     font-family: "Segoe UI", sans-serif;
     margin: 0;
     padding: 0;
+    font-size: 18px;
 }
 
 .wrapper {
@@ -35,7 +36,6 @@ body {
 
 /* ——— ヘッダー ——— */
 #logo p {
-    color: var(--color-primary);
     font-size: 2.5rem;
     margin: 0;
     text-align: center;
@@ -83,36 +83,6 @@ h2 {
     font-size: 1.8rem;
 }
 
-/* ——— ボタン ——— */
-.button {
-    display: inline-block;
-    background-image: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-    color: #20b4da;
-    padding: 0.8em 2.4em;
-    /* 横幅を広く */
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 999px;
-    /* ピル型 */
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    transition: transform 0.2s, box-shadow 0.2s;
-    white-space: nowrap;
-    /* 文字を横一列に */
-    text-align: center;
-    margin: 0;
-    /* ナビ内はgapで管理 */
-}
-
-.button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
-}
-
-.button:active {
-    transform: translateY(0);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-}
 
 /* ——— フッター ——— */
 #footer {
@@ -143,4 +113,14 @@ h2 {
   max-width: 600px; /* 好みで幅制限 */
   margin: 0 auto; /* ページ中央に配置 */
   line-height: 2;
+}
+
+/* すべてのボタンと送信・リセットボタンのサイズを少し大きくする */
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+    font-size: 0.9rem;      /* 文字を少し大きく */
+    padding: 0.2em 0.7em;   /* 余白を増やしてボタンを拡大 */
+    cursor: pointer;        /* カーソルをポインターに */
 }

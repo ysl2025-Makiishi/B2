@@ -4,7 +4,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>スケジュール作成 | K-manage</title>
+  <title>スケジュール作成</title>
   <link rel="stylesheet" href="<c:url value='/css/Schedule.css' />">
 </head>
 <body>
@@ -21,7 +21,7 @@
             <li><a href="<c:url value='/StudentListServlet' />">生徒一覧</a></li>
             <li><a href="<c:url value='/RegistServlet' />">登録</a></li>
             <li><a href="<c:url value='/SearchServlet' />">検索</a></li>
-            <li><a href="<c:url value='/LoginServlet' />">ログアウト</a></li>
+            <li><a href="<c:url value='/LogoutServlet' />" onclick="return confirm('本当に実行しますか？');">ログアウト</a></li>
         </ul>
         <!-- ヘッダー（ここまで） -->
         <!-- メイン（ここから） -->
@@ -80,8 +80,8 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" name="search" value="検索">
-                    <input type="reset" name="reset" value="リセット">
+                    <input type="submit" class="button" name="search" value="検索">
+                    <input type="reset" class="button" name="reset" value="リセット">
                     <span id="error_message"></span>
                 <td>
             </tr>
@@ -92,16 +92,17 @@
 
         <!-- 登録ボタン（非表示） -->
         <div id="register_container" style="display: none; margin-top: 10px;">
-            <button type="button" onclick="alert('登録しました');">登録</button>
+            <button type="button" class="button" onclick="alert('登録しました');">登録</button>
         </div>
         </div>
 
         <!-- 戻るボタン -->
         <div style="margin-top: 20px; text-align: left;">
-            <a href="subject_result.html">
-                <button type="button">科目ごと個人結果に戻る</button>
-            </a>
-        </div>
+		    <a href="IndividualResultsServlet">
+			  <button type="button" class="button">科目ごと個人結果に戻る</button>
+			</a>
+		</div>
+        
         <!-- メイン（ここまで） -->
         <!-- フッター（ここから） -->
         <!--<div id="footer">

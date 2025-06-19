@@ -78,8 +78,7 @@
       
 
     </h1>
-    </div>
-    </div>
+
 
     <ul id="nav">
       <li><a href="<c:url value='/HomeServlet' />">ホーム</a></li>
@@ -87,7 +86,8 @@
       <li><a href="<c:url value='/RegistServlet' />">登録</a></li>
       <li><a href="<c:url value='/SearchServlet' />">検索</a></li>
       <!--  <li><a href="<c:url value='/LoginServlet' />">宿題提案</a></li> -->
-      <li><a href="<c:url value='/LoginServlet' />">ログアウト</a></li>
+      <li><a href="<c:url value='/LogoutServlet' />"
+					onclick="return confirm('本当に実行しますか？');">ログアウト</a></li>
     </ul>
 
 
@@ -100,11 +100,11 @@
     <div class="form-row">
       <div class="form-group">
         <label for="name">氏名 <span style="color:red;">※</span></label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" name="name" value="name" required>
       </div>
       <div class="form-group">
         <label for="furigana">ふりがな <span style="color:red;">※</span></label>
-        <input type="text" id="furigana" name="furigana" onblur="validateHiragana(this)" required>
+        <input type="text" id="furigana" name="furigana" value="furigana" onblur="validateHiragana(this)" required>
       </div>
     </div>
 
@@ -112,11 +112,11 @@
     <div class="form-row">
       <div class="form-group">
         <label for="school">学校名</label>
-        <input type="text" id="school" name="school">
+        <input type="text" id="school" name="school" value="school">
       </div>
       <div class="form-group">
         <label for="birthday">生年月日 <span style="color:red;">※</span></label>
-        <input type="date" id="birthday" name="birthday" required>
+        <input type="date" id="birthday" name="birthday" value="${ student.birthday}" required>
       </div>
     </div>
 
@@ -140,15 +140,15 @@
     <div class="form-row">
       <div class="form-group">
         <label for="hope1">志望校 1</label>
-        <input type="text" id="hope1" name="hope1">
+        <input type="text" id="hope1" name="aspiration_school1" value="aspiration_school1">
       </div>
       <div class="form-group">
         <label for="hope2">志望校 2</label>
-        <input type="text" id="hope2" name="hope2">
+        <input type="text" id="hope2" name="aspiration_school2" value="aspiration_school2">
       </div>
       <div class="form-group">
         <label for="hope3">志望校 3</label>
-        <input type="text" id="hope3" name="hope3">
+        <input type="text" id="hope3" name="aspiration_school3" value="aspiration_school3">
       </div>
     </div>
 
@@ -173,7 +173,7 @@
   <option value="技術家庭">技術家庭</option>
 </select>-->
 
-国語&nbsp;&nbsp;<select name="grade1" style="width: 60px; margin-top: 5px;">
+国語&nbsp;&nbsp;<select name="gpa1" style="width: 60px; margin-top: 5px;">
   <option value="">成績</option>
   <option value="1">1</option>
   <option value="2">2</option>
@@ -197,7 +197,7 @@
   <option value="保健体育">保健体育</option>
   <option value="技術家庭">技術家庭</option>
      </select>-->
-      数学&nbsp;&nbsp;<select name="grade2" style="width: 60px; margin-top: 5px;">
+      数学&nbsp;&nbsp;<select name="gpa2" style="width: 60px; margin-top: 5px;">
          <option value="">成績</option>
   <option value="1">1</option>
   <option value="2">2</option>
@@ -219,7 +219,7 @@
   <option value="保健体育">保健体育</option>
   <option value="技術家庭">技術家庭</option>
       </select>-->
-      英語&nbsp;&nbsp;<select name="grade3" style="width: 60px; margin-top: 5px;">
+      英語&nbsp;&nbsp;<select name="gpa3" style="width: 60px; margin-top: 5px;">
           <option value="">成績</option>
   <option value="1">1</option>
   <option value="2">2</option>
@@ -241,7 +241,7 @@
   <option value="保健体育">保健体育</option>
   <option value="技術家庭">技術家庭</option>
       </select>-->
-      理科&nbsp;&nbsp;<select name="grade4" style="width: 60px; margin-top: 5px;"> 
+      理科&nbsp;&nbsp;<select name="gpa4" style="width: 60px; margin-top: 5px;"> 
          <option value="">成績</option>
   <option value="1">1</option>
   <option value="2">2</option>
@@ -263,7 +263,7 @@
   <option value="保健体育">保健体育</option>
   <option value="技術家庭">技術家庭</option>
       </select>-->
-      社会&nbsp;&nbsp;<select name="grade5" style="width: 60px; margin-top: 5px;">
+      社会&nbsp;&nbsp;<select name="gpa5" style="width: 60px; margin-top: 5px;">
          <option value="">成績</option>
   <option value="1">1</option>
   <option value="2">2</option>
@@ -285,7 +285,7 @@
   <option value="保健体育">保健体育</option>
   <option value="技術家庭">技術家庭</option>
       </select>-->
-      体育&nbsp;&nbsp;<select name="grade6" style="width: 60px; margin-top: 5px;">
+      体育&nbsp;&nbsp;<select name="gpa6" style="width: 60px; margin-top: 5px;">
          <option value="">成績</option>
   <option value="1">1</option>
   <option value="2">2</option>
@@ -307,7 +307,7 @@
   <option value="保健体育">保健体育</option>
   <option value="技術家庭">技術家庭</option>
       </select>-->
-      技家&nbsp;&nbsp;<select name="grade7" style="width: 60px; margin-top: 5px;"> 
+      技家&nbsp;&nbsp;<select name="gpa7" style="width: 60px; margin-top: 5px;"> 
         <option value="">成績</option>
   <option value="1">1</option>
   <option value="2">2</option>
@@ -326,7 +326,7 @@
   <option value="美術">美術</option>
   <option value="保健体育">保健体育</option>
   <option value="技術家庭">技術家庭</option></select>-->
-      美術&nbsp;&nbsp;<select name="grade8" style="width: 60px; margin-top: 5px;">
+      美術&nbsp;&nbsp;<select name="gpa8" style="width: 60px; margin-top: 5px;">
          <option value="">成績</option>
   <option value="1">1</option>
   <option value="2">2</option>
@@ -346,7 +346,7 @@
   <option value="美術">美術</option>
   <option value="保健体育">保健体育</option>
   <option value="技術家庭">技術家庭</option></select>-->
-      音楽&nbsp;&nbsp;<select name="grade9" style="width: 60px; margin-top: 5px;">
+      音楽&nbsp;&nbsp;<select name="gpa9" style="width: 60px; margin-top: 5px;">
          <option value="">成績</option>
   <option value="1">1</option>
   <option value="2">2</option>
@@ -367,6 +367,8 @@
     </div>
 
   </form>
+    </div>
+    </div>
 <script src="<c:url value='/js/regist.js' />"></script>
 </body>
 </html>

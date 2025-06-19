@@ -24,10 +24,10 @@
             <li><a href="<c:url value='/StudentListServlet' />">生徒一覧</a></li>
             <li><a href="<c:url value='/RegistServlet' />">登録</a></li>
             <li><a href="<c:url value='/SearchServlet' />">検索</a></li>
-            <li><a href="<c:url value='/LoginServlet' />">ログアウト</a></li>
+            <li><a href="<c:url value='/LogoutServlet' />" onclick="return confirm('本当に実行しますか？');">ログアウト</a></li>
         </ul>
  <h1 style="border-bottom: 2px solid #1685E6; padding-bottom: 5px; margin-bottom: 20px;">生徒一覧</h1>
-  <div>現在の登録人数: <span id="studentCount">0</span> 人</div>
+  <div>現在の登録人数： <span id="studentCount">0</span> 人</div>
   <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
 	  <select id="sortSelect" style="padding: 5px; font-size: 1rem;">
 	    <option disabled selected>並び替え</option>
@@ -51,6 +51,7 @@
                 ">
                 ↑ TOP
             </button>
+<button id="backToHome" onclick="location.href='<c:url value='/HomeServlet' />'">ホームへ戻る</button>
 </div>
 <script>
   const students = [];

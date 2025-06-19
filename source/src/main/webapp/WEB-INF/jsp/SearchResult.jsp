@@ -22,7 +22,7 @@
             <li><a href="<c:url value='/HomeServlet' />">ホーム</a></li>
             <li><a href="<c:url value='/StudentListServlet' />">生徒一覧</a></li>
             <li><a href="<c:url value='/RegistServlet' />">登録</a></li>
-            <li><a href="<c:url value='/SearachServlet' />">検索</a></li>
+            <li><a href="<c:url value='/SearchServlet' />">検索</a></li>
             <li><a href="<c:url value='/LogoutServlet' />"
 					onclick="return confirm('本当に実行しますか？');">ログアウト</a></li>
         </ul>
@@ -60,7 +60,7 @@
         </a>
         <form action="SearchResultServlet" method="post"
      		 onsubmit="return confirm('本当にこの生徒を削除しますか？');"
-     		 style="position: absolute; top: 10px; right: 30px;">
+     		 style="position: absolute; top: 30px; right: 50px;">
     		<input type="hidden" name="deleteId" value="${s.id}" />
    			 <input type="submit" value="削除" />
 		</form>

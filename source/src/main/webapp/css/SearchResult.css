@@ -204,44 +204,39 @@ h2 {
   font-size: 1.2rem;     /* 通常より少し大きく */
 }
 
-.student-card-wrapper {
-    position: relative;
-}
-
-.student-card,
-.student-card-wrapper form input[type="submit"] {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* カードも削除ボタンも通常時 */
 .student-card {
-	border: 1px solid #333; /* 太さと色 */
-    background-color: white;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  cursor: pointer; /* ← カードがクリック可能に見える */
+  transition: transform 0.2s;
 }
 
-.student-card-wrapper form input[type="submit"] {
-     background-color: #e74c3c; /* 明るめの赤 */
+.student-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 削除ボタンの基本スタイル */
+input[type="submit"][value="削除"] {
+    background-color: var(--color-primary);
     color: white;
     border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 6px 12px rgba(192, 57, 43, 0.5);
+    box-shadow: 0 4px 8px rgba(51, 102, 204, 0.5);
+    transition: background-color 0.3s, transform 0.2s;
+    user-select: none;
 }
 
-/* 親の .student-card-wrapper にホバーが来たら、カードと削除ボタン両方に動きをつける */
-.student-card-wrapper:hover .student-card {
-    transform: translateY(3px);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+/* ホバー時の動き */
+input[type="submit"][value="削除"]:hover {
+    background-color: var(--color-accent);
+    transform: translateY(-3px);
 }
 
-.student-card-wrapper:hover form input[type="submit"] {
-    transform: translateY(3px);
-    box-shadow: 0 2px 6px rgba(192, 57, 43, 0.3);
-    background-color: #c0392b; /* ボタン色もホバー時に変える */
+/* 押した時 */
+input[type="submit"][value="削除"]:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 6px rgba(51, 102, 204, 0.4);
 }
-
