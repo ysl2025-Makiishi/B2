@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page import="java.time.LocalDate"%>
 <%
 LocalDate today = LocalDate.now();
@@ -38,17 +39,17 @@ LocalDate today = LocalDate.now();
 
 		<ul class="subject-nav">
 			<li><a
-				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subject=国語' />">国語</a></li>
+				href="<c:url value='/SubjectResultServlet?id=${student.id}&subject=国語' />">国語</a></li>
 			<li><a
-				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subject=数学' />">数学</a></li>
+				href="<c:url value='/SubjectResultServlet?id=${student.id}&subject=数学' />">数学</a></li>
 			<li><a
-				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subject=理科' />">理科</a></li>
+				href="<c:url value='/SubjectResultServlet?id=${student.id}&subject=理科' />">理科</a></li>
 			<li><a
-				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subject=社会' />">社会</a></li>
+				href="<c:url value='/SubjectResultServlet?id=${student.id}&subject=社会' />">社会</a></li>
 			<li><a
-				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subject=英語' />">英語</a></li>
+				href="<c:url value='/SubjectResultServlet?id=${student.id}&subject=英語' />">英語</a></li>
 			<li><a
-				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subject=総合' />">総合</a></li>
+				href="<c:url value='/SubjectResultServlet?id=${student.id}&subject=総合' />">総合</a></li>
 		</ul>
 
 
@@ -212,7 +213,7 @@ LocalDate today = LocalDate.now();
 
 
 
-
+			
 			<!-- 最新の模試結果 -->
 			<section class="centered">
 				<h3>最新の模試結果</h3>
@@ -239,6 +240,7 @@ LocalDate today = LocalDate.now();
 								<td>${exam.averageScore}</td>
 							</tr>
 						</c:forEach>
+
 					</tbody>
 				</table>
 			</section>
