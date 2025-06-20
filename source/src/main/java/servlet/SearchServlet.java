@@ -18,6 +18,7 @@ public class SearchServlet extends HttpServlet {
     // GETリクエスト：検索フォームを表示
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	 request.setCharacterEncoding("UTF-8");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/search.jsp");
         dispatcher.forward(request, response);
     }
@@ -31,7 +32,7 @@ public class SearchServlet extends HttpServlet {
         // パラメータ取得（null対策付き）
         String name = getSafeParam(request.getParameter("name"));
         String furigana = getSafeParam(request.getParameter("furigana"));
-        String school = getSafeParam(request.getParameter("school"));
+        String schoolName = getSafeParam(request.getParameter("schoolName"));
         
         /*String name = request.getParameter("name");
         String furigana = request.getParameter("furigana");
@@ -40,14 +41,14 @@ public class SearchServlet extends HttpServlet {
      // nullチェックして空文字にする
         name = name == null ? "" : name;
         furigana = furigana == null ? "" : furigana;
-        school = school == null ? "" : school;
+        schoolName = schoolName == null ? "" : schoolName;
 
 
         try {
             // URLエンコードして検索結果画面にリダイレクト
             String redirectUrl = "SearchResultServlet?name=" + URLEncoder.encode(name, StandardCharsets.UTF_8)
                     + "&furigana=" + URLEncoder.encode(furigana, StandardCharsets.UTF_8)
-                    + "&school=" + URLEncoder.encode(school, StandardCharsets.UTF_8);
+                    + "&school=" + URLEncoder.encode(schoolName, StandardCharsets.UTF_8);
             response.sendRedirect(redirectUrl);
         } catch (Exception e) {
             e.printStackTrace();

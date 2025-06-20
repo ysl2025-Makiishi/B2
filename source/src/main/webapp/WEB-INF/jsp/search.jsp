@@ -61,12 +61,12 @@
       text-align: center;
     }
 
-    input[type="submit"],
+   /* input[type="submit"],
     input[type="reset"] {
       padding: 8px 20px;
       font-size: 16px;
       margin: 0 10px;
-    }
+    }*/
 
     #nav {
       list-style: none;
@@ -89,6 +89,23 @@
       font-size: 14px;
       color: #999;
     }
+  .modern-button {
+  font-size: 16px;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 25px !important; /* 重要度アップ */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 0 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: white;
+  background: linear-gradient(135deg, #1685E6, #5dade2);
+}
+
+.modern-button:hover {
+  background: linear-gradient(135deg, #0f6ac4, #439fd7);
+  transform: translateY(-2px);
+}
   </style>
 </head>
 <body>
@@ -133,33 +150,17 @@
 
         <label>
           <span class="label-text">学校名：</span>
-          <input type="text" name="school" />
+          <input type="text" name="schoolName" />
         </label>
 
         <div class="buttons">
-          <input type="submit" value="検索" />
-          <input type="reset" value="リセット" />
+          <button type="submit" class="modern-button primary">検索</button>
+         <button type="reset" class="modern-button primary">リセット</button>
+         
         </div>
       </form>
     </div>
   </div>
-
-  <script>
-    const huriganaInput = document.getElementById('huriganaInput');
-    const huriganaError = document.getElementById('huriganaError');
-
-    huriganaInput.addEventListener('input', () => {
-      const original = huriganaInput.value;
-      const filtered = original.replace(/[^\u3041-\u3096ー\s]/g, '');
-
-      if (original !== filtered) {
-        huriganaError.textContent = 'ひらがなで入力してください';
-      } else {
-        huriganaError.textContent = '';
-      }
-
-      huriganaInput.value = filtered;
-    });
-  </script>
+ <script src="<c:url value='/js/search.js' />"></script>
 </body>
 </html>
