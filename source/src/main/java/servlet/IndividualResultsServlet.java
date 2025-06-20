@@ -55,23 +55,85 @@ public class IndividualResultsServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+
 		// リクエストパラメータからIDを取得
 		String idStr = request.getParameter("id");
-		System.out.println("サーブレット：受け取ったID = " + idStr); // 🔴ログ①
+		System.out.println("POST：受け取った id = " + idStr);
+
 		if (idStr == null || !idStr.matches("\\d+")) {
-			// IDが無効なら検索結果ページに戻す
-			System.out.println("サーブレット：IDが不正です");
+			System.out.println("POST：IDが不正です");
 			response.sendRedirect("SearchResultServlet");
 			return;
 		}
+
 		int studentId = Integer.parseInt(idStr);
-		System.out.println("受け取ったID: " + studentId); // ★ログ①
+
+		// フォームデータを取得
+		String name = request.getParameter("name");
+		String furigana = request.getParameter("furigana");
+		String gender = request.getParameter("gender");
+		String birthday = request.getParameter("birthday");
+
+		// GPA データを取得
+		String gpaJp = request.getParameter("gpa_jp");
+		String gpaSs = request.getParameter("gpa_ss");
+		String gpaMa = request.getParameter("gpa_ma");
+		String gpaSc = request.getParameter("gpa_sc");
+		String gpaEn = request.getParameter("gpa_en");
+		String gpaMu = request.getParameter("gpa_mu");
+		String gpaAr = request.getParameter("gpa_ar");
+		String gpaPe = request.getParameter("gpa_pe");
+		String gpaTe = request.getParameter("gpa_te");
+
+		// 模試データを取得（配列）
+		String[] examNames = request.getParameterValues("exam_name[]");
+		String[] examDates = request.getParameterValues("exam_date[]");
+		String[] examSubjects = request.getParameterValues("exam_subject[]");
+		String[] examScores = request.getParameterValues("exam_score[]");
+		String[] examDevs = request.getParameterValues("exam_dev[]");
+		String[] examAvgs = request.getParameterValues("exam_avg[]");
+
+		System.out.println("POST：フォームデータ取得完了");
+
+		boolean success = true;
+		String message = "";
+
+		// 1. 基本情報の更新
+		if (!IndividualResultsDAO.updateStudentBasicInfo(studentId, name, furigana, gender, birthday)) {
+			success = false;
+			message += "基本情報の更新に失敗しました。";
+		}
+
+		// 2. GPAの更新
+		if (!IndividualResultsDAO.updateGPA(studentId, gpaJp, gpaSs, gpaMa, gpaSc, gpaEn, gpaMu, gpaAr, gpaPe, gpaTe)) {
+			success = false;
+			message += "GPAの更新に失敗しました。";
+		}
+
+		// 3. 模試結果の登録（新規データがある場合のみ）
+		if (examNames != null && examNames.length > 0) {
+			if (!IndividualResultsDAO.insertExamResults(studentId, examNames, examDates, examSubjects, examScores,
+					examDevs, examAvgs)) {
+				success = false;
+				message += "模試結果の登録に失敗しました。";
+			}
+		}
+
+		// 更新後、最新データを再取得
 		IndividualResults student = IndividualResultsDAO.getStudentInfo(studentId);
+
 		if (student == null) {
-			System.out.println("サーブレット：生徒がnullです"); // 🔴ログ④
+			System.out.println("POST：生徒情報の再取得に失敗");
 			response.sendRedirect("SearchResultServlet");
 			return;
 		}
+
+		// 結果メッセージを設定
+		if (success) {
+			message = "データが正常に保存されました";
+		}
+
+		request.setAttribute("message", message);
 		request.setAttribute("student", student);
 		request.getRequestDispatcher("/WEB-INF/jsp/IndividualResults.jsp").forward(request, response);
 	}

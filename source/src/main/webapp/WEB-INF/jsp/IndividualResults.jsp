@@ -81,7 +81,8 @@ LocalDate today = LocalDate.now();
 				<div class="flex-row">
 					<div class="field">
 						<label>性格</label><span class="personality-display">${student.personalityName}</span>
-						<a href="<c:url value='/PersonalityServlet' />" target="_blank" class="diag-link-button">性格診断はこちら</a>
+						<a href="<c:url value='/PersonalityServlet' />" target="_blank"
+							class="diag-link-button">性格診断はこちら</a>
 					</div>
 					<div class="field">
 						<label>生年月日</label><input type="date" name="birthday"
@@ -214,7 +215,7 @@ LocalDate today = LocalDate.now();
 
 
 
-			
+
 			<!-- 最新の模試結果 -->
 			<section class="centered">
 				<h3>最新の模試結果</h3>
