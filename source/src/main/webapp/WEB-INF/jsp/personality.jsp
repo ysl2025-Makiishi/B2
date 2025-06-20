@@ -23,7 +23,6 @@
       
 
     </h1>
-    <!-- ここここここここ -->
         <ul id="nav">
             <li><a href="<c:url value='/HomeServlet' />">ホーム</a></li>
       <li><a href="<c:url value='/StudentListServlet' />">生徒一覧</a></li>
@@ -38,17 +37,17 @@
         <div class="changeColor">
         <h2>性格診断</h2>
         <h2>性格の説明</h2>
-        <p>
-            ・開放性：新しいことに対する柔軟さや好奇心が強い。想像力が豊か。<br>
-            ・勤勉性：計画性や責任感が強く、自己管理能力が高い。<br>
-            ・神経症傾向：ストレスや不安に対して敏感。<br>
-            ・外向性：能動的で、変化を好む。<br>
-        </p>
+        <ul class="bullet-align">
+           <li>開放性：新しいことに対する柔軟さや好奇心が強い。想像力が豊か。</li>
+           <li>勤勉性：計画性や責任感が強く、自己管理能力が高い。</li>
+           <li>神経症傾向：ストレスや不安に対して敏感。</li>
+           <li>外向性：能動的で、変化を好む。</li>
+        </ul>
         </div>
         <!-- アンケート　ラジオボタンで選択 -->
         <h2>アンケート</h2>
         <div class="changeColor">
-        <p>当てはまると思うものを選択してください。（当てはまらない～当てはまる）</p>
+        <p>当てはまると思うものを選択してください。（1:当てはまらない～5:当てはまる）</p>
         </div>
         <form id="quiz-form">
             1. 新しいことを学ぶのが好きだ
@@ -121,26 +120,26 @@
             <br>
         </form>
 
+			<form id="registerPersonalityForm" method="POST" action="<c:url value='/PersonalityServlet'/>">
             <!-- 結果を表示 -->
             <div class="result">
                 <span style="font-size: 24px; font-weight: bold;">結果：</span>
                 <span id="personality-result" style="font-size: 24px; font-weight: bold;"></span>
             </div> 
             
+            <!-- データを送信するためのhiddenフィールド -->
+            <input type="hidden" name="personality" id="personality-hidden">
+            <input type="hidden" name="studentId" value="${studentId}" />
             
-            <button onclick="showMessage()">登録</button><br><br>
-            
+            <button type="submit" value="登録" onclick="showMessage()">登録</button>
+             <button type="button" onclick="resetForm()">リセット</button><br><br>
             <p id="message" style="color: red; display: none;">登録しました！</p>
-            
-            <a href="<c:url value='/IndividualResultServlet'/>">
+            </form>
+            <a href="<c:url value='/IndividualResultsServlet'/>">
             <button>個人結果ページへ戻る</button>
             </a>
 
             <div style="text-align: center;">
-
-                
-                
-                
 
         </div>
         </div>

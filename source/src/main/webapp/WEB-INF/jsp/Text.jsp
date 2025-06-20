@@ -3,6 +3,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <title>テキスト選出システム | K-manage</title>
@@ -76,6 +77,30 @@ form#searchForm .buttons {
   margin-bottom: 10px;
   display: block;
 }
+
+/* 汎用ボタンスタイル */
+.modern-button {
+  font-size: 16px;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 0 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 検索ボタン（青） */
+.modern-button.primary {
+  background: linear-gradient(135deg, #1685E6, #5dade2);
+  color: white;
+}
+
+.modern-button.primary:hover {
+  background: linear-gradient(135deg, #0f6ac4, #439fd7);
+  transform: translateY(-2px);
+}
+
   </style>
 </head>
 <body>
@@ -114,8 +139,9 @@ form#searchForm .buttons {
         </select>
 
         <div class="buttons">
-          <button type="submit">検索</button>
-          <button type="reset">リセット</button>
+         <button type="submit" class="modern-button primary">検索</button>
+         <button type="reset" class="modern-button primary">リセット</button>
+         
           <span id="warningMsg" style="color: red; font-size: 12px;"></span>
         </div>
       </form>
@@ -163,34 +189,6 @@ form#searchForm .buttons {
 
     </div>
   </div>
-  <script>
-  function validateForm() {
-    const subject = document.getElementById('subject').value;
-    const personality = document.getElementById('personality').value;
-    const msg = document.getElementById('warningMsg');
-    msg.textContent = '';
-    if (!subject) {
-      msg.textContent = '教科を選んでください。';
-      return false;
-    }
-    if (!personality) {
-      msg.textContent = '性格を選んでください。';
-      return false;
-    }
-    return true;
-  }
-
-  // リセット時、選択値・検索結果を明示的にクリア（戻るボタンは消さない）
-  document.getElementById('searchForm').addEventListener('reset', function () {
-    setTimeout(() => {
-      document.getElementById('subject').value = "";
-      document.getElementById('personality').value = "";
-      document.getElementById('warningMsg').textContent = '';
-      // 検索結果のみクリア
-      document.getElementById('searchResult').innerHTML = '';
-    }, 0);
-  });
-  </script>
-  
+  <script src="<c:url value='/js/Text.js' />"></script>
 </body>
 </html>

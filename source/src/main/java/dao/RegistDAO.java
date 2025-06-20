@@ -25,7 +25,7 @@ public class RegistDAO {
 	        }
 	    }
 	private Connection  getConnection() throws SQLException {
-		String url = "jdbc:mysql://localhost:3306/B2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo";
+		String url = "jdbc:mysql://localhost:3306/B2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Tokyo";
 		String user = "root";
 		String password = "password";
 		return DriverManager.getConnection(url, user, password);
@@ -138,7 +138,7 @@ public class RegistDAO {
 	
 	//gpaテーブルへの挿入（複数科目）
 	public void insertGrades(int studentId, Map<Integer, Integer> subjectGrades) {
-		String sql = "INSERT INTO gpas (student_id, subject_id, score) VALUES"
+		String sql = "INSERT INTO gpas (student_id, subject_id, gpa) VALUES"
 				+ " (?, ?, ?)";
 		
 		try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {

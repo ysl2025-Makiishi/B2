@@ -1,6 +1,5 @@
 package dao;
-
-	import java.sql.Connection;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,64 +7,67 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dto.students;
-	
-	public class SearchResultDAO {
-		
-			private static final String JDBC_URL = "jdbc:mysql://localhost:3306/B2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo";
-		    private static final String DB_USER = "root";
-		    private static final String DB_PASS = "password";
-
+public class SearchResultDAO {
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/B2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo";
+    private static final String DB_USER = "root";
+    private static final String DB_PASS = "password";
     public static List<students> searchByName(int id, String name, String furigana, String schoolName,
                                               String sort, int limit, int offset) {
         List<students> resultList = new ArrayList<>();
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-
-        String baseSql = """
+        StringBuilder sql = new StringBuilder("""
             SELECT students.*, schools.school_name
             FROM students
             LEFT JOIN schools ON students.school_id = schools.id
-            WHERE students.name LIKE ?
-              AND students.furigana LIKE ?
-              AND schools.school_name LIKE ?
-        """;
-
-        String orderBy;
+            WHERE 1=1
+        """);
+        List<Object> paramList = new ArrayList<>();
+        if (name != null && !name.isEmpty()) {
+            sql.append(" AND students.name LIKE ?");
+            paramList.add("%" + name + "%");
+        }
+        if (furigana != null && !furigana.isEmpty()) {
+            sql.append(" AND students.furigana LIKE ?");
+            paramList.add("%" + furigana + "%");
+        }
+        if (schoolName != null && !schoolName.isEmpty()) {
+            sql.append(" AND schools.school_name LIKE ?");
+            paramList.add("%" + schoolName + "%");
+        }
         switch (sort) {
-        case "nameAsc":
-            orderBy = " ORDER BY students.furigana COLLATE utf8mb4_unicode_ci ASC";
-            break;
-        case "nameDesc":
-            orderBy = " ORDER BY students.furigana COLLATE utf8mb4_unicode_ci DESC";
-            break;
-        case "createdAsc":
-            orderBy = " ORDER BY students.created_at ASC";
-            break;
-        case "createdDesc":
-        default:
-            orderBy = " ORDER BY students.created_at DESC";
-            break;
-    }
-
-        // LIMIT と OFFSET を追加
-        String sql = baseSql + orderBy + " LIMIT ? OFFSET ?";
-
+            case "nameAsc":
+                sql.append(" ORDER BY students.furigana COLLATE utf8mb4_unicode_ci ASC");
+                break;
+            case "nameDesc":
+                sql.append(" ORDER BY students.furigana COLLATE utf8mb4_unicode_ci DESC");
+                break;
+            case "createdAsc":
+                sql.append(" ORDER BY students.created_at ASC");
+                break;
+            case "createdDesc":
+            default:
+                sql.append(" ORDER BY students.created_at DESC");
+                break;
+        }
+        sql.append(" LIMIT ? OFFSET ?");
+        paramList.add(limit);
+        paramList.add(offset);
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/B2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo",
-                "root", "password"
-            );
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, "%" + name + "%");
-            pstmt.setString(2, "%" + furigana + "%");
-            pstmt.setString(3, "%" + schoolName + "%");
-            pstmt.setInt(4, limit);
-            pstmt.setInt(5, offset);
-
+            conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+            pstmt = conn.prepareStatement(sql.toString());
+            // プレースホルダに値を設定
+            for (int i = 0; i < paramList.size(); i++) {
+                Object param = paramList.get(i);
+                if (param instanceof String) {
+                    pstmt.setString(i + 1, (String) param);
+                } else if (param instanceof Integer) {
+                    pstmt.setInt(i + 1, (Integer) param);
+                }
+            }
             rs = pstmt.executeQuery();
-
             while (rs.next()) {
                 students s = new students();
                 s.setId(rs.getInt("id"));
@@ -81,10 +83,8 @@ import dto.students;
                 s.setPersonality_id(rs.getInt("personality_id"));
                 s.setCreated_at(rs.getTimestamp("created_at"));
                 s.setUpdated_at(rs.getTimestamp("updated_at"));
-
                 resultList.add(s);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -92,40 +92,42 @@ import dto.students;
             try { if (pstmt != null) pstmt.close(); } catch (Exception e) {}
             try { if (conn != null) conn.close(); } catch (Exception e) {}
         }
-
         return resultList;
     }
-
-    /**
-     * 総件数取得用（ページネーションのため）
-     */
     public static int countByName(String name, String furigana, String schoolName) {
         int count = 0;
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-
-        String sql = """
+        StringBuilder sql = new StringBuilder("""
             SELECT COUNT(*) AS total
             FROM students
             LEFT JOIN schools ON students.school_id = schools.id
-            WHERE students.name LIKE ?
-              AND students.furigana LIKE ?
-              AND schools.school_name LIKE ?
-        """;
-
+            WHERE 1=1
+        """);
+        List<Object> paramList = new ArrayList<>();
+        if (name != null && !name.isEmpty()) {
+            sql.append(" AND students.name LIKE ?");
+            paramList.add("%" + name + "%");
+        }
+        if (furigana != null && !furigana.isEmpty()) {
+            sql.append(" AND students.furigana LIKE ?");
+            paramList.add("%" + furigana + "%");
+        }
+        if (schoolName != null && !schoolName.isEmpty()) {
+            sql.append(" AND schools.school_name LIKE ?");
+            paramList.add("%" + schoolName + "%");
+        }
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/B2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo",
-                "root", "password"
-            );
-
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, "%" + name + "%");
-            pstmt.setString(2, "%" + furigana + "%");
-            pstmt.setString(3, "%" + schoolName + "%");
-
+            conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+            pstmt = conn.prepareStatement(sql.toString());
+            for (int i = 0; i < paramList.size(); i++) {
+                Object param = paramList.get(i);
+                if (param instanceof String) {
+                    pstmt.setString(i + 1, (String) param);
+                }
+            }
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 count = rs.getInt("total");
@@ -137,42 +139,32 @@ import dto.students;
             try { if (pstmt != null) pstmt.close(); } catch (Exception e) {}
             try { if (conn != null) conn.close(); } catch (Exception e) {}
         }
-
         return count;
     }
-    
- // 追加：生徒をIDで削除するメソッド
     public static boolean deleteById(int studentId) {
         Connection conn = null;
         boolean success = false;
-
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
-            conn.setAutoCommit(false); // トランザクション開始
-
-            // ① homeworks テーブルから該当生徒の宿題を削除
+            conn.setAutoCommit(false);
             String deleteHomeworkSql = "DELETE FROM homeworks WHERE student_id = ?";
             try (PreparedStatement ps1 = conn.prepareStatement(deleteHomeworkSql)) {
                 ps1.setInt(1, studentId);
-                ps1.executeUpdate(); // 件数は気にしなくてOK（0件でも問題なし）
+                ps1.executeUpdate();
             }
-
-            // ② students テーブルから生徒を削除
             String deleteStudentSql = "DELETE FROM students WHERE id = ?";
             try (PreparedStatement ps2 = conn.prepareStatement(deleteStudentSql)) {
                 ps2.setInt(1, studentId);
                 int rowsAffected = ps2.executeUpdate();
                 success = (rowsAffected > 0);
             }
-
-            conn.commit(); // 正常終了でコミット
-
+            conn.commit();
         } catch (Exception e) {
             e.printStackTrace();
             if (conn != null) {
                 try {
-                    conn.rollback(); // エラー時にロールバック
+                    conn.rollback();
                 } catch (Exception rollbackEx) {
                     rollbackEx.printStackTrace();
                 }
@@ -180,10 +172,6 @@ import dto.students;
         } finally {
             try { if (conn != null) conn.close(); } catch (Exception e) { e.printStackTrace(); }
         }
-
         return success;
     }
-
-    
 }
-

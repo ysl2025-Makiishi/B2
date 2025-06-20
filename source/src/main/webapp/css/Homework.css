@@ -13,6 +13,24 @@
     /* 補助テキスト */
 }
 
+
+    button.register-button {
+    background-color: #007BFF;       /* 明るめの青 */
+    color: white;                    /* 白い文字 */
+    padding: 12px 30px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);  /* 青系の影 */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button.register-button:hover {
+    background-color: #0056b3;       /* 濃い青に変化 */
+    transform: scale(1.05);          /* 少し大きくなる */
+}
+
 /* ——— 全体設定 ——— */
 body {
     background-color: var(--color-bg);
