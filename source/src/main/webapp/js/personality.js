@@ -1,4 +1,5 @@
 
+let personality = "";
 
          document.getElementById("quiz-form").addEventListener("submit", function(event) {
             event.preventDefault();
@@ -47,10 +48,15 @@
             console.log("Extraversion:" + Extraversion);   //テスト用
 
             //性格タイプを決定する関数
-            let personality = decisionPersonality(Openness, Diligence, Neuroticism, Extraversion);  //性格を格納するpersonality
-
+            personality = decisionPersonality(Openness, Diligence, Neuroticism, Extraversion);  //性格を格納するpersonality
             document.getElementById("personality-result").textContent = personality;
         });
+        
+        //personality-resultを送信
+            document.getElementById("registerPersonalityForm").addEventListener("submit", function(event) {
+    		const result = document.getElementById("personality-result").textContent;
+    		document.getElementById("personality-hidden").value = personality;
+});
 
         //性格タイプを決める関数
         function decisionPersonality(Openness, Diligence, Neuroticism, Extraversion) {
@@ -149,4 +155,21 @@
 function showMessage() {
 	document.getElementById("message").style.display = "block";
 }
-        
+
+window.showMessage = showMessage;  // これで外部から呼べる
+	// personality.js に追加
+function resetForm() {
+    // ラジオボタンの選択をすべてリセット
+    const radios = document.querySelectorAll('input[type="radio"]');
+    radios.forEach(r => r.checked = false);
+    // 結果エリア非表示
+    document.getElementById("result-area").style.display = "none";
+    // 登録ボタンや「登録しました！」メッセージを非表示
+    document.getElementById("register-area").style.display = "none";
+    document.getElementById("message").style.display = "none";
+    // 結果テキストもクリア
+    document.getElementById("personality-result").textContent = "";
+}
+	// ここでグローバル化（外から呼べるように）
+    window.resetForm = resetForm;
+
