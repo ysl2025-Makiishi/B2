@@ -38,7 +38,7 @@ label {
 	margin-bottom: .25em;
 }
 
-input[type=text], input[type=number], input[type=date], textarea {
+input[type=text], input[type=number], input[type=date], textarea, select {
 	width: 100%;
 	max-width: 400px;
 	padding: .45em .6em;
@@ -76,8 +76,17 @@ textarea {
 .center-row {
 	justify-content: center;
 } /* 内申点行を中央寄せ */
+
 .naishin-field {
 	min-width: 160px;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem; /* ラベルと入力欄の間隔 */
+}
+
+.naishin-field label {
+	margin: 0;
+	white-space: nowrap;
 }
 
 .section-btn-row {
@@ -145,6 +154,10 @@ table {
 	width: 100%;
 	border-collapse: collapse;
 	margin-top: 1rem;
+	background: white;
+	border: 1px solid #e0e4ea;
+	border-radius: 8px;
+	overflow: hidden;
 }
 
 th, td {
@@ -156,20 +169,33 @@ th, td {
 thead th {
 	background: #f0f2f7;
 	font-weight: 600;
+	color: #333;
 }
 
 tbody tr:nth-child(even) {
 	background: #fafbfc;
 }
 
+tbody tr:last-child td {
+	border-bottom: none;
+}
+
 td input {
 	width: 100%;
 	border: none;
 	padding: .4em .6em;
+	text-align: center;
+	font-size: 0.9rem;
+}
+
+td input:focus {
+	outline: none;
+	border-color: #3d6dd8;
+	box-shadow: 0 0 3px rgba(61, 109, 216, 0.3);
 }
 
 /* =========================================================
-   ボタン
+   ボタン（デフォルト）
    ========================================================= */
 button {
 	appearance: none;
@@ -208,6 +234,163 @@ button:hover {
 
 .overall-btn:hover {
 	filter: brightness(1.05);
+}
+
+/* =========================================================
+   カスタムボタンスタイル（統一デザイン）
+   ========================================================= */
+
+/* 更新ボタンコンテナ（真ん中配置） */
+.update-btn-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 30px 0;
+	padding: 20px;
+}
+
+/* 模試登録ボタンコンテナ（真ん中配置） */
+.exam-btn-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 20px;
+	margin: 20px 0;
+	padding: 15px;
+}
+
+/* 更新ボタン */
+.update-btn {
+	background: linear-gradient(135deg, #4CAF50, #45a049);
+	color: white;
+	border: none;
+	padding: 15px 40px;
+	font-size: 18px;
+	font-weight: bold;
+	border-radius: 8px;
+	cursor: pointer;
+	box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+	transition: all 0.3s ease;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	min-width: 120px;
+}
+
+.update-btn:hover {
+	background: linear-gradient(135deg, #45a049, #3d8b40);
+	box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+	transform: translateY(-2px);
+}
+
+.update-btn:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
+}
+
+/* 登録ボタン */
+.register-btn {
+	background: linear-gradient(135deg, #2196F3, #1976D2);
+	color: white;
+	border: none;
+	padding: 12px 30px;
+	font-size: 16px;
+	font-weight: bold;
+	border-radius: 6px;
+	cursor: pointer;
+	box-shadow: 0 3px 12px rgba(33, 150, 243, 0.3);
+	transition: all 0.3s ease;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	min-width: 100px;
+}
+
+.register-btn:hover {
+	background: linear-gradient(135deg, #1976D2, #1565C0);
+	box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+	transform: translateY(-2px);
+}
+
+.register-btn:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+}
+
+/* リセットボタン */
+.reset-btn {
+	background: linear-gradient(135deg, #FF9800, #F57C00);
+	color: white;
+	border: none;
+	padding: 12px 30px;
+	font-size: 16px;
+	font-weight: bold;
+	border-radius: 6px;
+	cursor: pointer;
+	box-shadow: 0 3px 12px rgba(255, 152, 0, 0.3);
+	transition: all 0.3s ease;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	min-width: 100px;
+}
+
+.reset-btn:hover {
+	background: linear-gradient(135deg, #F57C00, #E65100);
+	box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+	transform: translateY(-2px);
+}
+
+.reset-btn:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+
+/* 診断リンクボタン */
+.diag-link-button {
+	background: linear-gradient(135deg, #FF9800, #F57C00);
+	color: white;
+	text-decoration: none;
+	display: inline-block;
+	padding: 0.5em 1.2em;
+	border-radius: 6px;
+	font-size: 0.9rem;
+	font-weight: bold;
+	transition: all 0.3s ease;
+	box-shadow: 0 3px 12px rgba(255, 152, 0, 0.3);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	margin-left: 0.5rem;
+}
+
+.diag-link-button:hover {
+	background: linear-gradient(135deg, #F57C00, #E65100);
+	color: white;
+	transform: translateY(-2px);
+	box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+}
+
+/* フォーカス時の共通スタイル */
+.update-btn:focus,
+.register-btn:focus,
+.reset-btn:focus,
+.diag-link-button:focus {
+	outline: none;
+	ring: 3px solid rgba(255, 255, 255, 0.5);
+	ring-offset: 2px;
+}
+
+/* ローディング風エフェクト */
+.update-btn.loading::before {
+	content: "更新中...";
+	animation: pulse 1.5s infinite;
+}
+
+.register-btn.loading::before {
+	content: "登録中...";
+	animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.7; }
 }
 
 /* =========================================================
@@ -323,9 +506,78 @@ button:hover {
 }
 
 /* =========================================================
+   教科ナビゲーション
+   ========================================================= */
+.subject-nav {
+	list-style: none;
+	display: flex;
+	justify-content: center;
+	gap: 2rem;
+	padding: 2rem 0;
+	margin: 0 auto;
+	flex-wrap: wrap;
+}
+
+.subject-nav li {
+	margin: 0;
+}
+
+.subject-nav li a {
+	display: inline-block;
+	padding: 1rem 2.5rem;             /* 高さ・横幅を大きく */
+	font-size: 1.3rem;                /* 文字サイズアップ */
+	font-weight: bold;
+	text-decoration: none;
+	background-color: #0066cc;
+	color: white;
+	border-radius: 12px;             /* 丸みを少し大きめに */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* 影を追加して立体感 */
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.subject-nav li a:hover {
+	background-color: #004c99;
+	transform: scale(1.05);          /* ホバー時に拡大 */
+}
+
+/* =========================================================
+   性格表示
+   ========================================================= */
+.personality-display {
+	font-weight: bold;
+	font-size: 1.2em;
+	color: #333;
+	margin-top: 0.5em;
+}
+
+/* =========================================================
    レスポンシブ
    ========================================================= */
-@media ( max-width :599px) {
+@media (max-width: 768px) {
+	.update-btn-container,
+	.exam-btn-container {
+		flex-direction: column;
+		gap: 15px;
+	}
+	
+	.update-btn,
+	.register-btn,
+	.reset-btn {
+		width: 100%;
+		max-width: 200px;
+		padding: 12px 20px;
+		font-size: 14px;
+	}
+	
+	.diag-link-button {
+		margin-left: 0;
+		margin-top: 0.5rem;
+		display: block;
+		text-align: center;
+	}
+}
+
+@media (max-width: 599px) {
 	.field {
 		min-width: 100%;
 	}
@@ -351,54 +603,4 @@ button:hover {
 	.latest-info input {
 		max-width: 100px;
 	}
-}
-
-.subject-nav {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    padding: 2rem 0;
-    margin: 0 auto;
-    flex-wrap: wrap;
-}
-
-.subject-nav li {
-    margin: 0;
-}
-
-.subject-nav li a {
-    display: inline-block;
-    padding: 1rem 2.5rem;             /* 高さ・横幅を大きく */
-    font-size: 1.3rem;                /* 文字サイズアップ */
-    font-weight: bold;
-    text-decoration: none;
-    background-color: #0066cc;
-    color: white;
-    border-radius: 12px;             /* 丸みを少し大きめに */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* 影を追加して立体感 */
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.subject-nav li a:hover {
-    background-color: #004c99;
-    transform: scale(1.05);          /* ホバー時に拡大 */
-}
-
-.naishin-field {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem; /* ラベルと入力欄の間隔 */
-}
-
-.naishin-field label {
-	margin: 0;
-	white-space: nowrap;
-}
-
-.personality-display {
-  font-weight: bold;
-  font-size: 1.2em;
-  color: #333;
-  margin-top: 0.5em;
 }

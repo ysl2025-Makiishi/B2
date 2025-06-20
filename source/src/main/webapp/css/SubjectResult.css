@@ -255,3 +255,460 @@ textarea.large-textbox {
     background-color: #004c99;
     transform: scale(1.05);          /* ホバー時に拡大 */
 }
+
+/* ===============================
+   JSPから分離した追加スタイル
+   =============================== */
+
+/* メッセージ表示 */
+.message {
+    background: lightgreen;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+/* 削除ボタン */
+.delete-btn {
+    background: linear-gradient(135deg, #f44336, #d32f2f) !important;
+    color: white !important;
+    border: none;
+    border-radius: 6px;
+    padding: 0.4em 1.2em;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(244, 67, 54, 0.3);
+    transition: all 0.3s ease;
+    margin: 0.2em;
+}
+
+.delete-btn:hover {
+    background: linear-gradient(135deg, #d32f2f, #b71c1c) !important;
+    color: white !important;
+    box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+    transform: translateY(-1px) scale(1.05);
+}
+
+.delete-btn::before {
+    content: '🗑️';
+    margin-right: 0.3em;
+}
+
+/* 保存ボタン */
+.save-btn {
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 1em 3em;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.save-btn:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(40, 167, 69, 0.4);
+}
+
+/* 保存ボタンを中央配置 */
+.section-btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+/* 診断リンクボタン */
+.diag-link-button {
+    background: linear-gradient(135deg, #FF9800, #F57C00) !important;
+    color: white !important;
+    text-decoration: none;
+    display: inline-block;
+    padding: 0.5em 1.2em;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 12px rgba(255, 152, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 0.5rem;
+}
+
+.diag-link-button:hover {
+    background: linear-gradient(135deg, #F57C00, #E65100) !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+}
+
+/* テーブルスタイル */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    background: white;
+    border: 1px solid #e0e4ea;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table th {
+    background: #f0f2f7;
+    color: #333;
+    padding: 0.75rem;
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 1px solid #d3d7e0;
+}
+
+table td {
+    padding: 0.75rem;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+table tr:nth-child(even) {
+    background: #fafafa;
+}
+
+table input {
+    width: 100%;
+    max-width: 120px;
+    padding: 0.4em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+table input[type="date"] {
+    max-width: 150px;
+}
+
+table input:focus {
+    outline: none;
+    border-color: #3d6dd8;
+    box-shadow: 0 0 3px rgba(61, 109, 216, 0.3);
+}
+
+/* フォーカス時の共通スタイル */
+.save-btn:focus,
+.understanding-update-btn:focus,
+.table-edit-btn:focus,
+.delete-btn:focus,
+.diag-link-button:focus {
+    outline: none;
+    ring: 3px solid rgba(255, 255, 255, 0.5);
+    ring-offset: 2px;
+}
+
+/* ローディング風エフェクト */
+.save-btn.loading::before {
+    content: "保存中...";
+    animation: pulse 1.5s infinite;
+}
+
+.understanding-update-btn.loading::before {
+    content: "更新中...";
+    animation: pulse 1.5s infinite;
+}
+
+.table-edit-btn.loading::before {
+    content: "更新中...";
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* フィールド内の要素を整列 */
+.field {
+    display: flex;
+    flex-direction: column;
+    min-width: 180px;
+    align-items: flex-start;
+    position: relative;
+}
+
+.field label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.field span {
+    padding: 0.45em 0.6em;
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    min-height: 1.2em;
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.field input {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+/* 診断リンクボタンを改善 */
+.field .diag-link-button {
+    background: linear-gradient(135deg, #FF9800, #F57C00) !important;
+    color: white !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    padding: 8px 16px !important;
+    border-radius: 6px !important;
+    font-size: 0.85rem !important;
+    font-weight: bold !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 3px 12px rgba(255, 152, 0, 0.3) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin-left: 0 !important;
+    margin-top: 0.25rem !important;
+    width: fit-content !important;
+    white-space: nowrap !important;
+}
+
+.field .diag-link-button:hover {
+    background: linear-gradient(135deg, #F57C00, #E65100) !important;
+    color: white !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4) !important;
+    text-decoration: none !important;
+}
+
+/* 学習計画セクションのフレックスレイアウト改善 */
+.flex-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    justify-content: center;
+}
+
+/* 理解度フィールドを中央配置 */
+.flex-row[style*="justify-content: center"] .field {
+    align-items: center;
+    text-align: center;
+}
+
+.flex-row[style*="justify-content: center"] .field label {
+    text-align: center;
+}
+
+.flex-row[style*="justify-content: center"] .field input {
+    text-align: center;
+}
+
+/* 学習計画の理解度更新ボタン（大きめサイズ） */
+button[onclick*="updateUnderstanding"] {
+    background: linear-gradient(135deg, #2196F3, #1976D2) !important;
+    color: white !important;
+    border: none !important;
+    padding: 12px 30px !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    box-shadow: 0 3px 12px rgba(33, 150, 243, 0.3) !important;
+    transition: all 0.3s ease !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    min-width: 100px !important;
+    margin: 0.2em !important;
+}
+
+button[onclick*="updateUnderstanding"]:hover {
+    background: linear-gradient(135deg, #1976D2, #1565C0) !important;
+    box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4) !important;
+    transform: translateY(-2px) !important;
+    color: white !important;
+}
+
+button[onclick*="updateUnderstanding"]:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3) !important;
+}
+
+/* 個人結果に戻るボタン - 診断リンクボタンと同じデザイン */
+a.diag-link-button[href*="IndividualResultsServlet"] {
+    background: linear-gradient(135deg, #FF9800, #F57C00) !important;
+    color: white !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    padding: 8px 16px !important;
+    border-radius: 6px !important;
+    font-size: 0.85rem !important;
+    font-weight: bold !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 3px 12px rgba(255, 152, 0, 0.3) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin: 10px 0 !important;
+    white-space: nowrap !important;
+    width: fit-content !important;
+}
+
+a.diag-link-button[href*="IndividualResultsServlet"]:hover {
+    background: linear-gradient(135deg, #F57C00, #E65100) !important;
+    color: white !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4) !important;
+    text-decoration: none !important;
+}
+
+/* テーブル内のボタンサイズを調整 */
+table button[onclick*="updateExam"] {
+    background: linear-gradient(135deg, #2196F3, #1976D2) !important;
+    color: white !important;
+    border: none !important;
+    padding: 8px 20px !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    box-shadow: 0 3px 12px rgba(33, 150, 243, 0.3) !important;
+    transition: all 0.3s ease !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    min-width: 80px !important;
+    margin: 0.1em !important;
+}
+
+table button[onclick*="updateExam"]:hover {
+    background: linear-gradient(135deg, #1976D2, #1565C0) !important;
+    box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4) !important;
+    transform: translateY(-2px) !important;
+    color: white !important;
+}
+
+table button[onclick*="deleteExam"] {
+    background: linear-gradient(135deg, #f44336, #d32f2f) !important;
+    color: white !important;
+    border: none !important;
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3) !important;
+    transition: all 0.3s ease !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.3px !important;
+    min-width: 60px !important;
+    margin: 0.1em !important;
+}
+
+table button[onclick*="deleteExam"]:hover {
+    background: linear-gradient(135deg, #d32f2f, #b71c1c) !important;
+    box-shadow: 0 4px 10px rgba(244, 67, 54, 0.4) !important;
+    transform: translateY(-1px) !important;
+    color: white !important;
+}
+
+/* 保存ボタン - 理解度更新ボタンと同じデザイン、サイズはそのまま */
+.save-btn,
+button[type="submit"].save-btn {
+    background: linear-gradient(135deg, #2196F3, #1976D2) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 1em 3em !important;
+    font-size: 1.1rem !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 3px 12px rgba(33, 150, 243, 0.3) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    min-width: 120px !important;
+}
+
+.save-btn:hover,
+button[type="submit"].save-btn:hover {
+    background: linear-gradient(135deg, #1976D2, #1565C0) !important;
+    color: white !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4) !important;
+}
+
+.save-btn:active,
+button[type="submit"].save-btn:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3) !important;
+}
+
+/* フォーカス時の共通スタイル */
+.save-btn:focus,
+.understanding-update-btn:focus,
+.table-edit-btn:focus,
+.delete-btn:focus,
+.diag-link-button:focus {
+    outline: none;
+    ring: 3px solid rgba(255, 255, 255, 0.5);
+    ring-offset: 2px;
+}
+
+/* ローディング風エフェクト */
+.save-btn.loading::before {
+    content: "保存中...";
+    animation: pulse 1.5s infinite;
+}
+
+.understanding-update-btn.loading::before {
+    content: "更新中...";
+    animation: pulse 1.5s infinite;
+}
+
+.table-edit-btn.loading::before {
+    content: "更新中...";
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .section-btn-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .save-btn,
+    .understanding-update-btn,
+    .table-edit-btn,
+    .delete-btn {
+        width: 100%;
+        max-width: 200px;
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+    
+    .diag-link-button {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        display: block;
+        text-align: center;
+    }
+}

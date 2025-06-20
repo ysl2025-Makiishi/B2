@@ -38,6 +38,7 @@ LocalDate today = LocalDate.now();
 			class="diag-link-button">検索結果に戻る</a>
 
 		<!-- 修正後：教科IDと生徒IDを明確に分けて渡す -->
+		<!--
 		<ul class="subject-nav">
 			<li><c:url var="kokugoUrl" value="/SubjectResultServlet">
 					<c:param name="studentId" value="${student.id}" />
@@ -63,6 +64,22 @@ LocalDate today = LocalDate.now();
 					<c:param name="studentId" value="${student.id}" />
 					<c:param name="subjectId" value="10" />
 				</c:url> <a href="${sougouUrl}">総合</a></li>
+		</ul>
+		-->
+
+		<ul class="subject-nav">
+			<li><a
+				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=1' />">国語</a></li>
+			<li><a
+				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=2' />">数学</a></li>
+			<li><a
+				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=4' />">理科</a></li>
+			<li><a
+				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=5' />">社会</a></li>
+			<li><a
+				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=3' />">英語</a></li>
+			<li><a
+				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=10' />">総合</a></li>
 		</ul>
 
 
@@ -181,9 +198,9 @@ LocalDate today = LocalDate.now();
 				</div>
 			</section>
 
-			<!-- 保存 -->
-			<div class="section-btn-row">
-				<button type="submit" class="save-btn">保存</button>
+			<!-- 保存ボタン → 更新ボタンに変更 -->
+			<div class="update-btn-container">
+				<button type="submit" class="update-btn">更新</button>
 			</div>
 
 			<!-- ========== 模試結果（一覧入力） ========== -->
@@ -224,9 +241,10 @@ LocalDate today = LocalDate.now();
 					</tbody>
 				</table>
 
-				<div class="button-row">
-					<button type="submit" id="examRegisterBtn">登録</button>
-					<button type="reset">リセット</button>
+				<!-- 模試登録ボタンを中央配置 -->
+				<div class="exam-btn-container">
+					<button type="submit" id="examRegisterBtn" class="register-btn">登録</button>
+					<button type="reset" class="reset-btn">リセット</button>
 				</div>
 			</section>
 

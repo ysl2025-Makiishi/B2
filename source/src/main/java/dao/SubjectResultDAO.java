@@ -70,6 +70,36 @@ public class SubjectResultDAO {
 				System.out.println("理解度取得エラー: " + e.getMessage());
 			}
 
+			// texts テーブルからテキスト選出を取得
+			String textSql = "SELECT text_name FROM texts WHERE subject_id = ? LIMIT 1";
+			try (PreparedStatement ps = conn.prepareStatement(textSql)) {
+				ps.setInt(1, subjectId);
+				ResultSet rs = ps.executeQuery();
+				if (rs.next()) {
+					result.setTextSelection(rs.getString("text_name"));
+				}
+			} catch (SQLException e) {
+				System.out.println("テキスト選出取得エラー: " + e.getMessage());
+			}
+
+			// schedules テーブルからスケジュールを取得
+			String scheduleSql = """
+					SELECT t.text_name, s.pages
+					FROM schedules s
+					JOIN texts t ON s.text_id = t.id
+					WHERE s.student_id = ? AND t.subject_id = ?
+					""";
+			try (PreparedStatement ps = conn.prepareStatement(scheduleSql)) {
+				ps.setInt(1, studentId);
+				ps.setInt(2, subjectId);
+				ResultSet rs = ps.executeQuery();
+				if (rs.next()) {
+					result.setSchedule(rs.getString("text_name") + " " + rs.getInt("pages") + "ページ");
+				}
+			} catch (SQLException e) {
+				System.out.println("スケジュール取得エラー: " + e.getMessage());
+			}
+
 			// homeworks テーブルから宿題ページ数を取得
 			String homeworkSql = "SELECT homework FROM homeworks WHERE student_id = ? AND subject_id = ?";
 			try (PreparedStatement ps = conn.prepareStatement(homeworkSql)) {
@@ -108,7 +138,8 @@ public class SubjectResultDAO {
 		List<ExamScore> list = new ArrayList<>();
 
 		String sql = """
-				SELECT es.id, en.exam_name, ex.exam_date, es.score, es.deviation_value, es.average_score
+				SELECT es.id, ex.id as exam_id, en.id as exam_name_id, en.exam_name, ex.exam_date,
+				       es.score, es.deviation_value, es.average_score
 				FROM exam_scores es
 				JOIN exams ex ON es.exam_id = ex.id
 				JOIN exam_names en ON ex.exam_name_id = en.id
@@ -124,6 +155,8 @@ public class SubjectResultDAO {
 			while (rs.next()) {
 				ExamScore exam = new ExamScore();
 				exam.setId(rs.getInt("id"));
+				exam.setExamId(rs.getInt("exam_id"));
+				exam.setExamNameId(rs.getInt("exam_name_id"));
 				exam.setExamName(rs.getString("exam_name"));
 				exam.setExamDate(rs.getDate("exam_date"));
 				exam.setScore(rs.getInt("score"));
@@ -249,27 +282,142 @@ public class SubjectResultDAO {
 	/**
 	 * 模試結果を更新
 	 */
-	public static boolean updateExamResult(int examId, int score, double deviationValue, double averageScore) {
+	/**
+	 * 模試結果を更新（模試名・実施日も含む）
+	 */
+	public static boolean updateExamResult(int examScoreId, String examName, String examDate, int score,
+			double deviationValue, double averageScore) {
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-			String sql = """
-					UPDATE exam_scores
-					SET score = ?, deviation_value = ?, average_score = ?, updated_at = NOW()
-					WHERE id = ?
-					""";
+			conn.setAutoCommit(false);
 
-			try (PreparedStatement ps = conn.prepareStatement(sql)) {
-				ps.setInt(1, score);
-				ps.setDouble(2, deviationValue);
-				ps.setDouble(3, averageScore);
-				ps.setInt(4, examId);
+			try {
+				// 1. exam_names を更新/作成
+				String examNameSql = """
+						INSERT INTO exam_names (exam_name, created_at, updated_at)
+						VALUES (?, NOW(), NOW())
+						ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)
+						""";
+				int examNameId;
+				try (PreparedStatement ps = conn.prepareStatement(examNameSql,
+						PreparedStatement.RETURN_GENERATED_KEYS)) {
+					ps.setString(1, examName);
+					ps.executeUpdate();
+					try (ResultSet rs = ps.getGeneratedKeys()) {
+						rs.next();
+						examNameId = rs.getInt(1);
+					}
+				}
 
-				int result = ps.executeUpdate();
-				System.out.println("模試結果更新: " + result + "件");
-				return result > 0;
+				// 2. exams を更新
+				String examSql = """
+						UPDATE exams ex
+						JOIN exam_scores es ON ex.id = es.exam_id
+						SET ex.exam_name_id = ?, ex.exam_date = ?, ex.updated_at = NOW()
+						WHERE es.id = ?
+						""";
+				try (PreparedStatement ps = conn.prepareStatement(examSql)) {
+					ps.setInt(1, examNameId);
+					ps.setString(2, examDate);
+					ps.setInt(3, examScoreId);
+					ps.executeUpdate();
+				}
+
+				// 3. exam_scores を更新
+				String scoreSql = """
+						UPDATE exam_scores
+						SET score = ?, deviation_value = ?, average_score = ?, updated_at = NOW()
+						WHERE id = ?
+						""";
+				try (PreparedStatement ps = conn.prepareStatement(scoreSql)) {
+					ps.setInt(1, score);
+					ps.setDouble(2, deviationValue);
+					ps.setDouble(3, averageScore);
+					ps.setInt(4, examScoreId);
+					ps.executeUpdate();
+				}
+
+				conn.commit();
+				System.out.println("模試結果更新完了");
+				return true;
+
+			} catch (Exception e) {
+				conn.rollback();
+				System.out.println("模試結果更新エラー: " + e.getMessage());
+				e.printStackTrace();
+				return false;
 			}
 
 		} catch (SQLException e) {
-			System.out.println("模試結果更新エラー: " + e.getMessage());
+			System.out.println("DB接続エラー: " + e.getMessage());
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * 理解度のみ更新
+	 */
+	/**
+	 * 理解度のみ更新
+	 */
+	/**
+	 * 理解度のみ更新
+	 */
+	public static boolean updateUnderstandingOnly(int studentId, int subjectId, String understanding) {
+		System.out.println("=== 理解度更新デバッグ ===");
+		System.out.println("studentId: " + studentId);
+		System.out.println("subjectId: " + subjectId);
+		System.out.println("understanding: " + understanding);
+
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+			// 入力値チェック
+			if (understanding == null || understanding.trim().isEmpty()) {
+				System.out.println("ERROR: 理解度が空です");
+				return false;
+			}
+
+			int levelValue;
+			try {
+				levelValue = Integer.parseInt(understanding.trim());
+			} catch (NumberFormatException e) {
+				System.out.println("ERROR: 理解度が数値ではありません: " + understanding);
+				return false;
+			}
+
+			// まず既存データをチェック
+			String checkSql = "SELECT id FROM levels WHERE student_id = ? AND subject_id = ?";
+			boolean exists = false;
+
+			try (PreparedStatement checkPs = conn.prepareStatement(checkSql)) {
+				checkPs.setInt(1, studentId);
+				checkPs.setInt(2, subjectId);
+				ResultSet rs = checkPs.executeQuery();
+				exists = rs.next();
+				System.out.println("既存データ: " + (exists ? "あり" : "なし"));
+			}
+
+			String sql;
+			if (exists) {
+				// 更新
+				sql = "UPDATE levels SET level = ?, updated_at = NOW() WHERE student_id = ? AND subject_id = ?";
+			} else {
+				// 新規挿入
+				sql = "INSERT INTO levels (level, student_id, subject_id, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())";
+			}
+
+			try (PreparedStatement ps = conn.prepareStatement(sql)) {
+				ps.setInt(1, levelValue);
+				ps.setInt(2, studentId);
+				ps.setInt(3, subjectId);
+
+				int result = ps.executeUpdate();
+				System.out.println((exists ? "更新" : "挿入") + "結果: " + result + "件");
+				System.out.println("========================");
+				return result > 0;
+			}
+
+		} catch (Exception e) {
+			System.out.println("理解度更新エラー: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}

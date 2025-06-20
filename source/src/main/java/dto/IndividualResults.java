@@ -260,6 +260,26 @@ public class IndividualResults {
 		private int score; // 点数（0～100）
 		private double deviationValue; // 偏差値（例: 55.2）
 		private double averageScore; // 平均点（例: 63.4）
+		// 編集用に追加するフィールド
+		private int examId; // exams テーブルのID
+		private int examNameId; // exam_names テーブルのID
+
+		// getter/setter（既存のものに追加）
+		public int getExamId() {
+			return examId;
+		}
+
+		public void setExamId(int examId) {
+			this.examId = examId;
+		}
+
+		public int getExamNameId() {
+			return examNameId;
+		}
+
+		public void setExamNameId(int examNameId) {
+			this.examNameId = examNameId;
+		}
 
 		// id のgetter/setterを追加
 		public int getId() {

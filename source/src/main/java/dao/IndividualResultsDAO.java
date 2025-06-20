@@ -383,21 +383,21 @@ public class IndividualResultsDAO {
 		switch (subjectName) {
 		case "国語":
 			return 1;
-		case "社会":
-			return 2;
 		case "数学":
-			return 3;
+			return 2; // ← 修正
+		case "英語":
+			return 3; // ← 修正
 		case "理科":
 			return 4;
-		case "英語":
-			return 5;
-		case "音楽":
-			return 6;
-		case "美術":
-			return 7;
+		case "社会":
+			return 5; // ← 修正
 		case "保健体育":
-			return 8;
+			return 6;
 		case "技術家庭":
+			return 7;
+		case "美術":
+			return 8;
+		case "音楽":
 			return 9;
 		case "総合":
 			return 10;

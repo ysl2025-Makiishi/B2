@@ -68,6 +68,8 @@ public class SubjectResultServlet extends HttpServlet {
 
 		if ("update".equals(action)) {
 			updateSubjectData(request, response);
+		} else if ("updateUnderstanding".equals(action)) {
+			updateUnderstanding(request, response); // ← 追加
 		} else if ("deleteExam".equals(action)) {
 			deleteExamResult(request, response);
 		} else if ("updateExam".equals(action)) {
@@ -126,17 +128,23 @@ public class SubjectResultServlet extends HttpServlet {
 	/**
 	 * 模試結果の更新
 	 */
+	/**
+	 * 模試結果の更新（模試名・実施日も含む）
+	 */
 	private void updateExamResult(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		int examId = Integer.parseInt(request.getParameter("examId"));
+		String examName = request.getParameter("examName");
+		String examDate = request.getParameter("examDate");
 		int score = Integer.parseInt(request.getParameter("score"));
 		double deviationValue = Double.parseDouble(request.getParameter("deviationValue"));
 		double averageScore = Double.parseDouble(request.getParameter("averageScore"));
 		int studentId = Integer.parseInt(request.getParameter("studentId"));
 		int subjectId = Integer.parseInt(request.getParameter("subjectId"));
 
-		boolean success = SubjectResultDAO.updateExamResult(examId, score, deviationValue, averageScore);
+		boolean success = SubjectResultDAO.updateExamResult(examId, examName, examDate, score, deviationValue,
+				averageScore);
 
 		String message = success ? "模試結果を更新しました" : "模試結果の更新に失敗しました";
 		request.setAttribute("message", message);
@@ -149,17 +157,62 @@ public class SubjectResultServlet extends HttpServlet {
 		case 1:
 			return "国語";
 		case 2:
-			return "社会";
+			return "数学"; // ← 修正
 		case 3:
-			return "数学";
+			return "英語"; // ← 修正
 		case 4:
 			return "理科";
 		case 5:
-			return "英語";
+			return "社会"; // ← 修正
+		case 6:
+			return "保健体育";
+		case 7:
+			return "技術家庭";
+		case 8:
+			return "美術";
+		case 9:
+			return "音楽";
 		case 10:
 			return "総合";
 		default:
 			return "不明";
 		}
+	}
+
+	/**
+	 * 理解度のみ更新
+	 */
+	/**
+	 * 理解度のみ更新
+	 */
+	private void updateUnderstanding(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		System.out.println("=== updateUnderstanding 開始 ===");
+
+		String studentIdStr = request.getParameter("studentId");
+		String subjectIdStr = request.getParameter("subjectId");
+		String understanding = request.getParameter("understanding");
+
+		System.out.println("受け取ったパラメータ:");
+		System.out.println("studentId: " + studentIdStr);
+		System.out.println("subjectId: " + subjectIdStr);
+		System.out.println("understanding: " + understanding);
+
+		if (studentIdStr == null || subjectIdStr == null) {
+			System.out.println("ERROR: 必要なパラメータが不足");
+			response.sendRedirect("SearchResultServlet");
+			return;
+		}
+
+		int studentId = Integer.parseInt(studentIdStr);
+		int subjectId = Integer.parseInt(subjectIdStr);
+
+		boolean success = SubjectResultDAO.updateUnderstandingOnly(studentId, subjectId, understanding);
+
+		String message = success ? "理解度を更新しました" : "理解度の更新に失敗しました";
+		System.out.println("更新結果: " + message);
+
+		response.sendRedirect("SubjectResultServlet?studentId=" + studentId + "&subjectId=" + subjectId);
 	}
 }

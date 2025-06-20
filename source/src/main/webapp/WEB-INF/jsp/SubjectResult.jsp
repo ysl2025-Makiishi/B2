@@ -56,80 +56,86 @@
             <!-- 基本情報 -->
             <section class="centered">
                 <h3>基本情報</h3>
-                <div class="flex-row">
+                <div class="flex-row" style="justify-content: center;">
                     <div class="field">
                         <label for="name">氏名</label>
-                        <input type="text" id="name" name="name" value="${student.name}" readonly />
+                        <span>${student.name}</span>
                     </div>
                     <div class="field">
                         <label for="kana">ふりがな</label>
-                        <input type="text" id="kana" name="kana" value="${student.furigana}" readonly />
+                        <span>${student.furigana}</span>
                     </div>
                 </div>
             </section>
 
-            <!-- 学習計画 -->
-            <section class="centered">
-                <h3>学習計画</h3>
-                <div class="flex-row">
-                    <div class="field">
-                        <label for="understanding">理解度</label>
-                        <input type="text" id="understanding" name="understanding" value="${subjectData.understanding}" />
+            <!-- 総合以外の場合のみ表示 -->
+            <c:if test="${subjectId != 10}">
+                <!-- 学習計画 -->
+                <section class="centered">
+                    <h3>学習計画</h3>
+                    <!-- 理解度（真ん中） -->
+                    <div class="flex-row" style="justify-content: center;">
+                        <div class="field">
+                            <label for="understanding">理解度</label>
+                            <input type="text" id="understanding" name="understanding" value="${subjectData.understanding}" />
+                            <button type="button" onclick="updateUnderstanding()" class="understanding-update-btn">更新</button>
+                        </div>
                     </div>
-                    <div class="field">
-                        <label for="text_selection">テキスト選出</label>
-                        <input type="text" id="text_selection" name="text_selection" value="${subjectData.textSelection}" />
-                        <c:url var="textUrl" value="/TextServlet">
-                            <c:param name="studentId" value="${studentId}" />
-                            <c:param name="subjectId" value="${subjectId}" />
-                        </c:url>
-                        <a href="${textUrl}" target="_blank" class="diag-link-button">テキスト選出はこちら</a>
+                    <!-- テキスト選出・スケジュール作成・宿題ページ数 -->
+                    <div class="flex-row" style="justify-content: center;">
+                        <div class="field">
+                            <label for="text_selection">テキスト選出</label>
+                            <span>${subjectData.textSelection}</span>
+                            <c:url var="textUrl" value="/TextServlet">
+                                <c:param name="studentId" value="${studentId}" />
+                                <c:param name="subjectId" value="${subjectId}" />
+                            </c:url>
+                            <a href="${textUrl}" target="_blank" class="diag-link-button">テキスト選出はこちら</a>
+                        </div>
+                        <div class="field">
+                            <label for="schedule">スケジュール作成</label>
+                            <span>${subjectData.schedule}</span>
+                            <c:url var="scheduleUrl" value="/ScheduleServlet">
+                                <c:param name="studentId" value="${studentId}" />
+                                <c:param name="subjectId" value="${subjectId}" />
+                            </c:url>
+                            <a href="${scheduleUrl}" target="_blank" class="diag-link-button">スケジュール作成はこちら</a>
+                        </div>
+                        <div class="field">
+                            <label for="homework_pages">宿題ページ数</label>
+                            <span>${subjectData.homeworkPages}</span>
+                            <c:url var="homeworkUrl" value="/HomeworkServlet">
+                                <c:param name="studentId" value="${studentId}" />
+                                <c:param name="subjectId" value="${subjectId}" />
+                            </c:url>
+                            <a href="${homeworkUrl}" target="_blank" class="diag-link-button">宿題提案はこちら</a>
+                        </div>
                     </div>
-                </div>
-                <div class="flex-row">
-                    <div class="field">
-                        <label for="schedule">スケジュール作成</label>
-                        <input type="text" id="schedule" name="schedule" value="${subjectData.schedule}" />
-                        <c:url var="scheduleUrl" value="/ScheduleServlet">
-                            <c:param name="studentId" value="${studentId}" />
-                            <c:param name="subjectId" value="${subjectId}" />
-                        </c:url>
-                        <a href="${scheduleUrl}" target="_blank" class="diag-link-button">スケジュール作成はこちら</a>
-                    </div>
-                    <div class="field">
-                        <label for="homework_pages">宿題ページ数</label>
-                        <input type="text" id="homework_pages" name="homework_pages" value="${subjectData.homeworkPages}" />
-                        <c:url var="homeworkUrl" value="/HomeworkServlet">
-                            <c:param name="studentId" value="${studentId}" />
-                            <c:param name="subjectId" value="${subjectId}" />
-                        </c:url>
-                        <a href="${homeworkUrl}" target="_blank" class="diag-link-button">宿題提案はこちら</a>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- メモ欄 -->
-            <section class="centered">
-                <h3>前回やったこと</h3>
-                <textarea name="lastContent" class="large-textbox">${subjectData.lastContent}</textarea>
-            </section>
-            <section class="centered">
-                <h3>次回やること</h3>
-                <textarea name="nextContent" class="large-textbox">${subjectData.nextContent}</textarea>
-            </section>
-            <section class="centered">
-                <h3>宿題内容</h3>
-                <textarea name="homework" class="large-textbox">${subjectData.homework}</textarea>
-            </section>
-            <section class="centered">
-                <h3>備考</h3>
-                <textarea name="note" class="large-textbox">${subjectData.note}</textarea>
-            </section>
+                <!-- メモ欄 -->
+                <section class="centered">
+                    <h3>前回やったこと</h3>
+                    <textarea name="lastContent" class="large-textbox">${subjectData.lastContent}</textarea>
+                </section>
+                <section class="centered">
+                    <h3>次回やること</h3>
+                    <textarea name="nextContent" class="large-textbox">${subjectData.nextContent}</textarea>
+                </section>
+                <section class="centered">
+                    <h3>宿題内容</h3>
+                    <textarea name="homework" class="large-textbox">${subjectData.homework}</textarea>
+                </section>
+                <section class="centered">
+                    <h3>備考</h3>
+                    <textarea name="note" class="large-textbox">${subjectData.note}</textarea>
+                </section>
 
-            <!-- 保存ボタン -->
-            <div class="section-btn-row">
-                <button type="submit" class="save-btn">保存</button>
-            </div>
+                <!-- 保存ボタン -->
+                <div class="section-btn-row">
+                    <button type="submit" class="save-btn">保存</button>
+                </div>
+            </c:if>
         </form>
 
         <!-- 模試結果 -->
@@ -149,8 +155,12 @@
                 <tbody>
                     <c:forEach var="exam" items="${subjectData.examResults}">
                         <tr>
-                            <td>${exam.examName}</td>
-                            <td><fmt:formatDate value="${exam.examDate}" pattern="yyyy-MM-dd" /></td>
+                            <td>
+                                <input type="text" value="${exam.examName}" id="examName_${exam.id}" />
+                            </td>
+                            <td>
+                                <input type="date" value="<fmt:formatDate value='${exam.examDate}' pattern='yyyy-MM-dd' />" id="examDate_${exam.id}" />
+                            </td>
                             <td>
                                 <input type="number" value="${exam.score}" id="score_${exam.id}" min="0" max="100" />
                             </td>
@@ -161,7 +171,7 @@
                                 <input type="number" value="${exam.averageScore}" id="avg_${exam.id}" step="0.1" />
                             </td>
                             <td>
-                                <button type="button" onclick="updateExam(${exam.id})" class="edit-btn">更新</button>
+                                <button type="button" onclick="updateExam(${exam.id})" class="table-edit-btn">更新</button>
                                 <button type="button" onclick="deleteExam(${exam.id})" class="delete-btn">削除</button>
                             </td>
                         </tr>
@@ -173,63 +183,14 @@
         <a href="<c:url value='/IndividualResultsServlet?studentId=${student.id}' />" class="diag-link-button">個人結果に戻る</a>
     </div>
 
-    <script>
-        function updateExam(examId) {
-            const score = document.getElementById('score_' + examId).value;
-            const deviationValue = document.getElementById('dev_' + examId).value;
-            const averageScore = document.getElementById('avg_' + examId).value;
-            
-            const form = document.createElement('form');
-            form.method = 'post';
-            form.action = '<c:url value="/SubjectResultServlet" />';
-            
-            const fields = {
-                action: 'updateExam',
-                examId: examId,
-                score: score,
-                deviationValue: deviationValue,
-                averageScore: averageScore,
-                studentId: '${studentId}',
-                subjectId: '${subjectId}'
-            };
-            
-            for (const [key, value] of Object.entries(fields)) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = value;
-                form.appendChild(input);
-            }
-            
-            document.body.appendChild(form);
-            form.submit();
-        }
-        
-        function deleteExam(examId) {
-            if (confirm('この模試結果を削除しますか？')) {
-                const form = document.createElement('form');
-                form.method = 'post';
-                form.action = '<c:url value="/SubjectResultServlet" />';
-                
-                const fields = {
-                    action: 'deleteExam',
-                    examId: examId,
-                    studentId: '${studentId}',
-                    subjectId: '${subjectId}'
-                };
-                
-                for (const [key, value] of Object.entries(fields)) {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = key;
-                    input.value = value;
-                    form.appendChild(input);
-                }
-                
-                document.body.appendChild(form);
-                form.submit();
-            }
-        }
-    </script>
+    <!-- データを JavaScript に渡すための hidden elements -->
+    <div id="contextData" 
+         data-student-id="${studentId}" 
+         data-subject-id="${subjectId}" 
+         data-servlet-url="<c:url value='/SubjectResultServlet' />" 
+         style="display: none;">
+    </div>
+
+    <script src="<c:url value='/js/SubjectResult.js' />"></script>
 </body>
 </html>
