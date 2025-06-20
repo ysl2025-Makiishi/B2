@@ -253,12 +253,22 @@ public class IndividualResults {
 	// === 模試結果の内部クラス ===
 	// ==========================
 	public static class ExamScore {
+		private int id;
 		private String examName; // 模試名
 		private Date examDate; // 実施日
 		private String subjectName; // 教科名
 		private int score; // 点数（0～100）
 		private double deviationValue; // 偏差値（例: 55.2）
 		private double averageScore; // 平均点（例: 63.4）
+
+		// id のgetter/setterを追加
+		public int getId() {
+			return id;
+		}
+
+		public void setId(int id) {
+			this.id = id;
+		}
 
 		public String getExamName() {
 			return examName;
