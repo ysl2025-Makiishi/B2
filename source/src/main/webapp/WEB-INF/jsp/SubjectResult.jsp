@@ -35,11 +35,20 @@
 			href="<c:url value='/IndividualResultsServlet?studentId=${student.id}' />"
 			class="diag-link-button">個人結果に戻る</a>
 
+		<!-- 修正後：SubjectResult.jsp の教科ナビゲーション -->
 		<ul class="subject-nav">
-			<c:forEach var="subj" items="${['国語','数学','理科','社会','英語','総合']}">
-				<li><a
-					href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subject=${subj}' />">${subj}</a></li>
-			</c:forEach>
+			<li><a
+				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=1' />">国語</a></li>
+			<li><a
+				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=3' />">数学</a></li>
+			<li><a
+				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=4' />">理科</a></li>
+			<li><a
+				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=2' />">社会</a></li>
+			<li><a
+				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=5' />">英語</a></li>
+			<li><a
+				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=10' />">総合</a></li>
 		</ul>
 
 		<form method="post" action="<c:url value='/SubjectResultServlet' />">
@@ -62,44 +71,39 @@
 				</div>
 			</section>
 
-			<!-- 学習計画 -->
+			<!-- 学習計画セクションの修正 -->
 			<section class="centered">
 				<h3>学習計画</h3>
 				<div class="flex-row">
 					<div class="field">
 						<label for="understanding">理解度</label> <input type="text"
-							id="understanding" name="understanding"
-							value="${student.understanding}" readonly />
+							id="understanding" name="understanding" value="" readonly />
 					</div>
 					<div class="section-btn-row">
 						<button type="button" class="edit-btn" data-target="plan">編集</button>
 					</div>
 					<div class="field">
 						<label for="text_selection">テキスト選出</label> <input type="text"
-							id="text_selection" name="text_selection"
-							value="${student.textSelection}" readonly /> <a
+							id="text_selection" name="text_selection" value="" readonly /> <a
 							href="<c:url value='/TextServlet' />" target="_blank"
 							class="diag-link-button">テキスト選出はこちら</a>
 					</div>
 					<div class="field">
 						<label for="schedule">スケジュール作成</label> <input type="text"
-							id="schedule" name="schedule" value="${student.schedule}"
-							readonly /> <a href="<c:url value='/ScheduleServlet' />"
-							target="_blank" class="diag-link-button">スケジュール作成はこちら</a>
+							id="schedule" name="schedule" value="" readonly /> <a
+							href="<c:url value='/ScheduleServlet' />" target="_blank"
+							class="diag-link-button">スケジュール作成はこちら</a>
 					</div>
 					<div class="field">
 						<label for="homework_pages">宿題ページ数</label> <input type="text"
-							id="homework_pages" name="homework_pages"
-							value="${student.homeworkPages}" readonly /> <a
+							id="homework_pages" name="homework_pages" value="" readonly /> <a
 							href="<c:url value='/HomeworkServlet' />" target="_blank"
 							class="diag-link-button">宿題提案はこちら</a>
 					</div>
 				</div>
-
 			</section>
 
-
-			<!-- メモ欄 -->
+			<!-- メモ欄セクションの修正 -->
 			<section class="centered">
 				<h3>前回やったこと</h3>
 				<textarea name="lastContent" class="large-textbox"></textarea>

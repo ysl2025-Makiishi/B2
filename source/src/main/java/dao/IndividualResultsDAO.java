@@ -110,26 +110,47 @@ public class IndividualResultsDAO {
 	/**
 	 * 生徒の基本情報を更新
 	 */
+	/**
+	 * 生徒の基本情報を更新（学校名・志望校も含む）
+	 */
 	public static boolean updateStudentBasicInfo(int studentId, String name, String furigana, String gender,
-			String birthday) {
-		String sql = """
-					UPDATE students
-					SET name = ?, furigana = ?, gender = ?, birthday = ?, updated_at = NOW()
-					WHERE id = ?
-				""";
+			String birthday, String schoolName, String asp1, String asp2, String asp3) {
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+			conn.setAutoCommit(false);
 
-		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
-				PreparedStatement ps = conn.prepareStatement(sql)) {
+			// 1. 学校IDを取得/作成
+			int schoolId = getOrCreateSchoolId(conn, schoolName);
 
-			ps.setString(1, name);
-			ps.setString(2, furigana);
-			ps.setString(3, gender);
-			ps.setString(4, birthday);
-			ps.setInt(5, studentId);
+			// 2. 志望校IDを取得/作成
+			int asp1Id = getOrCreateAspirationSchoolId(conn, asp1);
+			int asp2Id = getOrCreateAspirationSchoolId(conn, asp2);
+			int asp3Id = getOrCreateAspirationSchoolId(conn, asp3);
 
-			int result = ps.executeUpdate();
-			System.out.println("基本情報更新結果: " + result + "件");
-			return result > 0;
+			// 3. 生徒情報を更新
+			String sql = """
+					    UPDATE students
+					    SET name = ?, furigana = ?, gender = ?, birthday = ?,
+					        school_id = ?, aspiration_school1_id = ?, aspiration_school2_id = ?, aspiration_school3_id = ?,
+					        updated_at = NOW()
+					    WHERE id = ?
+					""";
+
+			try (PreparedStatement ps = conn.prepareStatement(sql)) {
+				ps.setString(1, name);
+				ps.setString(2, furigana);
+				ps.setString(3, gender);
+				ps.setString(4, birthday);
+				ps.setInt(5, schoolId);
+				ps.setInt(6, asp1Id);
+				ps.setInt(7, asp2Id);
+				ps.setInt(8, asp3Id);
+				ps.setInt(9, studentId);
+
+				int result = ps.executeUpdate();
+				conn.commit();
+				System.out.println("基本情報更新結果: " + result + "件");
+				return result > 0;
+			}
 
 		} catch (SQLException e) {
 			System.out.println("基本情報更新エラー: " + e.getMessage());
@@ -139,7 +160,74 @@ public class IndividualResultsDAO {
 	}
 
 	/**
+	 * 学校名から学校IDを取得、存在しない場合は作成
+	 */
+	private static int getOrCreateSchoolId(Connection conn, String schoolName) throws SQLException {
+		if (schoolName == null || schoolName.trim().isEmpty()) {
+			return 0; // NULL
+		}
+
+		// 既存の学校IDを検索
+		String selectSql = "SELECT id FROM schools WHERE school_name = ?";
+		try (PreparedStatement ps = conn.prepareStatement(selectSql)) {
+			ps.setString(1, schoolName);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt("id");
+			}
+		}
+
+		// 存在しない場合は新規作成
+		String insertSql = "INSERT INTO schools (school_name, created_at, updated_at) VALUES (?, NOW(), NOW())";
+		try (PreparedStatement ps = conn.prepareStatement(insertSql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+			ps.setString(1, schoolName);
+			ps.executeUpdate();
+			ResultSet rs = ps.getGeneratedKeys();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		}
+
+		return 0;
+	}
+
+	/**
+	 * 志望校名から志望校IDを取得、存在しない場合は作成
+	 */
+	private static int getOrCreateAspirationSchoolId(Connection conn, String schoolName) throws SQLException {
+		if (schoolName == null || schoolName.trim().isEmpty()) {
+			return 0; // NULL
+		}
+
+		// 既存の志望校IDを検索
+		String selectSql = "SELECT id FROM aspiration_schools WHERE aspiration_school_name = ?";
+		try (PreparedStatement ps = conn.prepareStatement(selectSql)) {
+			ps.setString(1, schoolName);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt("id");
+			}
+		}
+
+		// 存在しない場合は新規作成
+		String insertSql = "INSERT INTO aspiration_schools (aspiration_school_name, created_at, updated_at) VALUES (?, NOW(), NOW())";
+		try (PreparedStatement ps = conn.prepareStatement(insertSql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+			ps.setString(1, schoolName);
+			ps.executeUpdate();
+			ResultSet rs = ps.getGeneratedKeys();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		}
+
+		return 0;
+	}
+
+	/**
 	 * GPAデータを更新（INSERT ON DUPLICATE KEY UPDATE）
+	 */
+	/**
+	 * GPAデータを更新（DELETE + INSERT方式）
 	 */
 	public static boolean updateGPA(int studentId, String gpaJp, String gpaSs, String gpaMa, String gpaSc, String gpaEn,
 			String gpaMu, String gpaAr, String gpaPe, String gpaTe) {
@@ -149,40 +237,57 @@ public class IndividualResultsDAO {
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 			conn.setAutoCommit(false); // トランザクション開始
 
-			String sql = """
-						INSERT INTO gpas (student_id, subject_id, gpa, created_at, updated_at)
-						VALUES (?, ?, ?, NOW(), NOW())
-						ON DUPLICATE KEY UPDATE
-						gpa = VALUES(gpa), updated_at = NOW()
-					""";
+			try {
+				// 1. 既存のGPAデータを削除
+				String deleteSql = "DELETE FROM gpas WHERE student_id = ?";
+				try (PreparedStatement deletePs = conn.prepareStatement(deleteSql)) {
+					deletePs.setInt(1, studentId);
+					int deleted = deletePs.executeUpdate();
+					System.out.println("既存GPA削除: " + deleted + "件");
+				}
 
-			try (PreparedStatement ps = conn.prepareStatement(sql)) {
-				int updateCount = 0;
+				// 2. 新しいGPAデータを挿入
+				String insertSql = "INSERT INTO gpas (student_id, subject_id, gpa, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())";
+				int insertCount = 0;
 
-				for (int i = 0; i < gpaValues.length; i++) {
-					if (gpaValues[i] != null && !gpaValues[i].trim().isEmpty()) {
-						ps.setInt(1, studentId);
-						ps.setInt(2, i + 1); // subject_id は1から9
-						ps.setInt(3, Integer.parseInt(gpaValues[i]));
-						ps.addBatch();
-						updateCount++;
+				try (PreparedStatement insertPs = conn.prepareStatement(insertSql)) {
+					for (int i = 0; i < gpaValues.length; i++) {
+						if (gpaValues[i] != null && !gpaValues[i].trim().isEmpty()) {
+							try {
+								int gpaValue = Integer.parseInt(gpaValues[i].trim());
+								insertPs.setInt(1, studentId);
+								insertPs.setInt(2, i + 1); // subject_id は1から9
+								insertPs.setInt(3, gpaValue);
+
+								int result = insertPs.executeUpdate(); // 1件ずつ実行
+								if (result > 0) {
+									insertCount++;
+									System.out.println("GPA挿入成功: subject_id=" + (i + 1) + ", gpa=" + gpaValue);
+								}
+							} catch (NumberFormatException e) {
+								System.out.println("GPA値が不正: " + gpaValues[i]);
+							}
+						}
 					}
 				}
 
-				if (updateCount > 0) {
-//					int[] results = ps.executeBatch();
-					conn.commit();
-					System.out.println("GPA更新完了: " + updateCount + "件");
-					return true;
-				}
+				// 3. トランザクションをコミット
+				conn.commit();
+				System.out.println("GPA更新完了: " + insertCount + "件");
+				return insertCount > 0;
+
+			} catch (SQLException e) {
+				// エラー時はロールバック
+				conn.rollback();
+				System.out.println("GPA更新でエラー、ロールバック: " + e.getMessage());
+				throw e;
 			}
 
 		} catch (Exception e) {
 			System.out.println("GPA更新エラー: " + e.getMessage());
 			e.printStackTrace();
+			return false;
 		}
-
-		return false;
 	}
 
 	/**

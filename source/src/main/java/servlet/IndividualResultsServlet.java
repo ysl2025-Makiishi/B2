@@ -73,6 +73,10 @@ public class IndividualResultsServlet extends HttpServlet {
 		String furigana = request.getParameter("furigana");
 		String gender = request.getParameter("gender");
 		String birthday = request.getParameter("birthday");
+		String school = request.getParameter("school"); // ← 追加
+		String asp1 = request.getParameter("asp1"); // ← 追加
+		String asp2 = request.getParameter("asp2"); // ← 追加
+		String asp3 = request.getParameter("asp3"); // ← 追加
 
 		// GPA データを取得
 		String gpaJp = request.getParameter("gpa_jp");
@@ -84,6 +88,18 @@ public class IndividualResultsServlet extends HttpServlet {
 		String gpaAr = request.getParameter("gpa_ar");
 		String gpaPe = request.getParameter("gpa_pe");
 		String gpaTe = request.getParameter("gpa_te");
+		// === GPAデバッグログ追加 ===
+		System.out.println("=== GPA更新デバッグ ===");
+		System.out.println("gpaJp = " + gpaJp);
+		System.out.println("gpaSs = " + gpaSs);
+		System.out.println("gpaMa = " + gpaMa);
+		System.out.println("gpaSc = " + gpaSc);
+		System.out.println("gpaEn = " + gpaEn);
+		System.out.println("gpaMu = " + gpaMu);
+		System.out.println("gpaAr = " + gpaAr);
+		System.out.println("gpaPe = " + gpaPe);
+		System.out.println("gpaTe = " + gpaTe);
+		System.out.println("==================");
 
 		// 模試データを取得（配列）
 		String[] examNames = request.getParameterValues("exam_name[]");
@@ -98,8 +114,9 @@ public class IndividualResultsServlet extends HttpServlet {
 		boolean success = true;
 		String message = "";
 
-		// 1. 基本情報の更新
-		if (!IndividualResultsDAO.updateStudentBasicInfo(studentId, name, furigana, gender, birthday)) {
+		// 1. 基本情報の更新（学校名・志望校も含む）← 変更
+		if (!IndividualResultsDAO.updateStudentBasicInfo(studentId, name, furigana, gender, birthday, school, asp1,
+				asp2, asp3)) {
 			success = false;
 			message += "基本情報の更新に失敗しました。";
 		}

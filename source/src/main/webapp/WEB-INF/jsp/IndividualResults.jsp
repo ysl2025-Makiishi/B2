@@ -37,19 +37,32 @@ LocalDate today = LocalDate.now();
 		<a href="<c:url value='/SearchResultServlet' />"
 			class="diag-link-button">検索結果に戻る</a>
 
+		<!-- 修正後：教科IDと生徒IDを明確に分けて渡す -->
 		<ul class="subject-nav">
-			<li><a
-				href="<c:url value='/SubjectResultServlet?id=${student.id}&subject=国語' />">国語</a></li>
-			<li><a
-				href="<c:url value='/SubjectResultServlet?id=${student.id}&subject=数学' />">数学</a></li>
-			<li><a
-				href="<c:url value='/SubjectResultServlet?id=${student.id}&subject=理科' />">理科</a></li>
-			<li><a
-				href="<c:url value='/SubjectResultServlet?id=${student.id}&subject=社会' />">社会</a></li>
-			<li><a
-				href="<c:url value='/SubjectResultServlet?id=${student.id}&subject=英語' />">英語</a></li>
-			<li><a
-				href="<c:url value='/SubjectResultServlet?id=${student.id}&subject=総合' />">総合</a></li>
+			<li><c:url var="kokugoUrl" value="/SubjectResultServlet">
+					<c:param name="studentId" value="${student.id}" />
+					<c:param name="subjectId" value="1" />
+				</c:url> <a href="${kokugoUrl}">国語</a></li>
+			<li><c:url var="sugakuUrl" value="/SubjectResultServlet">
+					<c:param name="studentId" value="${student.id}" />
+					<c:param name="subjectId" value="3" />
+				</c:url> <a href="${sugakuUrl}">数学</a></li>
+			<li><c:url var="rikaUrl" value="/SubjectResultServlet">
+					<c:param name="studentId" value="${student.id}" />
+					<c:param name="subjectId" value="4" />
+				</c:url> <a href="${rikaUrl}">理科</a></li>
+			<li><c:url var="shakaiUrl" value="/SubjectResultServlet">
+					<c:param name="studentId" value="${student.id}" />
+					<c:param name="subjectId" value="2" />
+				</c:url> <a href="${shakaiUrl}">社会</a></li>
+			<li><c:url var="eigoUrl" value="/SubjectResultServlet">
+					<c:param name="studentId" value="${student.id}" />
+					<c:param name="subjectId" value="5" />
+				</c:url> <a href="${eigoUrl}">英語</a></li>
+			<li><c:url var="sougouUrl" value="/SubjectResultServlet">
+					<c:param name="studentId" value="${student.id}" />
+					<c:param name="subjectId" value="10" />
+				</c:url> <a href="${sougouUrl}">総合</a></li>
 		</ul>
 
 
@@ -79,9 +92,13 @@ LocalDate today = LocalDate.now();
 					</div>
 				</div>
 				<div class="flex-row">
+					<!-- 修正後 -->
 					<div class="field">
 						<label>性格</label><span class="personality-display">${student.personalityName}</span>
-						<a href="<c:url value='/PersonalityServlet' />" target="_blank"
+						<c:url var="personalityUrl" value="/PersonalityServlet">
+							<c:param name="studentId" value="${student.id}" />
+						</c:url>
+						<a href="${personalityUrl}" target="_blank"
 							class="diag-link-button">性格診断はこちら</a>
 					</div>
 					<div class="field">
