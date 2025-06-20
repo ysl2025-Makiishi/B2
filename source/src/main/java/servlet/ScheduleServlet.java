@@ -22,6 +22,8 @@ public class ScheduleServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	
+    		request.setCharacterEncoding("UTF-8");
 
         // パラメータ取得（検索条件）
 //        String targetDate = request.getParameter("target_date");

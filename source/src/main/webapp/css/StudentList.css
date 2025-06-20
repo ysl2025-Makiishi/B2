@@ -1,28 +1,21 @@
 @charset "UTF-8";
 body {
       font-family: Arial, sans-serif;
-      padding: 20px;
+      padding: 30px;
+      line-height: 1.6;
     }
-    .student-grid {
-	  display: grid;
-	  grid-template-columns: repeat(3, 1fr); /* 3列固定 */
-	  gap: 15px;
-	  max-width: 1280px; /* 必要に応じて調整 */
-	  margin: 20px auto 0; /* 中央寄せ */
-	}
+    
     
     table {
     width: 100%;
     }
     .student-card {
-	  width: 100%;
-	  max-width: 400px;  /* これでカードが広すぎないように調整 */
-	  border: 1px solid #aaa;
-	  padding: 10px;
-	  box-sizing: border-box;
-	  background-color: #F9F9F9;
-	  min-width: 100px;
-	  margin: 0 auto; /* カード中央寄せ（必要に応じて） */
+	  border: 1px solid #d1d1d1;
+	  padding: 20px;
+	  background: #ffffff;
+	  border-radius: 10px;
+	  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+	  transition: all 0.2s ease-in-out;
 	}
     
     .student-card p {
@@ -38,10 +31,7 @@ body {
     .pagination button {
       margin: 0 2px;
     }
-    #backToTop {
-      margin-top: 30px;
-      display: none;
-    }
+    
     table {
      width: 600px; /* 固定幅に変更 */
      margin: 20px auto; /* 中央寄せ */
@@ -136,35 +126,16 @@ h2 {
     font-size: 1.8rem;
 }
 
-/* ——— ボタン ——— */
-.button {
-    display: inline-block;
-    background-image: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-    color: #20b4da;
-    padding: 0.8em 2.4em;
-    /* 横幅を広く */
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 999px;
-    /* ピル型 */
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    transition: transform 0.2s, box-shadow 0.2s;
-    white-space: nowrap;
-    /* 文字を横一列に */
-    text-align: center;
-    margin: 0;
-    /* ナビ内はgapで管理 */
+#backToHome:hover,
+#backToTop:hover {
+  background-color: #0f6fc7;        /* ホバー時に少し濃く */
+  transform: translateY(-2px);
 }
 
-.button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
-}
-
-.button:active {
-    transform: translateY(0);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+#backToHome:active,
+#backToTop:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* ——— フッター ——— */
@@ -176,56 +147,113 @@ h2 {
 }
 
 .pagination {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
   margin-top: 20px;
-  text-align: center;
 }
 
 .student-row {
   display: flex;
-  gap: 10px;
-  margin: 4px 0;
+  margin-bottom: 10px;
+  font-size: 1rem;
 }
 
 .label {
-  width: 60px;
-  font-weight: normal;
+  width: 80px;
+  font-weight: 600;
+  color: #555;
 }
 
 .value {
   flex: 1;
+  color: #333;
 }
+
 
 .name {
-  font-weight: bold; /* 氏名だけ太字に */
-}
-
-.name {
-  font-weight: bold;     /* 太字 */
-  font-size: 1.2rem;     /* 通常より少し大きく */
-}
-
-.student-card {
-  cursor: pointer; /* ← カードがクリック可能に見える */
-  transition: transform 0.2s;
+  font-size: 1.25rem;
+  color: #1685e6;
+  font-weight: bold;
 }
 
 .student-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
 
 #backToHome {
-  padding: 1px 6px;   /* ← 少し大きめに調整 */
-  font-size: 1rem;    /* ← テキストも少し拡大 */
+  display: inline-block;
+  background-color: #1685e6;        /* メインカラー */
+  color: #ffffff;
+  padding: 0.6em 1.6em;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  text-decoration: none;
+  text-align: center;
+  margin: 10px auto;
+}
+
+#backToTop {
+  display: block;                 
+  width: fit-content;            
+  background-color: #1685e6;
+  color: #ffffff;
+  padding: 0.6em 1.6em;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  text-decoration: none;
+  position: fixed;
+  bottom: 20px;
+  right: 45px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  margin: 0;                     
 }
 
 
 .pagination button {
-  padding: 1px 7px;    /* ← ボタンの余白を大きめに */
-  font-size: 1rem;     /* ← 文字サイズを少し拡大 */
+  padding: 6px 12px;
+  font-size: 1rem;
+  background-color: #ffffff;
+  border: 1px solid #1685e6;
+  color: #1685e6;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.pagination button:hover {
+  background-color: #1685e6;
+  color: #fff;
 }
 
 .page-info {
   font-size: 1.1rem;      /* ← サイズを大きく */
   color: var(--color-text);  /* ← 既存の色と統一（任意） */
+}
+
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px 48px;
+  padding: 32px 0;
+  max-width: 1200px; /* 👈 横幅制限を追加（最大3列分くらい） */
+  margin: 0 auto;     /* 中央寄せ */
+}
+
+
+#studentCount {
+  font-weight: bold;
+  color: #3366cc;
+  font-size: 1.1rem;
+}
+
+.student-card {
+  padding: 24px; /* 元の20px → 少し広げる */
 }

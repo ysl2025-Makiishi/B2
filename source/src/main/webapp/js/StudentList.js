@@ -60,16 +60,34 @@ document.getElementById("studentCount").textContent = students.length;
     for (const student of displayStudents) {
       const card = document.createElement("div");
       card.className = "student-card";
-      card.innerHTML = `
+      // 性別を「M → 男」「F → 女」に変換
+		let genderDisplay = student.gender === "M" ? "男性" : student.gender === "F" ? "女性" : student.gender;
+		
+		card.innerHTML = `
 		  <div class="student-row"><span class="label">氏名</span><span class="value name">${student.name}</span></div>
 		  <div class="student-row"><span class="label">学校名</span><span class="value">${student.school}</span></div>
-		  <div class="student-row"><span class="label">性別</span><span class="value">${student.gender}</span></div>
-	  `;
+		  <div class="student-row"><span class="label">性別</span><span class="value">${genderDisplay}</span></div>
+		`;
+
 
 	card.addEventListener("click", () => {
-	  const encodedName = encodeURIComponent(student.name);
-	  window.location.href = `/IndividualResultsServlet?name=${encodedName}`;
+	  // フォームを作ってPOST送信する
+	  const form = document.createElement("form");
+	  form.method = "POST";
+	  form.action = `${contextPath}/IndividualResultsServlet`;
+	
+	  // student.id を hidden input で送信
+	  const input = document.createElement("input");
+	  input.type = "hidden";
+	  input.name = "id"; // IndividualResultsServlet で受け取るパラメータ名と一致させる
+	  input.value = student.id;
+	
+	  form.appendChild(input);
+	  document.body.appendChild(form);
+	  form.submit(); // POST送信
 	});
+
+
 
       
       studentGrid.appendChild(card);
