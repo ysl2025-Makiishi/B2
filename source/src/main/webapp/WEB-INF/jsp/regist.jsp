@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <title>生徒登録フォーム</title>
-  <link rel="stylesheet" type="text/css" href="<c:url value='/css/K-style.css' />">
+  <link rel="stylesheet" type="text/css" href="<c:url value='/css/regist.css' />">
   <style>
   select, option {
     background-color: white;
@@ -100,11 +100,11 @@
     <div class="form-row">
       <div class="form-group">
         <label for="name">氏名 <span style="color:red;">※</span></label>
-        <input type="text" id="name" name="name" value="name" required>
+        <input type="text" id="name" name="name" value="" required>
       </div>
       <div class="form-group">
         <label for="furigana">ふりがな <span style="color:red;">※</span></label>
-        <input type="text" id="furigana" name="furigana" value="furigana" onblur="validateHiragana(this)" required>
+        <input type="text" id="furigana" name="furigana" value="" onblur="validateHiragana(this)" required>
       </div>
     </div>
 
@@ -112,7 +112,7 @@
     <div class="form-row">
       <div class="form-group">
         <label for="school">学校名</label>
-        <input type="text" id="school" name="school" value="school">
+        <input type="text" id="school" name="school" value="">
       </div>
       <div class="form-group">
         <label for="birthday">生年月日 <span style="color:red;">※</span></label>
@@ -140,15 +140,15 @@
     <div class="form-row">
       <div class="form-group">
         <label for="hope1">志望校 1</label>
-        <input type="text" id="hope1" name="aspiration_school1" value="aspiration_school1">
+        <input type="text" id="hope1" name="aspiration_school1" value="">
       </div>
       <div class="form-group">
         <label for="hope2">志望校 2</label>
-        <input type="text" id="hope2" name="aspiration_school2" value="aspiration_school2">
+        <input type="text" id="hope2" name="aspiration_school2" value="">
       </div>
       <div class="form-group">
         <label for="hope3">志望校 3</label>
-        <input type="text" id="hope3" name="aspiration_school3" value="aspiration_school3">
+        <input type="text" id="hope3" name="aspiration_school3" value="">
       </div>
     </div>
 

@@ -50,72 +50,96 @@
         <p>当てはまると思うものを選択してください。（1:当てはまらない～5:当てはまる）</p>
         </div>
         <form id="quiz-form">
+        	<div class="quiz-question">
             1. 新しいことを学ぶのが好きだ
+            <div class="quiz-options">
             <label><input type="radio" name="q1" value="1" required> 1</label>
             <label><input type="radio" name="q1" value="2" required> 2</label>
             <label><input type="radio" name="q1" value="3" required> 3</label>
             <label><input type="radio" name="q1" value="4" required> 4</label>
             <label><input type="radio" name="q1" value="5" required> 5</label>
             <br>
+            </div></div>
 
+			<div class="quiz-question">
             2. 細かいスケジュールを立てるのが得意だ
+            <div class="quiz-options">
             <label><input type="radio" name="q2" value="1" required> 1</label>
             <label><input type="radio" name="q2" value="2" required> 2</label>
             <label><input type="radio" name="q2" value="3" required> 3</label>
             <label><input type="radio" name="q2" value="4" required> 4</label>
             <label><input type="radio" name="q2" value="5" required> 5</label>
             <br>
+            </div></div>
 
+			<div class="quiz-question">
             3. 心配しすぎて手が止まることがある
+            <div class="quiz-options">
             <label><input type="radio" name="q3" value="1" required> 1</label>
             <label><input type="radio" name="q3" value="2" required> 2</label>
             <label><input type="radio" name="q3" value="3" required> 3</label>
             <label><input type="radio" name="q3" value="4" required> 4</label>
             <label><input type="radio" name="q3" value="5" required> 5</label>
             <br>
+            </div></div>
 
+			<div class="quiz-question">
             4. グループで話すと元気になる
+            <div class="quiz-options">
             <label><input type="radio" name="q4" value="1" required> 1</label>
             <label><input type="radio" name="q4" value="2" required> 2</label>
             <label><input type="radio" name="q4" value="3" required> 3</label>
             <label><input type="radio" name="q4" value="4" required> 4</label>
             <label><input type="radio" name="q4" value="5" required> 5</label>
             <br>
+            </div></div>
 
+			<div class="quiz-question">
             5. じっとしているよりも、何か活動しているほうが好きだ
+            <div class="quiz-options">
             <label><input type="radio" name="q5" value="1" required> 1</label>
             <label><input type="radio" name="q5" value="2" required> 2</label>
             <label><input type="radio" name="q5" value="3" required> 3</label>
             <label><input type="radio" name="q5" value="4" required> 4</label>
             <label><input type="radio" name="q5" value="5" required> 5</label>
             <br>
+            </div></div>
 
+			<div class="quiz-question">
             6. 芸術や創作活動に魅力を感じる
+            <div class="quiz-options">
             <label><input type="radio" name="q6" value="1" required> 1</label>
             <label><input type="radio" name="q6" value="2" required> 2</label>
             <label><input type="radio" name="q6" value="3" required> 3</label>
             <label><input type="radio" name="q6" value="4" required> 4</label>
             <label><input type="radio" name="q6" value="5" required> 5</label>
             <br>
+            </div></div>
 
+			<div class="quiz-question">
             7. 一度決めた計画はきっちり守りたい
+            <div class="quiz-options">
             <label><input type="radio" name="q7" value="1" required> 1</label>
             <label><input type="radio" name="q7" value="2" required> 2</label>
             <label><input type="radio" name="q7" value="3" required> 3</label>
             <label><input type="radio" name="q7" value="4" required> 4</label>
             <label><input type="radio" name="q7" value="5" required> 5</label>
             <br>
+            </div></div>
 
+			<div class="quiz-question">
             8. 小さなミスでも落ち込んでしまう
+            <div class="quiz-options">
             <label><input type="radio" name="q8" value="1" required> 1</label>
             <label><input type="radio" name="q8" value="2" required> 2</label>
             <label><input type="radio" name="q8" value="3" required> 3</label>
             <label><input type="radio" name="q8" value="4" required> 4</label>
             <label><input type="radio" name="q8" value="5" required> 5</label>
             <br><br>
+            </div></div>
 
             <div class="button-area">
-                <button type="submit">診断する</button>
+                <button type="submit" class="fancy-button">診断する</button>
             </div>
             <br>
         </form>
