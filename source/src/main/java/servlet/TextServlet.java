@@ -16,49 +16,134 @@ import dto.texts;
 @WebServlet("/TextServlet")
 public class TextServlet extends HttpServlet {
 
-    // 初期表示（GET）時：選択リセット状態で表示
+    private static final long serialVersionUID = 1L;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("subject", ""); // ← 空文字に変更（JSPと合わせるため）
+
+        // studentId を取得（なければ 0）
+        String studentIdStr = request.getParameter("studentId");
+        int studentId = 0;
+        try {
+            studentId = Integer.parseInt(studentIdStr);
+        } catch (NumberFormatException | NullPointerException e) {
+            studentId = 0;
+        }
+
+        // 初期表示に必要な属性
+        request.setAttribute("subject", "");
         request.setAttribute("personality", "");
         request.setAttribute("searched", false);
+        request.setAttribute("studentId", studentId);
+        request.setAttribute("subjectId", "");
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/Text.jsp");
         dispatcher.forward(request, response);
     }
 
-    // 検索実行時（POST）：選択された値で検索し、選択状態を保持してJSPへ
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         request.setCharacterEncoding("UTF-8");
+
+        String action = request.getParameter("action");
+        String textIdStr = request.getParameter("textId");
+        String studentIdStr = request.getParameter("studentId");
+
+        int studentId = 0;
+        String message = "";
+        Integer selectedSubjectId = null;
+        int subjectId = 0;
+
+        try {
+            studentId = Integer.parseInt(studentIdStr);
+        } catch (NumberFormatException e) {
+            studentId = 0;
+        }
+
+        // ▼ 登録処理
+        if (action != null && textIdStr != null && studentId > 0) {
+            try {
+                int textId = Integer.parseInt(textIdStr);
+                TextDAO textDAO = new TextDAO();
+                texts selectedText = textDAO.findById(textId);
+
+                if (selectedText == null) {
+                    message = "指定されたテキストが見つかりません。";
+                } else {
+                    subjectId = selectedText.getSubjectId();
+                    selectedSubjectId = subjectId;
+
+                    boolean registered = textDAO.registerSelectedText(studentId, subjectId, textId);
+                    if (!registered) {
+                        message = "選出登録に失敗しました。";
+                    }
+                }
+            } catch (NumberFormatException e) {
+                message = "不正なテキストIDです。";
+            }
+
+            request.setAttribute("message", message);
+            request.setAttribute("searched", false);
+            request.setAttribute("subject", "");
+            request.setAttribute("personality", "");
+            request.setAttribute("studentId", studentId);
+            request.setAttribute("subjectId", selectedSubjectId != null ? selectedSubjectId : "");
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/Text.jsp");
+            dispatcher.forward(request, response);
+            return;
+        }
+
+        // ▼ 検索処理
         String subStr = request.getParameter("subject");
         String perStr = request.getParameter("personality");
 
+        int personalityId = 0;
+        boolean validInput = true;
+
         try {
-            int subjectId = Integer.parseInt(subStr);
-            int personalityId = Integer.parseInt(perStr);
+            if (subStr != null && !subStr.isEmpty()) {
+                subjectId = Integer.parseInt(subStr);
+            } else {
+                validInput = false;
+            }
 
-            System.out.println("選択された subjectId = " + subjectId);
-            System.out.println("選択された personalityId = " + personalityId);
+            if (perStr != null && !perStr.isEmpty()) {
+                personalityId = Integer.parseInt(perStr);
+            } else {
+                validInput = false;
+            }
 
-            TextDAO dao = new TextDAO();
-            List<texts> textsList = dao.getTextsBySubjectAndPersonality(subjectId, personalityId);
+            if (validInput) {
+                TextDAO dao = new TextDAO();
+                List<texts> textsList = dao.getTextsBySubjectAndPersonality(subjectId, personalityId);
 
-            System.out.println("取得した教材数 = " + textsList.size());
-
-            request.setAttribute("textsList", textsList);
-            request.setAttribute("searched", true);
-            request.setAttribute("subject", subjectId);       // 選択状態保持
-            request.setAttribute("personality", personalityId);
+                request.setAttribute("textsList", textsList);
+                request.setAttribute("searched", true);
+                request.setAttribute("subject", subjectId);
+                request.setAttribute("personality", personalityId);
+                request.setAttribute("subjectId", subjectId);
+            } else {
+                request.setAttribute("textsList", null);
+                request.setAttribute("searched", true);
+                request.setAttribute("subject", "");
+                request.setAttribute("personality", "");
+                request.setAttribute("subjectId", "");
+            }
 
         } catch (NumberFormatException e) {
-            System.out.println("エラー：subject または personality が不正（未選択または数字でない）");
             request.setAttribute("textsList", null);
             request.setAttribute("searched", true);
-            request.setAttribute("subject", "");              // 初期化
+            request.setAttribute("subject", "");
             request.setAttribute("personality", "");
+            request.setAttribute("subjectId", "");
         }
+
+        request.setAttribute("studentId", studentId);
+        request.setAttribute("message", message);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/Text.jsp");
         dispatcher.forward(request, response);

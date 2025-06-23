@@ -146,4 +146,29 @@ public class TextDAO {
             return false;
         }
     }
+
+    // 生徒の選出テキスト登録処理
+    public boolean registerSelectedText(int studentId, int subjectId, int textId) {
+        String sql = """
+            INSERT INTO schedules (student_id, subject_id, text_id, pages, created_at, updated_at)
+            VALUES (?, ?, ?, (SELECT pages FROM texts WHERE id = ?), NOW(), NOW())
+            ON DUPLICATE KEY UPDATE text_id = VALUES(text_id), updated_at = NOW()
+        """;
+
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, studentId);
+            ps.setInt(2, subjectId);
+            ps.setInt(3, textId);
+            ps.setInt(4, textId);
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
