@@ -55,8 +55,4 @@ public class StudentListServlet extends HttpServlet {
 		// JSPにフォワード
 		request.getRequestDispatcher("/WEB-INF/jsp/StudentList.jsp").forward(request, response);
 	}
-}
-     
-        
-
-		
+}	

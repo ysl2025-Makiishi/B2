@@ -1,29 +1,3 @@
-/*const students = [
-  { name: "田中 太郎", school: "東京中学校", gender: "男" },
-  { name: "鈴木 花子", school: "大阪中学校", gender: "女" },
-  { name: "佐藤 次郎", school: "名古屋中学校", gender: "男" },
-  { name: "高橋 美咲", school: "福岡中学校", gender: "女" },
-  { name: "伊藤 健", school: "札幌中学校", gender: "男" },
-  { name: "中村 彩", school: "東京中学校", gender: "女" },
-  { name: "小林 一郎", school: "大阪中学校", gender: "男" },
-  { name: "山本 裕子", school: "名古屋中学校", gender: "女" },
-  { name: "加藤 剛", school: "福岡中学校", gender: "男" },
-  { name: "吉田 明美", school: "札幌中学校", gender: "女" },
-  { name: "吉田 明美", school: "札幌中学校", gender: "女" },
-  { name: "斉藤 直樹", school: "東京中学校", gender: "男" },
-  { name: "橋本 美佳", school: "大阪中学校", gender: "女" },
-  { name: "石川 勇", school: "名古屋中学校", gender: "男" },
-  { name: "村上 玲奈", school: "福岡中学校", gender: "女" },
-  { name: "岡田 大輔", school: "札幌中学校", gender: "男" },
-  { name: "藤田 真由美", school: "東京中学校", gender: "女" },
-  { name: "松本 翔", school: "大阪中学校", gender: "男" },
-  { name: "森田 里奈", school: "名古屋中学校", gender: "女" },
-  { name: "西村 拓也", school: "福岡中学校", gender: "男" },
-  { name: "遠藤 奈緒", school: "札幌中学校", gender: "女" },
-  { name: "金子 健太", school: "東京中学校", gender: "男" },
-  { name: "中川 美咲", school: "大阪中学校", gender: "女" }
-]*/
-
 // StudentList.js
 console.log(students); // ← JSPで定義された配列がここで使える
 
@@ -71,22 +45,9 @@ document.getElementById("studentCount").textContent = students.length;
 
 
 	card.addEventListener("click", () => {
-	  // フォームを作ってPOST送信する
-	  const form = document.createElement("form");
-	  form.method = "POST";
-	  form.action = `${contextPath}/IndividualResultsServlet`;
-	
-	  // student.id を hidden input で送信
-	  const input = document.createElement("input");
-	  input.type = "hidden";
-	  input.name = "id"; // IndividualResultsServlet で受け取るパラメータ名と一致させる
-	  input.value = student.id;
-	
-	  form.appendChild(input);
-	  document.body.appendChild(form);
-	  form.submit(); // POST送信
+	  console.log("clicked student id:", student.id);
+	  location.href = `${contextPath}/IndividualResultsServlet?studentId=${student.id}`;
 	});
-
 
 
       

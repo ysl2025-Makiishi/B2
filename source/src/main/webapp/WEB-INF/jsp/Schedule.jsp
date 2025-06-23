@@ -86,6 +86,7 @@
                 <td>
             </tr>
             </table>
+        <input type="hidden" name="page" id="calculated_page">
         </form>
         <!-- 最初は非表示の結果 -->
         <p id="result" style="display: none;">結果：　ページ進めよう！</p>

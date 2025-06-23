@@ -40,6 +40,7 @@ body {
     margin: 0;
     text-align: center;
     letter-spacing: 1px;
+    color: var(--color-primary);
 }
 
 /* ——— ナビゲーション ——— */
@@ -92,13 +93,18 @@ h2 {
     font-size: 0.9rem;
 }
 
-/* スケジュール作成の結果のフォントサイズ */
 #result {
-  color: var(--color-text);
-  font-size: 1.2em !important;
+  color: #2e86de;
+  font-size: 1.3rem;
   font-weight: bold;
-  margin: 0; /* ← マージンを完全にリセット */
+  padding: 0.5em 1em;
+  background-color: #eaf4ff;
+  border-left: 6px solid #2e86de;
+  margin-top: 1rem;
+  border-radius: 5px;
+  display: none;
 }
+
 
 #register_container {
   margin: 0; /* ← こちらも同様にリセット */
@@ -111,7 +117,7 @@ h2 {
   gap: 0.5rem; /* フォームと登録ボタンの間隔 */
   width: 100%; /* 親幅にフィット */
   max-width: 600px; /* 好みで幅制限 */
-  margin: 0 auto; /* ページ中央に配置 */
+  margin: 2rem auto;
   line-height: 2;
 }
 
@@ -123,4 +129,53 @@ input[type="button"] {
     font-size: 0.9rem;      /* 文字を少し大きく */
     padding: 0.2em 0.7em;   /* 余白を増やしてボタンを拡大 */
     cursor: pointer;        /* カーソルをポインターに */
+}
+
+#schedule_form {
+  background-color: #f9fbfc;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0, 100, 200, 0.15);
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+#schedule_form input[type="date"],
+#schedule_form input[type="number"],
+#schedule_form select {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#error_message {
+  color: red;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+.button,
+input[type="submit"],
+input[type="reset"],
+button {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+button:hover {
+  background-color: var(--color-accent);
 }

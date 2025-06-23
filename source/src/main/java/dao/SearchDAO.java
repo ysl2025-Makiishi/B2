@@ -23,31 +23,46 @@ public class SearchDAO {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
 
-            String sql = "SELECT s.id, s.name, s.furigana, s.school_id, s.birthday, s.gender, " +
-                         "s.aspiration_school1_id, s.aspiration_school2_id, s.aspiration_school3_id, " +
-                         "s.personality_id, s.created_at, s.updated_at " +
-                         "FROM students s " +
-                         "LEFT JOIN schools sch ON s.school_id = sch.id " +
-                         "WHERE s.name LIKE ? AND s.furigana LIKE ? AND (sch.name LIKE ? OR ? = '%') " +
-                         "ORDER BY s.id";
+            StringBuilder sql = new StringBuilder(
+                "SELECT s.id, s.name, s.furigana, s.school_id, sch.name AS school_name, s.birthday, s.gender, " +
+                "s.aspiration_school1_id, s.aspiration_school2_id, s.aspiration_school3_id, " +
+                "s.personality_id, s.created_at, s.updated_at " +
+                "FROM students s " +
+                "LEFT JOIN schools sch ON s.school_id = sch.id " +
+                "WHERE 1=1"
+            );
 
-            PreparedStatement pStmt = conn.prepareStatement(sql);
+            List<String> params = new ArrayList<>();
 
-            pStmt.setString(1, name != null && !name.isEmpty() ? "%" + name + "%" : "%");
-            pStmt.setString(2, furigana != null && !furigana.isEmpty() ? "%" + furigana + "%" : "%");
-            String schoolName = school != null && !school.isEmpty() ? "%" + school + "%" : "%";
-            pStmt.setString(3, schoolName);
-            pStmt.setString(4, schoolName); // OR ? = '%' の部分用
+            if (name != null && !name.isEmpty()) {
+                sql.append(" AND s.name LIKE ?");
+                params.add("%" + name + "%");
+            }
+            if (furigana != null && !furigana.isEmpty()) {
+                sql.append(" AND s.furigana LIKE ?");
+                params.add("%" + furigana + "%");
+            }
+            if (school != null && !school.isEmpty()) {
+                sql.append(" AND sch.name LIKE ?");
+                params.add("%" + school + "%");
+            }
+
+            sql.append(" ORDER BY s.id");
+
+            PreparedStatement pStmt = conn.prepareStatement(sql.toString());
+
+            for (int i = 0; i < params.size(); i++) {
+                pStmt.setString(i + 1, params.get(i));
+            }
 
             ResultSet rs = pStmt.executeQuery();
-
             while (rs.next()) {
                 students s = new students(
                     rs.getInt("id"),
                     rs.getString("name"),
                     rs.getString("furigana"),
                     rs.getInt("school_id"),
-                    rs.getString("school_name"), 
+                    rs.getString("school_name"),
                     rs.getDate("birthday"),
                     rs.getString("gender"),
                     rs.getInt("aspiration_school1_id"),
@@ -74,4 +89,5 @@ public class SearchDAO {
         }
 
         return studentList;
-    }}
+    }
+}
