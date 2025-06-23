@@ -29,7 +29,7 @@ public class SubjectResultServlet extends HttpServlet {
 
 		if (studentIdStr == null || !studentIdStr.matches("\\d+") || subjectIdStr == null
 				|| !subjectIdStr.matches("\\d+")) {
-//			response.sendRedirect("SearchResultServlet");
+			response.sendRedirect("SearchResultServlet");
 			return;
 		}
 
@@ -39,7 +39,7 @@ public class SubjectResultServlet extends HttpServlet {
 		// 生徒情報を取得
 		IndividualResults student = IndividualResultsDAO.getStudentInfo(studentId);
 		if (student == null) {
-//			response.sendRedirect("SearchResultServlet");
+			response.sendRedirect("SearchResultServlet");
 			return;
 		}
 
@@ -200,8 +200,8 @@ public class SubjectResultServlet extends HttpServlet {
 //		System.out.println("understanding: " + understanding);
 
 		if (studentIdStr == null || subjectIdStr == null) {
-			System.out.println("ERROR: 必要なパラメータが不足");
-//			response.sendRedirect("SearchResultServlet");
+//			System.out.println("ERROR: 必要なパラメータが不足");
+			response.sendRedirect("SearchResultServlet");
 			return;
 		}
 

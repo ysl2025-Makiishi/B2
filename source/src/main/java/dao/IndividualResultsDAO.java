@@ -119,20 +119,20 @@ public class IndividualResultsDAO {
 			conn.setAutoCommit(false);
 
 			// 1. 学校IDを取得/作成
-			int schoolId = getOrCreateSchoolId(conn, schoolName);
+			Integer schoolId = getOrCreateSchoolId(conn, schoolName);
 
 			// 2. 志望校IDを取得/作成
-			int asp1Id = getOrCreateAspirationSchoolId(conn, asp1);
-			int asp2Id = getOrCreateAspirationSchoolId(conn, asp2);
-			int asp3Id = getOrCreateAspirationSchoolId(conn, asp3);
+			Integer asp1Id = getOrCreateAspirationSchoolId(conn, asp1);
+			Integer asp2Id = getOrCreateAspirationSchoolId(conn, asp2);
+			Integer asp3Id = getOrCreateAspirationSchoolId(conn, asp3);
 
 			// 3. 生徒情報を更新
 			String sql = """
-					    UPDATE students
-					    SET name = ?, furigana = ?, gender = ?, birthday = ?,
-					        school_id = ?, aspiration_school1_id = ?, aspiration_school2_id = ?, aspiration_school3_id = ?,
-					        updated_at = NOW()
-					    WHERE id = ?
+					UPDATE students
+					SET name = ?, furigana = ?, gender = ?, birthday = ?,
+					    school_id = ?, aspiration_school1_id = ?, aspiration_school2_id = ?, aspiration_school3_id = ?,
+					    updated_at = NOW()
+					WHERE id = ?
 					""";
 
 			try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -140,10 +140,32 @@ public class IndividualResultsDAO {
 				ps.setString(2, furigana);
 				ps.setString(3, gender);
 				ps.setString(4, birthday);
-				ps.setInt(5, schoolId);
-				ps.setInt(6, asp1Id);
-				ps.setInt(7, asp2Id);
-				ps.setInt(8, asp3Id);
+
+				// nullの場合はsetNullを使用
+				if (schoolId != null) {
+					ps.setInt(5, schoolId);
+				} else {
+					ps.setNull(5, java.sql.Types.INTEGER);
+				}
+
+				if (asp1Id != null) {
+					ps.setInt(6, asp1Id);
+				} else {
+					ps.setNull(6, java.sql.Types.INTEGER);
+				}
+
+				if (asp2Id != null) {
+					ps.setInt(7, asp2Id);
+				} else {
+					ps.setNull(7, java.sql.Types.INTEGER);
+				}
+
+				if (asp3Id != null) {
+					ps.setInt(8, asp3Id);
+				} else {
+					ps.setNull(8, java.sql.Types.INTEGER);
+				}
+
 				ps.setInt(9, studentId);
 
 				int result = ps.executeUpdate();
@@ -162,15 +184,15 @@ public class IndividualResultsDAO {
 	/**
 	 * 学校名から学校IDを取得、存在しない場合は作成
 	 */
-	private static int getOrCreateSchoolId(Connection conn, String schoolName) throws SQLException {
+	private static Integer getOrCreateSchoolId(Connection conn, String schoolName) throws SQLException {
 		if (schoolName == null || schoolName.trim().isEmpty()) {
-			return 0; // NULL
+			return null; // 0ではなくnullを返す
 		}
 
 		// 既存の学校IDを検索
 		String selectSql = "SELECT id FROM schools WHERE school_name = ?";
 		try (PreparedStatement ps = conn.prepareStatement(selectSql)) {
-			ps.setString(1, schoolName);
+			ps.setString(1, schoolName.trim());
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				return rs.getInt("id");
@@ -180,7 +202,7 @@ public class IndividualResultsDAO {
 		// 存在しない場合は新規作成
 		String insertSql = "INSERT INTO schools (school_name, created_at, updated_at) VALUES (?, NOW(), NOW())";
 		try (PreparedStatement ps = conn.prepareStatement(insertSql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-			ps.setString(1, schoolName);
+			ps.setString(1, schoolName.trim());
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			if (rs.next()) {
@@ -188,21 +210,21 @@ public class IndividualResultsDAO {
 			}
 		}
 
-		return 0;
+		return null;
 	}
 
 	/**
 	 * 志望校名から志望校IDを取得、存在しない場合は作成
 	 */
-	private static int getOrCreateAspirationSchoolId(Connection conn, String schoolName) throws SQLException {
+	private static Integer getOrCreateAspirationSchoolId(Connection conn, String schoolName) throws SQLException {
 		if (schoolName == null || schoolName.trim().isEmpty()) {
-			return 0; // NULL
+			return null; // 0ではなくnullを返す
 		}
 
 		// 既存の志望校IDを検索
 		String selectSql = "SELECT id FROM aspiration_schools WHERE aspiration_school_name = ?";
 		try (PreparedStatement ps = conn.prepareStatement(selectSql)) {
-			ps.setString(1, schoolName);
+			ps.setString(1, schoolName.trim());
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				return rs.getInt("id");
@@ -212,7 +234,7 @@ public class IndividualResultsDAO {
 		// 存在しない場合は新規作成
 		String insertSql = "INSERT INTO aspiration_schools (aspiration_school_name, created_at, updated_at) VALUES (?, NOW(), NOW())";
 		try (PreparedStatement ps = conn.prepareStatement(insertSql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-			ps.setString(1, schoolName);
+			ps.setString(1, schoolName.trim());
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			if (rs.next()) {
@@ -220,7 +242,7 @@ public class IndividualResultsDAO {
 			}
 		}
 
-		return 0;
+		return null;
 	}
 
 	/**

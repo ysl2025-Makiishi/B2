@@ -70,16 +70,23 @@ public class SubjectResultDAO {
 //				System.out.println("理解度取得エラー: " + e.getMessage());
 			}
 
-			// texts テーブルからテキスト選出を取得
-			String textSql = "SELECT text_name FROM texts WHERE subject_id = ? LIMIT 1";
+			// schedulesテーブルから実際に選出されたテキストのみを取得
+			String textSql = """
+					SELECT t.text_name
+					FROM schedules s
+					JOIN texts t ON s.text_id = t.id
+					WHERE s.student_id = ? AND s.subject_id = ?
+					""";
 			try (PreparedStatement ps = conn.prepareStatement(textSql)) {
-				ps.setInt(1, subjectId);
+				ps.setInt(1, studentId);
+				ps.setInt(2, subjectId);
 				ResultSet rs = ps.executeQuery();
 				if (rs.next()) {
 					result.setTextSelection(rs.getString("text_name"));
 				}
+				// データがない場合はnullのまま（未選出として表示される）
 			} catch (SQLException e) {
-//				System.out.println("テキスト選出取得エラー: " + e.getMessage());
+				// System.out.println("テキスト選出取得エラー: " + e.getMessage());
 			}
 
 			// schedules テーブルからスケジュールを取得

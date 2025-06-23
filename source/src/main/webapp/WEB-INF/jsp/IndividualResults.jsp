@@ -85,7 +85,7 @@ LocalDate today = LocalDate.now();
 						<c:url var="personalityUrl" value="/PersonalityServlet">
 							<c:param name="studentId" value="${student.id}" />
 						</c:url>
-						<a href="${personalityUrl}" target="_blank"
+						<a href="${personalityUrl}" 
 							class="diag-link-button">性格診断はこちら</a>
 					</div>
 					<div class="field">
@@ -123,40 +123,49 @@ LocalDate today = LocalDate.now();
 				<h3>GPA 一覧（9 教科）</h3>
 				<div class="gpa-list">
 					<div class="gpa-item">
-						<label for="gpa_jp">国語</label><input type="text" id="gpa_jp"
-							name="gpa_jp" value="${student.gpaJp}" class="gpa-input" />
+						<label for="gpa_jp">国語</label><input type="number" id="gpa_jp"
+							name="gpa_jp" value="${student.gpaJp}" class="gpa-input" 
+							min="1" max="5" step="1" />
 					</div>
 					<div class="gpa-item">
-						<label for="gpa_ss">社会</label><input type="text" id="gpa_ss"
-							name="gpa_ss" value="${student.gpaSs}" class="gpa-input" />
+						<label for="gpa_ss">社会</label><input type="number" id="gpa_ss"
+							name="gpa_ss" value="${student.gpaSs}" class="gpa-input" 
+							min="1" max="5" step="1" />
 					</div>
 					<div class="gpa-item">
-						<label for="gpa_ma">数学</label><input type="text" id="gpa_ma"
-							name="gpa_ma" value="${student.gpaMa}" class="gpa-input" />
+						<label for="gpa_ma">数学</label><input type="number" id="gpa_ma"
+							name="gpa_ma" value="${student.gpaMa}" class="gpa-input" 
+							min="1" max="5" step="1" />
 					</div>
 					<div class="gpa-item">
-						<label for="gpa_sc">理科</label><input type="text" id="gpa_sc"
-							name="gpa_sc" value="${student.gpaSc}" class="gpa-input" />
+						<label for="gpa_sc">理科</label><input type="number" id="gpa_sc"
+							name="gpa_sc" value="${student.gpaSc}" class="gpa-input" 
+							min="1" max="5" step="1" />
 					</div>
 					<div class="gpa-item">
-						<label for="gpa_en">英語</label><input type="text" id="gpa_en"
-							name="gpa_en" value="${student.gpaEn}" class="gpa-input" />
+						<label for="gpa_en">英語</label><input type="number" id="gpa_en"
+							name="gpa_en" value="${student.gpaEn}" class="gpa-input" 
+							min="1" max="5" step="1" />
 					</div>
 					<div class="gpa-item">
-						<label for="gpa_mu">音楽</label><input type="text" id="gpa_mu"
-							name="gpa_mu" value="${student.gpaMu}" class="gpa-input" />
+						<label for="gpa_mu">音楽</label><input type="number" id="gpa_mu"
+							name="gpa_mu" value="${student.gpaMu}" class="gpa-input" 
+							min="1" max="5" step="1" />
 					</div>
 					<div class="gpa-item">
-						<label for="gpa_ar">美術</label><input type="text" id="gpa_ar"
-							name="gpa_ar" value="${student.gpaAr}" class="gpa-input" />
+						<label for="gpa_ar">美術</label><input type="number" id="gpa_ar"
+							name="gpa_ar" value="${student.gpaAr}" class="gpa-input" 
+							min="1" max="5" step="1" />
 					</div>
 					<div class="gpa-item">
-						<label for="gpa_pe">保健体育</label><input type="text" id="gpa_pe"
-							name="gpa_pe" value="${student.gpaPe}" class="gpa-input" />
+						<label for="gpa_pe">保健体育</label><input type="number" id="gpa_pe"
+							name="gpa_pe" value="${student.gpaPe}" class="gpa-input" 
+							min="1" max="5" step="1" />
 					</div>
 					<div class="gpa-item">
-						<label for="gpa_te">技術家庭</label><input type="text" id="gpa_te"
-							name="gpa_te" value="${student.gpaTe}" class="gpa-input" />
+						<label for="gpa_te">技術家庭</label><input type="number" id="gpa_te"
+							name="gpa_te" value="${student.gpaTe}" class="gpa-input" 
+							min="1" max="5" step="1" />
 					</div>
 				</div>
 

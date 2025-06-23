@@ -18,6 +18,7 @@ public class IndividualResultsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 
 		// === デバッグ情報 ===
 //		System.out.println("=== GET リクエスト デバッグ情報 ===");
@@ -37,14 +38,14 @@ public class IndividualResultsServlet extends HttpServlet {
 //		System.out.println("GET：受け取った studentId = " + idStr);
 		if (idStr == null || !idStr.matches("\\d+")) {
 //			System.out.println("IDが不正なのでリダイレクトします");
-//			response.sendRedirect("SearchResultServlet");
+			response.sendRedirect("SearchResultServlet");
 			return;
 		}
 		int studentId = Integer.parseInt(idStr);
 		IndividualResults student = IndividualResultsDAO.getStudentInfo(studentId);
 		if (student == null) {
 //			System.out.println("該当生徒が見つかりません");
-//			response.sendRedirect("SearchResultServlet");
+			response.sendRedirect("SearchResultServlet");
 			return;
 		}
 		request.setAttribute("student", student);
@@ -62,7 +63,7 @@ public class IndividualResultsServlet extends HttpServlet {
 
 		if (idStr == null || !idStr.matches("\\d+")) {
 //			System.out.println("POST：IDが不正です");
-//			response.sendRedirect("SearchResultServlet");
+			response.sendRedirect("SearchResultServlet");
 			return;
 		}
 
@@ -141,7 +142,7 @@ public class IndividualResultsServlet extends HttpServlet {
 
 		if (student == null) {
 //			System.out.println("POST：生徒情報の再取得に失敗");
-//			response.sendRedirect("SearchResultServlet");
+			response.sendRedirect("SearchResultServlet");
 			return;
 		}
 
