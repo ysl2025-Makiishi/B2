@@ -4,12 +4,14 @@ body {
       padding: 20px;
     }
     .student-grid {
-	  display: grid;
-	  grid-template-columns: repeat(3, 1fr); /* 3列固定 */
-	  gap: 15px;
-	  max-width: 1280px; /* 必要に応じて調整 */
-	  margin: 20px auto 0; /* 中央寄せ */
-	}
+	 display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px 48px;
+  padding: 32px 0;
+  max-width: 1200px; /* 👈 横幅制限を追加（最大3列分くらい） */
+  margin: 0 auto;     /* 中央寄せ */
+}
+	
     
     table {
     width: 100%;
@@ -240,3 +242,201 @@ input[type="submit"][value="削除"]:active {
     transform: translateY(0);
     box-shadow: 0 3px 6px rgba(51, 102, 204, 0.4);
 }
+
+
+
+
+
+    
+    table {
+    width: 100%;
+    }
+    .student-card {
+	  border: 1px solid #d1d1d1;
+	  padding: 20px;
+	  background: #ffffff;
+	  border-radius: 10px;
+	  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+	  transition: all 0.2s ease-in-out;
+	}
+    
+    .student-card p {
+      margin: 5px 0;
+    }
+    .sort-btn {
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+    .pagination {
+      margin-top: 10px;
+    }
+    .pagination button {
+      margin: 0 2px;
+    }
+    
+    table {
+     width: 600px; /* 固定幅に変更 */
+     margin: 20px auto; /* 中央寄せ */
+     border-collapse: collapse;
+    }
+    @media (max-width: 600px) {
+      .student-card {
+        flex: 1 1 100%;
+      }
+    }
+    
+:root {
+    --color-bg: #b9e2ec;
+    /* 明るめのネイビーブルー */
+    --color-surface: #ffffff;
+    /* コンテナ背景 */
+    --color-primary: #3366cc;
+    /* メインアクセント */
+    --color-accent: #5dade2;
+    /* ホバー時アクセント */
+    --color-text: #1685e6;
+    /* 主テキスト */
+    --color-muted: #b0c4de;
+    /* 補助テキスト */
+}
+
+/* ——— 全体設定 ——— */
+
+
+/* ——— ヘッダー ——— */
+
+/* ——— ナビゲーション ——— */
+
+
+
+
+
+/* ——— 見出し ——— */
+
+#backToHome:hover,
+#backToTop:hover {
+  background-color: #0f6fc7;        /* ホバー時に少し濃く */
+  transform: translateY(-2px);
+}
+
+#backToHome:active,
+#backToTop:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ——— フッター ——— */
+	
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 20px;
+}
+
+.student-row {
+  display: flex;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.label {
+  width: 80px;
+  font-weight: 600;
+  color: #555;
+}
+
+.value {
+  flex: 1;
+  color: #333;
+}
+
+
+.name {
+  font-size: 1.25rem;
+  color: #1685e6;
+  font-weight: bold;
+}
+
+.student-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+#backToHome {
+  display: inline-block;
+  background-color: #1685e6;        /* メインカラー */
+  color: #ffffff;
+  padding: 0.6em 1.6em;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  text-decoration: none;
+  text-align: center;
+  margin: 10px auto;
+}
+
+#backToTop {
+  display: block;                 
+  width: fit-content;            
+  background-color: #1685e6;
+  color: #ffffff;
+  padding: 0.6em 1.6em;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  text-decoration: none;
+  position: fixed;
+  bottom: 20px;
+  right: 45px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  margin: 0;                     
+}
+
+
+.pagination button {
+  padding: 6px 12px;
+  font-size: 1rem;
+  background-color: #ffffff;
+  border: 1px solid #1685e6;
+  color: #1685e6;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.pagination button:hover {
+  background-color: #1685e6;
+  color: #fff;
+}
+
+.page-info {
+  font-size: 1.1rem;      /* ← サイズを大きく */
+  color: var(--color-text);  /* ← 既存の色と統一（任意） */
+}
+
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px 48px;
+  padding: 32px 0;
+  max-width: 1200px; /* 👈 横幅制限を追加（最大3列分くらい） */
+  margin: 0 auto;     /* 中央寄せ */
+}
+
+
+#studentCount {
+  font-weight: bold;
+  color: #3366cc;
+  font-size: 1.1rem;
+}
+
+.student-card {
+  padding: 24px; /* 元の20px → 少し広げる */
+}
+

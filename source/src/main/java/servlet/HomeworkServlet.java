@@ -1,6 +1,9 @@
 package servlet;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,7 +20,7 @@ public class HomeworkServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         String studentIdStr = request.getParameter("studentId");
         String subjectIdStr = request.getParameter("subjectId");
 
@@ -32,13 +35,43 @@ public class HomeworkServlet extends HttpServlet {
         request.setAttribute("studentId", studentId);
         request.setAttribute("subjectId", subjectId);
 
+        // ここから計算ロジック
+        String nextDateStr = request.getParameter("nextDate");
+        String totalPagesStr = request.getParameter("totalPages");
+
+        if (nextDateStr != null && totalPagesStr != null) {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate today = LocalDate.now();
+                LocalDate nextDate = LocalDate.parse(nextDateStr, formatter);
+                int totalPages = Integer.parseInt(totalPagesStr);
+
+                long daysBetween = ChronoUnit.DAYS.between(today, nextDate);
+
+                if (daysBetween <= 0) {
+                    request.setAttribute("errorMessage", "次に塾に行く日は今日より後の日付を入力してください。");
+                } else {
+                    int pagesPerDay = (int) Math.ceil((double) totalPages / daysBetween);
+                    request.setAttribute("pagesPerDay", pagesPerDay);
+
+                    // 登録済みチェック
+                    HomeworkDAO dao = new HomeworkDAO();
+                    boolean isRegistered = dao.existsHomework(studentId, subjectId);
+                    request.setAttribute("isRegistered", isRegistered);
+                }
+
+            } catch (Exception e) {
+                request.setAttribute("errorMessage", "入力形式が正しくありません。");
+            }
+        }
+
         request.getRequestDispatcher("/WEB-INF/jsp/Homework.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
 
@@ -55,6 +88,7 @@ public class HomeworkServlet extends HttpServlet {
                 dao.insertHomework(studentId, subjectId, pagesPerDay);
             }
 
+            // 登録後は科目ごと個人結果ページへリダイレクト
             response.sendRedirect("SubjectResultServlet?studentId=" + studentId + "&subjectId=" + subjectId);
 
         } catch (Exception e) {
