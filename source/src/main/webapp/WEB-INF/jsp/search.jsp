@@ -145,7 +145,7 @@
         <label>
           <span class="label-text">ふりがな：</span>
           <input type="text" name="furigana" id="furiganaInput" />
-          <span id="huriganaError" class="error"></span>
+          <span id="furiganaError" class="error"></span>
         </label>
 
         <label>

@@ -96,19 +96,20 @@
     
     <div style="text-align: center; margin-top: 30px;">
         <form action="<c:url value='/SubjectResultServlet' />" method="get">
-          <button type="submit" style="
-            background-color: #888;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-          ">
-            科目ごと個人結果に戻る
-          </button>
-        </form>
-      </div>
+  			<input type="hidden" name="studentId" value="${studentId}">
+ 			 <input type="hidden" name="subjectId" value="${subjectId}">
+ 			 <button type="submit" style="
+  			  background-color: #888;
+   			 color: white;
+   			 padding: 10px 20px;
+  			  font-size: 16px;
+  			  border: none;
+  			  border-radius: 8px;
+  			  cursor: pointer;
+ 	 ">
+    科目ごと個人結果に戻る
+  </button>
+</form>
 
 <%
     String nextDateStr = request.getParameter("nextDate");

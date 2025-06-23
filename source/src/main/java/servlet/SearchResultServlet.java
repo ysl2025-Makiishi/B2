@@ -63,7 +63,8 @@ import dto.students;
 	
 	        String sort = request.getParameter("sort");
 	        if (sort == null || !(sort.equals("createdDesc") || sort.equals("createdAsc")
-	                || sort.equals("nameAsc") || sort.equals("nameDesc"))) {
+	                || sort.equals("nameAsc") || sort.equals("nameDesc")
+	                || sort.equals("updatedAsc") || sort.equals("updatedDesc"))) {
 	            sort = "createdDesc";
 	        }
 	

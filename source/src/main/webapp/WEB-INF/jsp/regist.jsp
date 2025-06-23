@@ -125,9 +125,9 @@
       <div class="form-group">
         <label>性別 <span style="color:red;">※</span></label>
         <div class="radio-group">
-          <label><input type="radio" name="gender" value="男" required> 男性</label>
-          <label><input type="radio" name="gender" value="女"> 女性</label>
-          <label><input type="radio" name="gender" value="無回答"> 無回答</label>
+          <label><input type="radio" name="gender" value="M" required> 男性</label>
+          <label><input type="radio" name="gender" value="F"> 女性</label>
+          <label><input type="radio" name="gender" value="O"> 無回答</label>
         </div>
       </div>
       <div class="form-group">
