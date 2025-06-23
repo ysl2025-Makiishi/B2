@@ -41,22 +41,17 @@
   <!-- 生徒カード表示 -->
   <div class="student-grid" id="studentGrid"></div>
   <div class="pagination" id="pagination"></div>
-      <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'});" style="
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                padding: 10px 15px;
-                font-size: 16px;
-                border-radius: 5px;
-                ">
-                ↑ TOP
-            </button>
+      <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'});" >
+             ↑ TOP
+       </button>
 <button id="backToHome" onclick="location.href='<c:url value='/HomeServlet' />'">ホームへ戻る</button>
 </div>
 <script>
+  const contextPath = "${pageContext.request.contextPath}";
   const students = [];
   <c:forEach var="s" items="${studentList}">
     students.push({
+      id: "${s.id}",  
       name: "${fn:escapeXml(s.name)}",
       school: "${fn:escapeXml(s.school_name)}",
       gender: "${fn:escapeXml(s.gender)}"

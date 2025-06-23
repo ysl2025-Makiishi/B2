@@ -24,7 +24,7 @@ public class StudentListDAO {
 	                "root", "password"
 	        );
 
-	        String sql = "SELECT s.name, s.gender, sc.school_name AS school_name " +
+	        String sql = "SELECT s.id, s.name, s.gender, sc.school_name AS school_name " +
 	                "FROM students s " +
 	                "JOIN schools sc ON s.school_id = sc.id " +
 	                "ORDER BY s.id ASC";
@@ -33,10 +33,12 @@ public class StudentListDAO {
 	   ResultSet rs = pStmt.executeQuery();
 
 	   while (rs.next()) {
-	       students s = new students();
-	       s.setName(rs.getString("name"));
-	       s.setGender(rs.getString("gender"));
-	       s.setSchool_name(rs.getString("school_name")); // ← 本物の学校名に変更！
+		   students s = new students();
+		   s.setId(rs.getInt("id")); 
+		   s.setName(rs.getString("name"));
+		   s.setGender(rs.getString("gender"));
+		   s.setSchool_name(rs.getString("school_name"));
+
 	       studentList.add(s);
 	   }
 

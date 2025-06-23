@@ -1,18 +1,17 @@
 :root {
-    --color-bg: #b9e2ec;
+    --color-bg: #B9E2EC;
     /* 明るめのネイビーブルー */
-    --color-surface: #ffffff;
+    --color-surface: #FFFFFF;
     /* コンテナ背景 */
-    --color-primary: #3366cc;
+    --color-primary: #3366CC;
     /* メインアクセント */
-    --color-accent: #5dade2;
+    --color-accent: #5DADE2;
     /* ホバー時アクセント */
-    --color-text: #1685e6;
+    --color-text: #1685E6;
     /* 主テキスト */
-    --color-muted: #b0c4de;
+    --color-muted: #B0C4DE;
     /* 補助テキスト */
 }
-
 /* ——— 全体設定 ——— */
 body {
     background-color: var(--color-bg);
@@ -25,7 +24,6 @@ body {
   text-align: center;   /* h1 内のインライン要素を中央寄せ */
   /* 追加で余白調整したい場合はここで */
 }
-
 /* ロゴ画像の余白を微調整したい場合 */
 #logo img {
   display: inline-block; /* ← text-align と相性が良い */
@@ -39,16 +37,14 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     border-radius: 8px;
 }
-
 /* ——— ヘッダー ——— */
 #logo p {
-    color: var(--color-primary);
+    color: var(--color-blue);
     font-size: 2.5rem;
     margin: 0;
     text-align: center;
     letter-spacing: 1px;
 }
-
 /* ——— ナビゲーション ——— */
 #nav {
     list-style: none;
@@ -61,7 +57,6 @@ body {
     background-color: var(--color-surface);
     border-radius: 6px;
 }
-
 #nav a {
     color: var(--color-text);
     text-decoration: none;
@@ -73,27 +68,25 @@ body {
     white-space: nowrap;
     /* 改行を防止 */
 }
-
 #nav a:hover {
     background-color: var(--color-accent);
     color: #fff;
 }
-
 /* ——— 見出し ——— */
 h2 {
-    color: maroon;
+    color: blue;
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
     border-bottom: 2px solid var(--color-accent);
     padding-bottom: 0.25rem;
     font-size: 1.8rem;
+    text-align: left !important;
 }
-
 /* ——— ボタン ——— */
 .button {
     display: inline-block;
     background-image: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-    color: #20b4da;
+    color: #20B4DA;
     padding: 0.8em 2.4em;
     /* 横幅を広く */
     font-size: 1.1rem;
@@ -109,17 +102,14 @@ h2 {
     margin: 0;
     /* ナビ内はgapで管理 */
 }
-
 .button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
 }
-
 .button:active {
     transform: translateY(0);
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 }
-
 /* ——— フッター ——— */
 #footer {
     text-align: center;
@@ -127,17 +117,75 @@ h2 {
     color: var(--color-muted);
     font-size: 0.9rem;
 }
-
 /*文字の色を変更する用*/
 .changeColor {
-	color: maroon;
+	color: #0080FF;
 }
-
 /*クイズフォームの文字色変更*/
 #quiz-form {
-	color: maroon;
+	color: #0080FF;
+	color: #0080FF;
+  text-align: left;
+  max-width: 600px;
+  margin: 0 auto; /* 中央に配置 */
+}
+
+.quiz-question {
+  margin-bottom: 1.5em;
+  font-weight: bold;
+}
+
+.quiz-options label {
+  margin-right: 1em;
 }
 
 .result {
-	color: maroon;
+	color: #0080FF;
+}
+.changeColor ul {
+  list-style-type: disc;
+  list-style-position: inside;  /* ここを inside に */
+  padding-left: 0;              /* 余白はなくす */
+  margin: 0;
+  color: #0080FF;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+.changeColor li {
+  margin-bottom: 0.6em;
+  padding-left: 1em;           /* テキストの字下げを追加 */
+}
+
+.bullet-align {
+	list-style-position: inside; /* ・をテキストと同じ位置に */
+    padding-left: 0;
+    margin-left: 0;
+    text-align: left; /* ここで左揃え */
+    display: inline-block; /* 必要に応じて中央揃えの親の影響を防ぐ */
+}
+
+/*ボタン用*/
+.fancy-button {
+  background: linear-gradient(135deg, #4DA0B0, #D39D38);
+  color: #fff;
+  padding: 0.8em 2.2em;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+}
+
+.fancy-button:hover {
+  background: linear-gradient(135deg, #D39D38, #4DA0B0);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.fancy-button:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
 }

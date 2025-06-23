@@ -21,13 +21,22 @@ import dto.students;
 	    @Override
 	    protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	            throws ServletException, IOException {
+	    	request.setCharacterEncoding("UTF-8");
 	        doPost(request, response); // GETもPOSTも同じ処理
+	        
+	     // もしもログインしていなかったらログインサーブレットにリダイレクトする
+//			HttpSession session = request.getSession();
+//			if (session.getAttribute("id") == null) {
+//				response.sendRedirect("/webapp/LoginServlet");
+//				return;
+//			}
+	        
 	    }
 	
 	    @Override
 	    protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	            throws ServletException, IOException {
-	
+	    	
 	        request.setCharacterEncoding("UTF-8");
 	        
 	        String deleteIdStr = request.getParameter("deleteId");
@@ -93,3 +102,4 @@ import dto.students;
 	        return val == null ? "" : val;
 	    }
 	}
+		
