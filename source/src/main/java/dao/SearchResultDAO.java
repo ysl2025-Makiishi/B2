@@ -37,20 +37,28 @@ public class SearchResultDAO {
             paramList.add("%" + schoolName + "%");
         }
         switch (sort) {
-            case "nameAsc":
-                sql.append(" ORDER BY students.furigana COLLATE utf8mb4_unicode_ci ASC");
-                break;
-            case "nameDesc":
-                sql.append(" ORDER BY students.furigana COLLATE utf8mb4_unicode_ci DESC");
-                break;
-            case "createdAsc":
-                sql.append(" ORDER BY students.created_at ASC");
-                break;
-            case "createdDesc":
-            default:
-                sql.append(" ORDER BY students.created_at DESC");
-                break;
-        }
+        case "nameAsc":
+            sql.append(" ORDER BY students.furigana COLLATE utf8mb4_unicode_ci ASC");
+            break;
+        case "nameDesc":
+            sql.append(" ORDER BY students.furigana COLLATE utf8mb4_unicode_ci DESC");
+            break;
+        case "createdAsc":
+            sql.append(" ORDER BY students.created_at ASC");
+            break;
+        case "createdDesc":
+            sql.append(" ORDER BY students.created_at DESC");
+            break;
+        case "updatedAsc":
+            sql.append(" ORDER BY students.updated_at ASC");
+            break;
+        case "updatedDesc":
+            sql.append(" ORDER BY students.updated_at DESC");
+            break;
+        default:
+            sql.append(" ORDER BY students.created_at DESC");
+            break;
+    }
         sql.append(" LIMIT ? OFFSET ?");
         paramList.add(limit);
         paramList.add(offset);

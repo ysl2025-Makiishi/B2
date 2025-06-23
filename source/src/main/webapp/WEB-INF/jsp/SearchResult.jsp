@@ -39,14 +39,20 @@
 				type="hidden" name="page" value="1" /> <select name="sort"
 				onchange="this.form.submit()" style="padding: 5px; font-size: 1rem;">
 				<option value="" disabled <c:if test="${empty sort}">selected</c:if>>並び替え</option>
+				
 				<option value="createdDesc"
 					<c:if test="${sort eq 'createdDesc'}">selected</c:if>>登録順（新しい順）</option>
 				<option value="createdAsc"
 					<c:if test="${sort eq 'createdAsc'}">selected</c:if>>登録順（古い順）</option>
+				<option value="updatedDesc"
+					<c:if test="${sort eq 'updatedDesc'}">selected</c:if>>更新順（新しい順）</option>
+	            <option value="updatedAsc"
+					<c:if test="${sort eq 'updatedAsc'}">selected</c:if>>更新順（古い順）</option>
 				<option value="nameAsc"
 					<c:if test="${sort eq 'nameAsc'}">selected</c:if>>名前順（昇順）</option>
 				<option value="nameDesc"
 					<c:if test="${sort eq 'nameDesc'}">selected</c:if>>名前順（降順）</option>
+					
 			</select>
 		</form>
 
@@ -70,7 +76,12 @@
 										<strong>学校名:</strong> ${s.school_name}
 									</p>
 									<p>
-										<strong>性別:</strong> ${s.gender}
+ 										 <strong>性別:</strong>
+ 										 <c:choose>
+    										<c:when test="${s.gender == 'M'}">男</c:when>
+ 											  <c:when test="${s.gender == 'F'}">女</c:when>
+  											  <c:otherwise>無回答</c:otherwise>
+ 											 </c:choose>
 									</p>
 								</div>
 							</a>
@@ -127,7 +138,9 @@
 			</c:otherwise>
 		</c:choose>
 	</div>
-
-	<script></script>
+		<button id="scrollToTopBtn" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; font-size: 1rem; border-radius: 5px;">
+  			上へ戻る
+		</button>
+<script src="<c:url value='/js/SearchResult.js' />"></script>
 </body>
 </html>
