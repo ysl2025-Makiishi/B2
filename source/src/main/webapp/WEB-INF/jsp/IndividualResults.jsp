@@ -15,6 +15,9 @@ LocalDate today = LocalDate.now();
 <link rel="stylesheet" href="<c:url value='/css/K-style.css' />" />
 <link rel="stylesheet"
 	href="<c:url value='/css/IndividualResults.css' />" />
+<link rel="stylesheet"
+	href="<c:url value='/css/RadarChart.css' />" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
 	<div class="wrapper">
@@ -209,11 +212,11 @@ LocalDate today = LocalDate.now();
 									<option value="総合">総合</option>
 							</select></td>
 
-							<td><input name="exam_score[]" min="0" max="100" step="1"
+							<td><input name="exam_score[]" min="0" max="500" step="1"
 								type="number" /></td>
 							<td><input name="exam_dev[]" step="0.1" min="0"
 								type="number" /></td>
-							<td><input name="exam_avg[]" step="0.1" min="0" max="100"
+							<td><input name="exam_avg[]" step="0.1" min="0" max="500"
 								type="number" /></td>
 
 						</tr>
@@ -226,9 +229,34 @@ LocalDate today = LocalDate.now();
 					<button type="reset" class="reset-btn">リセット</button>
 				</div>
 			</section>
-
-
-
+			
+			<!-- レーダーチャート追加 -->
+			<section class="centered">
+				<h3>成績レーダーチャート</h3>
+				<div class="radar-chart-container">
+					<div class="chart-header">
+						<h4 id="chartExamName">最新模試結果</h4>
+						<p id="chartExamDate">実施日: -</p>
+					</div>
+					<div class="chart-canvas-wrapper">
+						<canvas id="radarChart"></canvas>
+					</div>
+					<div class="chart-stats">
+						<div class="stat-item">
+							<span class="stat-label">総合平均</span>
+							<span class="stat-value" id="myAverage">-</span>
+						</div>
+						<div class="stat-item">
+							<span class="stat-label">全体平均</span>
+							<span class="stat-value" id="overallAverage">-</span>
+						</div>
+						<div class="stat-item">
+							<span class="stat-label">平均との差</span>
+							<span class="stat-value" id="difference">-</span>
+						</div>
+					</div>
+				</div>
+			</section>
 
 			<!-- 最新の模試結果 -->
 			<section class="centered">
@@ -256,13 +284,75 @@ LocalDate today = LocalDate.now();
 								<td>${exam.averageScore}</td>
 							</tr>
 						</c:forEach>
-
 					</tbody>
 				</table>
 			</section>
+
+			
 		</form>
 	</div>
 
 	<script src="<c:url value='/js/IndividualResults.js' />"></script>
+	<script src="<c:url value='/js/RadarChart.js' />"></script>
+
+	<script type="text/javascript">
+	// サーバーサイドデータをJavaScriptに渡す
+	var examDataFromServer = {
+		subjects: [],
+		myScores: [],
+		averageScores: [],
+		examName: "",
+		examDate: ""
+	};
+
+	// 最新の模試データを取得（日付順でソート後、最新の各教科を取得）
+	var examMap = new Map();
+	<c:forEach var="exam" items="${student.examResults}">
+		<c:if test="${exam.subjectName != '総合'}">
+			var subject = "${exam.subjectName}";
+			var examDate = "${exam.examDate}";
+			var examName = "${exam.examName}";
+			var score = ${exam.score};
+			var averageScore = ${exam.averageScore};
+			
+			// 同じ教科で既に登録されている場合、日付が新しい方を採用
+			if (!examMap.has(subject) || examMap.get(subject).examDate < examDate) {
+				examMap.set(subject, {
+					examName: examName,
+					examDate: examDate,
+					score: score,
+					averageScore: averageScore
+				});
+			}
+		</c:if>
+	</c:forEach>
+
+	// 教科順序を定義
+	var subjectOrder = ["国語", "数学", "英語", "理科", "社会"];
+	
+	// データを配列に変換
+	for (var i = 0; i < subjectOrder.length; i++) {
+		var subject = subjectOrder[i];
+		if (examMap.has(subject)) {
+			var data = examMap.get(subject);
+			examDataFromServer.subjects.push(subject);
+			examDataFromServer.myScores.push(data.score);
+			examDataFromServer.averageScores.push(data.averageScore);
+			
+			// 最新の模試名と日付を設定（最初に見つかったもの）
+			if (examDataFromServer.examName === "") {
+				examDataFromServer.examName = data.examName;
+				examDataFromServer.examDate = data.examDate;
+			}
+		}
+	}
+
+	// DOMContentLoaded後にチャートを初期化
+	document.addEventListener('DOMContentLoaded', function() {
+		if (typeof initializeRadarChart === 'function') {
+			initializeRadarChart(examDataFromServer);
+		}
+	});
+	</script>
 </body>
 </html>

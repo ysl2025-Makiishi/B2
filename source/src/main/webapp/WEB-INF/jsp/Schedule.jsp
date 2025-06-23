@@ -27,7 +27,7 @@
         <!-- メイン（ここから） -->
         <h2>スケジュール作成</h2>
         <div id="form_and_register_wrapper">
-  		<form id="schedule_form" action="ScheduleServlet" method="get">
+  		<form id="schedule_form" action="<c:url value='/ScheduleServlet' />" method="post">
             <table>
             <tr>
                 <td>
@@ -79,31 +79,34 @@
                 </td>
             </tr>
             <tr>
-                <td>
-                    <input type="submit" class="button" name="search" value="検索">
-                    <input type="reset" class="button" name="reset" value="リセット">
-                    <span id="error_message"></span>
-                <td>
-            </tr>
+			  <td>
+			    <div class="form-buttons">
+			      <button type="button" id="search_button" class="primary-button large-button">検索</button>
+			      <input type="reset" value="リセット" class="primary-button large-button">
+			    </div>
+			    <span id="error_message"></span>
+			  </td>
+			</tr>
+            
             </table>
-        <input type="hidden" name="page" id="calculated_page">
-        </form>
-        <!-- 最初は非表示の結果 -->
+        
+        <input type="hidden" name="studentId" value="${studentId}">
+		<input type="hidden" name="subjectId" value="${subjectId}">
+		<input type="hidden" name="calculated_page" id="calculated_page">
+		
+		<!-- 最初は非表示の結果 -->
         <p id="result" style="display: none;">結果：　ページ進めよう！</p>
-
-        <!-- 登録ボタン（非表示） -->
-        <div id="register_container" style="display: none; margin-top: 10px;">
-            <button type="button" class="button" onclick="alert('登録しました');">登録</button>
-        </div>
+		 <!-- 登録ボタン（非表示） -->
+		<div id="register_container" style="display: none; margin-top: 10px;">
+		    <input type="submit" name="action" value="登録" class="primary-button large-button">
+		</div>
+        </form>
         </div>
 
         <!-- 戻るボタン -->
         <div style="margin-top: 20px; text-align: left;">
-		    <a href="IndividualResultsServlet">
-			  <button type="button" class="button">科目ごと個人結果に戻る</button>
-			</a>
+		  <a href="<c:url value='/IndividualResultsServlet' />" class="primary-button">科目ごと個人結果に戻る</a>
 		</div>
-        
         <!-- メイン（ここまで） -->
         <!-- フッター（ここから） -->
         <!--<div id="footer">

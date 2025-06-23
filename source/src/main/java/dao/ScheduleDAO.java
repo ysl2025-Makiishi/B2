@@ -24,24 +24,39 @@ public class ScheduleDAO {
      * @return 登録成功ならtrue、失敗ならfalse
      */
 
-    public boolean updatePages(schedules schedule) {
-        String sql = "UPDATE schedules SET pages = ? WHERE student_id = ? AND subject_id = ?";
+    public boolean upsertPages(schedules schedule) {
+        String updateSql = "UPDATE schedules SET pages = ? WHERE student_id = ? AND subject_id = ?";
+        String insertSql = "INSERT INTO schedules (student_id, subject_id, pages) VALUES (?, ?, ?)";
 
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnection()) {
+            // 1. UPDATE を試みる
+            try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+                updateStmt.setInt(1, schedule.getPages());
+                updateStmt.setInt(2, schedule.getStudent_id());
+                updateStmt.setInt(3, schedule.getSubject_id());
 
-            ps.setInt(1, schedule.getPages());
-            ps.setInt(2, schedule.getStudent_id());
-            ps.setInt(3, schedule.getSubject_id());
+                int updated = updateStmt.executeUpdate();
 
-            int result = ps.executeUpdate();
-            return result > 0;
+                // 更新できたら true を返す
+                if (updated > 0) {
+                    return true;
+                }
+            }
+
+            // 2. UPDATE が 0 行 → INSERT を試みる
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+                insertStmt.setInt(1, schedule.getStudent_id());
+                insertStmt.setInt(2, schedule.getSubject_id());
+                insertStmt.setInt(3, schedule.getPages());
+
+                int inserted = insertStmt.executeUpdate();
+                return inserted > 0;
+            }
 
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             return false;
         }
     }
-
 
 }

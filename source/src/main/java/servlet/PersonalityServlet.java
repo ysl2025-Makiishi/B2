@@ -69,7 +69,6 @@ public class PersonalityServlet extends HttpServlet {
         // バリデーション
         if (studentIdStr == null || !studentIdStr.matches("\\d+")) {
             System.out.println("ERROR: studentIdが不正です: " + studentIdStr);
-            response.sendRedirect("error.jsp");
             return;
         }
 
@@ -81,7 +80,6 @@ public class PersonalityServlet extends HttpServlet {
 
         if (personalityId == null) {
             System.out.println("ERROR: 性格IDの取得に失敗しました");
-            response.sendRedirect("error.jsp");
             return;
         }
 
@@ -89,12 +87,15 @@ public class PersonalityServlet extends HttpServlet {
         boolean success = dao.updateStudentPersonality(studentId, personalityId);
         if (success) {
             System.out.println("SUCCESS: 生徒の性格IDを更新しました");
-            response.sendRedirect("success.jsp");
+            response.sendRedirect(request.getContextPath() + "/IndividualResultsServlet?studentId=" + studentId);
+            //response.sendRedirect("/WEB-INF/jsp/IndividualResults.jsp");
         } else {
             System.out.println("ERROR: 生徒の性格ID更新に失敗しました");
-            response.sendRedirect("error.jsp");
         }
         System.out.println("=== PersonalityServlet POST リクエスト ===");
+        
     }
+    
+    
     }
 

@@ -5,16 +5,14 @@ document.getElementById("schedule_form").addEventListener("reset", function() {
     document.getElementById("error_message").textContent = "";
 });
 
-document.getElementById("schedule_form").addEventListener("submit", function(e) {
-    e.preventDefault(); // フォーム送信を止める
-
+document.getElementById("search_button").addEventListener("click", function () {
+    // ここに検索の処理を移動します
     const date = document.querySelector('input[name="target_date"]').value;
     const frequency = document.querySelector('select[name="frequency"]').value;
     const understanding = parseInt(document.querySelector('select[name="level_of_understanding"]').value);
     const page = parseInt(document.querySelector('input[name="page"]').value);
     const errorMessage = document.getElementById("error_message");
 
-    // 初期化
     errorMessage.textContent = "";
     document.getElementById("result").style.display = "none";
     document.getElementById("register_container").style.display = "none";
@@ -27,26 +25,20 @@ document.getElementById("schedule_form").addEventListener("submit", function(e) 
     if (!page || page <= 0) errors.push("進めるテキストページ数");
 
     if (errors.length > 0) {
-        if (errors.length === 1) {
-            errorMessage.textContent = `${errors[0]}を選択してください`;
-        } else {
-            errorMessage.textContent = "選択していない項目が複数あります";
-        }
+        errorMessage.textContent = errors.length === 1 ?
+            `${errors[0]}を選択してください` : "選択していない項目が複数あります";
         return;
     }
 
-    // 日数の計算
     const today = new Date();
     const targetDate = new Date(date);
-    const diffTime = targetDate.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // 日数（1日単位に切り上げ）
+    const diffDays = Math.ceil((targetDate - today) / (1000 * 60 * 60 * 24));
 
     if (diffDays <= 0) {
         errorMessage.textContent = "目標日は今日以降の日付を選んでください";
         return;
     }
 
-    // 理解度係数の計算
     let factor = 1.0;
     if (understanding === 6) factor = 1.1;
     else if (understanding === 7) factor = 1.2;
@@ -54,18 +46,16 @@ document.getElementById("schedule_form").addEventListener("submit", function(e) 
     else if (understanding === 9) factor = 1.4;
     else if (understanding === 10) factor = 1.5;
 
-    // ページ数計算
     const dailyPage = page / diffDays;
-    const resultPage = Math.ceil(dailyPage * factor); // 小数切り上げ
+    const resultPage = Math.ceil(dailyPage * factor);
 
-    // 結果表示
     document.getElementById("result").textContent = `結果： ${resultPage}ページ進めよう！`;
     document.getElementById("result").style.display = "block";
     document.getElementById("register_container").style.display = "block";
+
+    // サーバー送信用に隠しフィールドにセット
     document.getElementById("calculated_page").value = resultPage;
-
 });
-
 
 window.addEventListener('DOMContentLoaded', function() {
     const today = new Date();
