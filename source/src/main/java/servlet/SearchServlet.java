@@ -46,9 +46,9 @@ public class SearchServlet extends HttpServlet {
 
         try {
             // URLエンコードして検索結果画面にリダイレクト
-            String redirectUrl = "SearchResultServlet?name=" + URLEncoder.encode(name, StandardCharsets.UTF_8)
-                    + "&furigana=" + URLEncoder.encode(furigana, StandardCharsets.UTF_8)
-                    + "&school=" + URLEncoder.encode(schoolName, StandardCharsets.UTF_8);
+        	String redirectUrl = "SearchResultServlet?name=" + URLEncoder.encode(name, StandardCharsets.UTF_8)
+            + "&furigana=" + URLEncoder.encode(furigana, StandardCharsets.UTF_8)
+            + "&schoolName=" + URLEncoder.encode(schoolName, StandardCharsets.UTF_8); // ← ここ！
             response.sendRedirect(redirectUrl);
         } catch (Exception e) {
             e.printStackTrace();

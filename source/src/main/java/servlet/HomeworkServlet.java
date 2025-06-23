@@ -46,8 +46,7 @@ public class HomeworkServlet extends HttpServlet {
             int studentId = Integer.parseInt(request.getParameter("studentId"));
             int subjectId = Integer.parseInt(request.getParameter("subjectId"));
             int pagesPerDay = Integer.parseInt(request.getParameter("pagesPerDay"));
-            String action = request.getParameter("action"); // insert or update
-
+            String action = request.getParameter("action");
             HomeworkDAO dao = new HomeworkDAO();
 
             if ("update".equals(action)) {

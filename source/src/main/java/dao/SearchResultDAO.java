@@ -141,6 +141,7 @@ public class SearchResultDAO {
         }
         return count;
     }
+    
     public static boolean deleteById(int studentId) {
         Connection conn = null;
         boolean success = false;
@@ -148,18 +149,26 @@ public class SearchResultDAO {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
             conn.setAutoCommit(false);
-            String deleteHomeworkSql = "DELETE FROM homeworks WHERE student_id = ?";
-            try (PreparedStatement ps1 = conn.prepareStatement(deleteHomeworkSql)) {
-                ps1.setInt(1, studentId);
-                ps1.executeUpdate();
+
+            String[] deleteSqls = {
+                "DELETE FROM reports WHERE student_id = ?",
+                "DELETE FROM schedules WHERE student_id = ?",
+                "DELETE FROM gpas WHERE student_id = ?",
+                "DELETE FROM levels WHERE student_id = ?",
+                "DELETE FROM exam_scores WHERE student_id = ?",
+                "DELETE FROM homeworks WHERE student_id = ?",
+                "DELETE FROM students WHERE id = ?"
+            };
+
+            for (String sql : deleteSqls) {
+                try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                    ps.setInt(1, studentId);
+                    ps.executeUpdate();
+                }
             }
-            String deleteStudentSql = "DELETE FROM students WHERE id = ?";
-            try (PreparedStatement ps2 = conn.prepareStatement(deleteStudentSql)) {
-                ps2.setInt(1, studentId);
-                int rowsAffected = ps2.executeUpdate();
-                success = (rowsAffected > 0);
-            }
+
             conn.commit();
+            success = true;
         } catch (Exception e) {
             e.printStackTrace();
             if (conn != null) {

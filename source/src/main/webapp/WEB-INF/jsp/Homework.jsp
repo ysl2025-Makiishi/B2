@@ -129,18 +129,33 @@
 <%
             } else {
                 int pagesPerDay = (int) Math.ceil((double) totalPages / daysBetween);
+
+                // ★ ここで DAO を使って登録済みかチェック
+                boolean isRegistered = false;
+                try {
+                    int studentId = Integer.parseInt(request.getParameter("studentId"));
+                    int subjectId = Integer.parseInt(request.getParameter("subjectId"));
+                    dao.HomeworkDAO dao = new dao.HomeworkDAO();
+                    isRegistered = dao.existsHomework(studentId, subjectId);
+                } catch (Exception e) {
+                    // エラーハンドリングしてもよい
+                }
+
+                String actionType = isRegistered ? "update" : "insert";
 %>
                 <div class="result">
-                    
                     <strong>1日に <%= pagesPerDay %> ページ</strong>進めよう！
                 </div>
 
-                <!-- ★ 登録ボタンフォーム -->
+                <!-- 登録 or 更新 ボタン -->
                 <form method="post" action="HomeworkServlet" style="text-align:center; margin-top:30px;">
                     <input type="hidden" name="studentId" value="${studentId}">
                     <input type="hidden" name="subjectId" value="${subjectId}">
                     <input type="hidden" name="pagesPerDay" value="<%= pagesPerDay %>">
-                    <button type="submit" class="register-button">この宿題を登録</button>
+                    <input type="hidden" name="action" value="<%= actionType %>">
+                    <button type="submit" class="register-button">
+                        <%= isRegistered ? "宿題を更新" : "この宿題を登録" %>
+                    </button>
                 </form>
 <%
             }
