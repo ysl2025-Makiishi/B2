@@ -166,7 +166,7 @@ h2 {
 
 /*ボタン用*/
 .fancy-button {
-  background: linear-gradient(135deg, #4DA0B0, #D39D38);
+  background-color: var(--color-primary);
   color: #fff;
   padding: 0.8em 2.2em;
   font-size: 1.1rem;
@@ -180,9 +180,10 @@ h2 {
 }
 
 .fancy-button:hover {
-  background: linear-gradient(135deg, #D39D38, #4DA0B0);
+  background-color: var(--color-primary);
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 10px rgba(93, 173, 226, 0.6),  /* 青系の外側に光 */
+    0 6px 16px rgba(0, 0, 0, 0.4);     /* 元の影も維持 */;
 }
 
 .fancy-button:active {

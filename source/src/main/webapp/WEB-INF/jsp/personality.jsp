@@ -155,12 +155,12 @@
             <input type="hidden" name="personality" id="personality-hidden">
             <input type="hidden" name="studentId" value="${studentId}" />
             
-            <button type="submit" value="登録" onclick="showMessage()">登録</button>
-             <button type="button" onclick="resetForm()">リセット</button><br><br>
+            <button type="submit" class="fancy-button" value="登録" onclick="showMessage()">登録</button>
+             <button type="button" class="fancy-button" onclick="resetForm()">リセット</button><br><br>
             <p id="message" style="color: red; display: none;">登録しました！</p>
             </form>
-            <a href="<c:url value='/IndividualResultsServlet'/>">
-            <button>個人結果ページへ戻る</button>
+            <a href="<c:url value='/IndividualResultsServlet?studentId=${studentId}'/>">
+            <button class="fancy-button">個人結果ページへ戻る</button>
             </a>
 
             <div style="text-align: center;">
