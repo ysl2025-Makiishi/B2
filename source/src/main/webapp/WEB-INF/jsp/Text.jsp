@@ -118,33 +118,41 @@ form#searchForm .buttons {
       <li><a href="<c:url value='/LogoutServlet' />" onclick="return confirm('本当に実行しますか？');">ログアウト</a></li>
     </ul>
     <div class="content-center">
-      <h2>テキスト選出</h2>
-      <form id="searchForm" action="<c:url value='/TextServlet' />" method="post" onsubmit="return validateForm();">
-        <label for="subject">学習したい教科</label>
-        <select id="subject" name="subject">
-          <option value="" <c:if test="${subject == null}">selected</c:if>>-- 教科を選んでください --</option>
-          <option value="1" <c:if test="${subject == 1}">selected</c:if>>国語</option>
-          <option value="2" <c:if test="${subject == 2}">selected</c:if>>数学</option>
-          <option value="3" <c:if test="${subject == 3}">selected</c:if>>英語</option>
-          <option value="4" <c:if test="${subject == 4}">selected</c:if>>理科</option>
-          <option value="5" <c:if test="${subject == 5}">selected</c:if>>社会</option>
-        </select>
-        <label for="personality">生徒の性格</label>
-        <select id="personality" name="personality">
-          <option value="" <c:if test="${personality == null}">selected</c:if>>-- 性格を選んでください --</option>
-          <option value="1" <c:if test="${personality == 1}">selected</c:if>>開放性</option>
-          <option value="2" <c:if test="${personality == 2}">selected</c:if>>勤勉性</option>
-          <option value="3" <c:if test="${personality == 3}">selected</c:if>>神経症傾向</option>
-          <option value="4" <c:if test="${personality == 4}">selected</c:if>>外向性</option>
-        </select>
+     <h2 href="TextServlet?studentId=${student.id}">テキスト選出</h2>
+     
+      <c:if test="${not empty message}">
+    <p style="color: green; font-weight: bold; text-align: center; margin-bottom: 20px;">
+    ${message}
+     </p>
+     </c:if>
+     <form id="searchForm" action="<c:url value='/TextServlet' />" method="post" onsubmit="return validateForm();">
+  <input type="hidden" name="studentId" value="${studentId}" />
 
-        <div class="buttons">
-         <button type="submit" class="modern-button primary">検索</button>
-         <button type="reset" class="modern-button primary">リセット</button>
-         
-          <span id="warningMsg" style="color: red; font-size: 12px;"></span>
-        </div>
-      </form>
+  <label for="subject">学習したい教科</label>
+  <select id="subject" name="subject">
+    <option value="" <c:if test="${subject == null}">selected</c:if>>-- 教科を選んでください --</option>
+    <option value="1" <c:if test="${subject == 1}">selected</c:if>>国語</option>
+    <option value="2" <c:if test="${subject == 2}">selected</c:if>>数学</option>
+    <option value="3" <c:if test="${subject == 3}">selected</c:if>>英語</option>
+    <option value="4" <c:if test="${subject == 4}">selected</c:if>>理科</option>
+    <option value="5" <c:if test="${subject == 5}">selected</c:if>>社会</option>
+  </select>
+
+  <label for="personality">生徒の性格</label>
+  <select id="personality" name="personality">
+    <option value="" <c:if test="${personality == null}">selected</c:if>>-- 性格を選んでください --</option>
+    <option value="1" <c:if test="${personality == 1}">selected</c:if>>開放性</option>
+    <option value="2" <c:if test="${personality == 2}">selected</c:if>>勤勉性</option>
+    <option value="3" <c:if test="${personality == 3}">selected</c:if>>神経症傾向</option>
+    <option value="4" <c:if test="${personality == 4}">selected</c:if>>外向性</option>
+  </select>
+
+  <div class="buttons">
+    <button type="submit" class="modern-button primary">検索</button>
+    <button type="reset" class="modern-button primary">リセット</button>
+    <span id="warningMsg" style="color: red; font-size: 12px;"></span>
+  </div>
+</form>
 
       <!-- 検索結果の表示部分 -->
       <div id="searchResult">
@@ -153,19 +161,29 @@ form#searchForm .buttons {
             <c:when test="${not empty textsList}">
               <div class="card-container">
                 <c:forEach var="text" items="${textsList}">
-                  <div class="card">
-                    <span class="result-text">結果：${text.textName} を使おう！</span>
-                    <form action="<c:url value='/SubjectResultServlet' />" method="post">
-                      <input type="hidden" name="textId" value="${text.id}" />
-                      <button type="submit">登録</button>
-                    </form>           
-                  </div>
+                 <!-- テキストごとのカード内 -->
+<div class="card">
+  <span class="result-text">結果：${text.textName} を使おう！</span>
+
+  <!-- 登録ボタン -->
+ <form action="<c:url value='/TextServlet' />" method="post" style="display:inline-block;">
+  <input type="hidden" name="action" value="register" />
+  <input type="hidden" name="textId" value="${text.id}" />
+  <input type="hidden" name="studentId" value="${studentId}" />
+  <button type="submit" class="modern-button primary">登録</button>
+</form>
+
+<form action="<c:url value='/TextServlet' />" method="post" style="display:inline-block;">
+  <input type="hidden" name="action" value="update" />
+  <input type="hidden" name="textId" value="${text.id}" />
+  <input type="hidden" name="studentId" value="${studentId}" />
+  <button type="submit" class="modern-button primary" style="background: linear-gradient(135deg, #E68A00, #f4b942);">更新</button>
+</form>
+ 
+</div>                
                 </c:forEach>
               </div>
             </c:when>
-            <c:otherwise>
-              <p>検索結果はありません</p>
-            </c:otherwise>
           </c:choose>
         </c:if>
       </div>
@@ -173,6 +191,8 @@ form#searchForm .buttons {
       <!-- 「科目ごと個人結果に戻る」ボタンはsearchResultの外に -->
       <div style="text-align: center; margin-top: 30px;">
         <form action="<c:url value='/SubjectResultServlet' />" method="get">
+         <input type="hidden" name="studentId" value="${studentId}" />
+  	     <input type="hidden" name="subjectId" value="${subjectId}" />
           <button type="submit" style="
             background-color: #888;
             color: white;

@@ -149,3 +149,30 @@ h2 {
     text-align: left; /* ここで左揃え */
     display: inline-block; /* 必要に応じて中央揃えの親の影響を防ぐ */
 }
+
+/*ボタン用*/
+.fancy-button {
+  background-color: var(--color-primary);
+  color: #fff;
+  padding: 0.8em 2.2em;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+}
+
+.fancy-button:hover {
+  background-color: var(--color-primary);
+  transform: translateY(-3px);
+  box-shadow: 0 0 10px rgba(93, 173, 226, 0.6),  /* 青系の外側に光 */
+    0 6px 16px rgba(0, 0, 0, 0.4);     /* 元の影も維持 */;
+}
+
+.fancy-button:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}

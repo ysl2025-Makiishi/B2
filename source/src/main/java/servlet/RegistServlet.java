@@ -135,7 +135,8 @@ public class RegistServlet extends HttpServlet{
 		
 
 		// 結果ページにフォワードする
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/regist.jsp");
-		dispatcher.forward(request, response);
+		//RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/StudentList.jsp");
+		//dispatcher.forward(request, response);
+		response.sendRedirect(request.getContextPath() + "/StudentListServlet");
 	}
 }
