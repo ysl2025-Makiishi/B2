@@ -24,8 +24,8 @@ public class SubjectResultDAO {
 		result.setStudentId(studentId);
 		result.setSubjectId(subjectId);
 
-		System.out.println("=== SubjectData取得開始 ===");
-		System.out.println("studentId = " + studentId + ", subjectId = " + subjectId);
+//		System.out.println("=== SubjectData取得開始 ===");
+//		System.out.println("studentId = " + studentId + ", subjectId = " + subjectId);
 
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 			// reports テーブルから学習データを取得
@@ -47,13 +47,13 @@ public class SubjectResultDAO {
 					result.setNextContent(rs.getString("do_next_time"));
 					result.setHomework(rs.getString("homework"));
 					result.setNote(rs.getString("note"));
-					System.out.println("教科別学習データ取得成功");
-					System.out.println("lastContent = " + result.getLastContent());
+//					System.out.println("教科別学習データ取得成功");
+//					System.out.println("lastContent = " + result.getLastContent());
 				} else {
-					System.out.println("教科別学習データが存在しません（初回アクセス）");
+//					System.out.println("教科別学習データが存在しません（初回アクセス）");
 				}
 			} catch (SQLException e) {
-				System.out.println("学習データSQL実行エラー: " + e.getMessage());
+//				System.out.println("学習データSQL実行エラー: " + e.getMessage());
 				e.printStackTrace();
 			}
 
@@ -67,7 +67,7 @@ public class SubjectResultDAO {
 					result.setUnderstanding(String.valueOf(rs.getInt("level")));
 				}
 			} catch (SQLException e) {
-				System.out.println("理解度取得エラー: " + e.getMessage());
+//				System.out.println("理解度取得エラー: " + e.getMessage());
 			}
 
 			// texts テーブルからテキスト選出を取得
@@ -79,7 +79,7 @@ public class SubjectResultDAO {
 					result.setTextSelection(rs.getString("text_name"));
 				}
 			} catch (SQLException e) {
-				System.out.println("テキスト選出取得エラー: " + e.getMessage());
+//				System.out.println("テキスト選出取得エラー: " + e.getMessage());
 			}
 
 			// schedules テーブルからスケジュールを取得
@@ -97,7 +97,7 @@ public class SubjectResultDAO {
 					result.setSchedule(rs.getString("text_name") + " " + rs.getInt("pages") + "ページ");
 				}
 			} catch (SQLException e) {
-				System.out.println("スケジュール取得エラー: " + e.getMessage());
+//				System.out.println("スケジュール取得エラー: " + e.getMessage());
 			}
 
 			// homeworks テーブルから宿題ページ数を取得
@@ -110,23 +110,23 @@ public class SubjectResultDAO {
 					result.setHomeworkPages(String.valueOf(rs.getInt("homework")));
 				}
 			} catch (SQLException e) {
-				System.out.println("宿題ページ数取得エラー: " + e.getMessage());
+//				System.out.println("宿題ページ数取得エラー: " + e.getMessage());
 			}
 
 			// 教科別模試結果を取得
 			try {
 				result.setExamResults(getSubjectExamResults(conn, studentId, subjectId));
 			} catch (SQLException e) {
-				System.out.println("模試結果取得エラー: " + e.getMessage());
+//				System.out.println("模試結果取得エラー: " + e.getMessage());
 				e.printStackTrace();
 			}
 
 		} catch (SQLException e) {
-			System.out.println("DB接続エラー: " + e.getMessage());
+//			System.out.println("DB接続エラー: " + e.getMessage());
 			e.printStackTrace();
 		}
 
-		System.out.println("=== SubjectData取得完了 ===");
+//		System.out.println("=== SubjectData取得完了 ===");
 		return result;
 	}
 
@@ -165,7 +165,7 @@ public class SubjectResultDAO {
 				list.add(exam);
 			}
 
-			System.out.println("教科別模試結果取得: " + list.size() + "件");
+//			System.out.println("教科別模試結果取得: " + list.size() + "件");
 		}
 
 		return list;
@@ -241,18 +241,18 @@ public class SubjectResultDAO {
 				}
 
 				conn.commit();
-				System.out.println("教科別学習データ更新完了");
+//				System.out.println("教科別学習データ更新完了");
 				return true;
 
 			} catch (Exception e) {
 				conn.rollback();
-				System.out.println("教科別学習データ更新エラー: " + e.getMessage());
+//				System.out.println("教科別学習データ更新エラー: " + e.getMessage());
 				e.printStackTrace();
 				return false;
 			}
 
 		} catch (SQLException e) {
-			System.out.println("DB接続エラー: " + e.getMessage());
+//			System.out.println("DB接続エラー: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -268,12 +268,12 @@ public class SubjectResultDAO {
 			try (PreparedStatement ps = conn.prepareStatement(sql)) {
 				ps.setInt(1, examId);
 				int result = ps.executeUpdate();
-				System.out.println("模試結果削除: " + result + "件");
+//				System.out.println("模試結果削除: " + result + "件");
 				return result > 0;
 			}
 
 		} catch (SQLException e) {
-			System.out.println("模試結果削除エラー: " + e.getMessage());
+//			System.out.println("模試結果削除エラー: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -337,18 +337,18 @@ public class SubjectResultDAO {
 				}
 
 				conn.commit();
-				System.out.println("模試結果更新完了");
+//				System.out.println("模試結果更新完了");
 				return true;
 
 			} catch (Exception e) {
 				conn.rollback();
-				System.out.println("模試結果更新エラー: " + e.getMessage());
+//				System.out.println("模試結果更新エラー: " + e.getMessage());
 				e.printStackTrace();
 				return false;
 			}
 
 		} catch (SQLException e) {
-			System.out.println("DB接続エラー: " + e.getMessage());
+//			System.out.println("DB接続エラー: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -364,15 +364,15 @@ public class SubjectResultDAO {
 	 * 理解度のみ更新
 	 */
 	public static boolean updateUnderstandingOnly(int studentId, int subjectId, String understanding) {
-		System.out.println("=== 理解度更新デバッグ ===");
-		System.out.println("studentId: " + studentId);
-		System.out.println("subjectId: " + subjectId);
-		System.out.println("understanding: " + understanding);
+//		System.out.println("=== 理解度更新デバッグ ===");
+//		System.out.println("studentId: " + studentId);
+//		System.out.println("subjectId: " + subjectId);
+//		System.out.println("understanding: " + understanding);
 
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 			// 入力値チェック
 			if (understanding == null || understanding.trim().isEmpty()) {
-				System.out.println("ERROR: 理解度が空です");
+//				System.out.println("ERROR: 理解度が空です");
 				return false;
 			}
 
@@ -380,7 +380,7 @@ public class SubjectResultDAO {
 			try {
 				levelValue = Integer.parseInt(understanding.trim());
 			} catch (NumberFormatException e) {
-				System.out.println("ERROR: 理解度が数値ではありません: " + understanding);
+//				System.out.println("ERROR: 理解度が数値ではありません: " + understanding);
 				return false;
 			}
 
@@ -393,7 +393,7 @@ public class SubjectResultDAO {
 				checkPs.setInt(2, subjectId);
 				ResultSet rs = checkPs.executeQuery();
 				exists = rs.next();
-				System.out.println("既存データ: " + (exists ? "あり" : "なし"));
+//				System.out.println("既存データ: " + (exists ? "あり" : "なし"));
 			}
 
 			String sql;
@@ -411,13 +411,13 @@ public class SubjectResultDAO {
 				ps.setInt(3, subjectId);
 
 				int result = ps.executeUpdate();
-				System.out.println((exists ? "更新" : "挿入") + "結果: " + result + "件");
-				System.out.println("========================");
+//				System.out.println((exists ? "更新" : "挿入") + "結果: " + result + "件");
+//				System.out.println("========================");
 				return result > 0;
 			}
 
 		} catch (Exception e) {
-			System.out.println("理解度更新エラー: " + e.getMessage());
+//			System.out.println("理解度更新エラー: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}

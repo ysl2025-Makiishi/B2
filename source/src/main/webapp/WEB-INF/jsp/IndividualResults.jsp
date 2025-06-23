@@ -37,36 +37,6 @@ LocalDate today = LocalDate.now();
 		<a href="<c:url value='/SearchResultServlet' />"
 			class="diag-link-button">検索結果に戻る</a>
 
-		<!-- 修正後：教科IDと生徒IDを明確に分けて渡す -->
-		<!--
-		<ul class="subject-nav">
-			<li><c:url var="kokugoUrl" value="/SubjectResultServlet">
-					<c:param name="studentId" value="${student.id}" />
-					<c:param name="subjectId" value="1" />
-				</c:url> <a href="${kokugoUrl}">国語</a></li>
-			<li><c:url var="sugakuUrl" value="/SubjectResultServlet">
-					<c:param name="studentId" value="${student.id}" />
-					<c:param name="subjectId" value="3" />
-				</c:url> <a href="${sugakuUrl}">数学</a></li>
-			<li><c:url var="rikaUrl" value="/SubjectResultServlet">
-					<c:param name="studentId" value="${student.id}" />
-					<c:param name="subjectId" value="4" />
-				</c:url> <a href="${rikaUrl}">理科</a></li>
-			<li><c:url var="shakaiUrl" value="/SubjectResultServlet">
-					<c:param name="studentId" value="${student.id}" />
-					<c:param name="subjectId" value="2" />
-				</c:url> <a href="${shakaiUrl}">社会</a></li>
-			<li><c:url var="eigoUrl" value="/SubjectResultServlet">
-					<c:param name="studentId" value="${student.id}" />
-					<c:param name="subjectId" value="5" />
-				</c:url> <a href="${eigoUrl}">英語</a></li>
-			<li><c:url var="sougouUrl" value="/SubjectResultServlet">
-					<c:param name="studentId" value="${student.id}" />
-					<c:param name="subjectId" value="10" />
-				</c:url> <a href="${sougouUrl}">総合</a></li>
-		</ul>
-		-->
-
 		<ul class="subject-nav">
 			<li><a
 				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=1' />">国語</a></li>

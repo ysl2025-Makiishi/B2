@@ -20,31 +20,31 @@ public class IndividualResultsServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		// === デバッグ情報 ===
-		System.out.println("=== GET リクエスト デバッグ情報 ===");
-		System.out.println("リクエストURL: " + request.getRequestURL());
-		System.out.println("クエリ文字列: " + request.getQueryString());
-		System.out.println("リファラー: " + request.getHeader("Referer"));
+//		System.out.println("=== GET リクエスト デバッグ情報 ===");
+//		System.out.println("リクエストURL: " + request.getRequestURL());
+//		System.out.println("クエリ文字列: " + request.getQueryString());
+//		System.out.println("リファラー: " + request.getHeader("Referer"));
 
 		// すべてのパラメータを表示
-		System.out.println("=== すべてのパラメータ ===");
+//		System.out.println("=== すべてのパラメータ ===");
 		request.getParameterMap().forEach((key, values) -> {
-			System.out.println(key + " = " + String.join(", ", values));
+//			System.out.println(key + " = " + String.join(", ", values));
 		});
-		System.out.println("========================");
+//		System.out.println("========================");
 
 		// studentId という名前で受け取るよう修正
 		String idStr = request.getParameter("studentId"); // ← ここを修正！
-		System.out.println("GET：受け取った studentId = " + idStr);
+//		System.out.println("GET：受け取った studentId = " + idStr);
 		if (idStr == null || !idStr.matches("\\d+")) {
-			System.out.println("IDが不正なのでリダイレクトします");
-			response.sendRedirect("SearchResultServlet");
+//			System.out.println("IDが不正なのでリダイレクトします");
+//			response.sendRedirect("SearchResultServlet");
 			return;
 		}
 		int studentId = Integer.parseInt(idStr);
 		IndividualResults student = IndividualResultsDAO.getStudentInfo(studentId);
 		if (student == null) {
-			System.out.println("該当生徒が見つかりません");
-			response.sendRedirect("SearchResultServlet");
+//			System.out.println("該当生徒が見つかりません");
+//			response.sendRedirect("SearchResultServlet");
 			return;
 		}
 		request.setAttribute("student", student);
@@ -58,11 +58,11 @@ public class IndividualResultsServlet extends HttpServlet {
 
 		// リクエストパラメータからIDを取得
 		String idStr = request.getParameter("id");
-		System.out.println("POST：受け取った id = " + idStr);
+//		System.out.println("POST：受け取った id = " + idStr);
 
 		if (idStr == null || !idStr.matches("\\d+")) {
-			System.out.println("POST：IDが不正です");
-			response.sendRedirect("SearchResultServlet");
+//			System.out.println("POST：IDが不正です");
+//			response.sendRedirect("SearchResultServlet");
 			return;
 		}
 
@@ -89,17 +89,17 @@ public class IndividualResultsServlet extends HttpServlet {
 		String gpaPe = request.getParameter("gpa_pe");
 		String gpaTe = request.getParameter("gpa_te");
 		// === GPAデバッグログ追加 ===
-		System.out.println("=== GPA更新デバッグ ===");
-		System.out.println("gpaJp = " + gpaJp);
-		System.out.println("gpaSs = " + gpaSs);
-		System.out.println("gpaMa = " + gpaMa);
-		System.out.println("gpaSc = " + gpaSc);
-		System.out.println("gpaEn = " + gpaEn);
-		System.out.println("gpaMu = " + gpaMu);
-		System.out.println("gpaAr = " + gpaAr);
-		System.out.println("gpaPe = " + gpaPe);
-		System.out.println("gpaTe = " + gpaTe);
-		System.out.println("==================");
+//		System.out.println("=== GPA更新デバッグ ===");
+//		System.out.println("gpaJp = " + gpaJp);
+//		System.out.println("gpaSs = " + gpaSs);
+//		System.out.println("gpaMa = " + gpaMa);
+//		System.out.println("gpaSc = " + gpaSc);
+//		System.out.println("gpaEn = " + gpaEn);
+//		System.out.println("gpaMu = " + gpaMu);
+//		System.out.println("gpaAr = " + gpaAr);
+//		System.out.println("gpaPe = " + gpaPe);
+//		System.out.println("gpaTe = " + gpaTe);
+//		System.out.println("==================");
 
 		// 模試データを取得（配列）
 		String[] examNames = request.getParameterValues("exam_name[]");
@@ -109,7 +109,7 @@ public class IndividualResultsServlet extends HttpServlet {
 		String[] examDevs = request.getParameterValues("exam_dev[]");
 		String[] examAvgs = request.getParameterValues("exam_avg[]");
 
-		System.out.println("POST：フォームデータ取得完了");
+//		System.out.println("POST：フォームデータ取得完了");
 
 		boolean success = true;
 		String message = "";
@@ -140,8 +140,8 @@ public class IndividualResultsServlet extends HttpServlet {
 		IndividualResults student = IndividualResultsDAO.getStudentInfo(studentId);
 
 		if (student == null) {
-			System.out.println("POST：生徒情報の再取得に失敗");
-			response.sendRedirect("SearchResultServlet");
+//			System.out.println("POST：生徒情報の再取得に失敗");
+//			response.sendRedirect("SearchResultServlet");
 			return;
 		}
 
