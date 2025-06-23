@@ -361,8 +361,8 @@
 
     <!-- ボタンとエラーメッセージ -->
     <div class="buttons">
-      <button type="submit" value="登録">登録</button>
-      <button type="reset">リセット</button>
+      <button type="submit" class="fancy-button" value="登録">登録</button>
+      <button type="reset" class="fancy-button">リセット</button>
       <span class="error-message" id="errorMessage"></span>
     </div>
 
