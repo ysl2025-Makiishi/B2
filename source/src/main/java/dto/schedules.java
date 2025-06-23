@@ -8,21 +8,25 @@ public class schedules {
 	private int text_id;
 	private int pages;
 	private int student_id;
+	private int subject_id;
 	private Date created_at;
 	private Date updated_at;
 	
-	public schedules(int id, int text_id, int pages, int student_id, Date created_at, Date updated_at) {
-		this.id = id;
-		this.text_id = text_id;
-		this.pages = pages;
-		this.student_id = student_id;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
+	public schedules(int id, int text_id, int pages, int student_id, int subject_id, Date created_at, Date updated_at) {
+	    this.id = id;
+	    this.text_id = text_id;
+	    this.pages = pages;
+	    this.student_id = student_id;
+	    this.subject_id = subject_id;
+	    this.created_at = created_at;
+	    this.updated_at = updated_at;
 	}
+
 	
 	public schedules() {
-		this(0,0,0,0,null,null);
+	    this(0, 0, 0, 0, 0, null, null);
 	}
+
 
 	public int getId() {
 		return id;
@@ -56,6 +60,14 @@ public class schedules {
 		this.student_id = student_id;
 	}
 
+	public int getSubject_id() {
+	    return subject_id;
+	}
+
+	public void setSubject_id(int subject_id) {
+	    this.subject_id = subject_id;
+	}
+	
 	public Date getCreated_at() {
 		return created_at;
 	}
