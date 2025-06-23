@@ -99,7 +99,10 @@ import dto.students;
 	    }
 	
 	    private String getOrDefault(String val) {
-	        return val == null ? "" : val;
+	        if (val == null || val.trim().isEmpty()) {
+	            return null;
+	        }
+	        return val;
 	    }
 	}
 		
