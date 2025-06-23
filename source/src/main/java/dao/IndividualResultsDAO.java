@@ -53,10 +53,10 @@ public class IndividualResultsDAO {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, studentId);
 			ResultSet rs = ps.executeQuery();
-			System.out.println("getStudentInfo: studentId = " + studentId);
+//			System.out.println("getStudentInfo: studentId = " + studentId);
 
 			if (rs.next()) {
-				System.out.println("該当生徒あり：DBから取得成功");
+//				System.out.println("該当生徒あり：DBから取得成功");
 				result = new IndividualResults();
 				result.setId(rs.getInt("id"));
 				result.setName(rs.getString("name"));
@@ -78,22 +78,22 @@ public class IndividualResultsDAO {
 				result.setGpaPe(rs.getInt("gpa_pe"));
 				result.setGpaTe(rs.getInt("gpa_te"));
 			} else {
-				System.out.println("該当生徒なし：IDに一致するデータがDBにない");
+//				System.out.println("該当生徒なし：IDに一致するデータがDBにない");
 			}
 
 			if (result != null) {
 				try {
-					System.out.println("=== 模試結果取得開始 ===");
+//					System.out.println("=== 模試結果取得開始 ===");
 					result.setGpaList(getGpaList(conn, studentId));
-					System.out.println("GPA取得完了");
+//					System.out.println("GPA取得完了");
 
 					List<ExamScore> examResults = getExamResults(conn, studentId);
-					System.out.println("取得した模試結果の件数: " + examResults.size());
+//					System.out.println("取得した模試結果の件数: " + examResults.size());
 					result.setExamResults(examResults);
 
-					System.out.println("=== 模試結果取得完了 ===");
+//					System.out.println("=== 模試結果取得完了 ===");
 				} catch (Exception e) {
-					System.out.println("模試取得でエラー発生: " + e.getMessage());
+//					System.out.println("模試取得でエラー発生: " + e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -148,12 +148,12 @@ public class IndividualResultsDAO {
 
 				int result = ps.executeUpdate();
 				conn.commit();
-				System.out.println("基本情報更新結果: " + result + "件");
+//				System.out.println("基本情報更新結果: " + result + "件");
 				return result > 0;
 			}
 
 		} catch (SQLException e) {
-			System.out.println("基本情報更新エラー: " + e.getMessage());
+//			System.out.println("基本情報更新エラー: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -242,8 +242,9 @@ public class IndividualResultsDAO {
 				String deleteSql = "DELETE FROM gpas WHERE student_id = ?";
 				try (PreparedStatement deletePs = conn.prepareStatement(deleteSql)) {
 					deletePs.setInt(1, studentId);
-					int deleted = deletePs.executeUpdate();
-					System.out.println("既存GPA削除: " + deleted + "件");
+//					int deleted = deletePs.executeUpdate();
+					deletePs.executeUpdate();
+//					System.out.println("既存GPA削除: " + deleted + "件");
 				}
 
 				// 2. 新しいGPAデータを挿入
@@ -262,10 +263,10 @@ public class IndividualResultsDAO {
 								int result = insertPs.executeUpdate(); // 1件ずつ実行
 								if (result > 0) {
 									insertCount++;
-									System.out.println("GPA挿入成功: subject_id=" + (i + 1) + ", gpa=" + gpaValue);
+//									System.out.println("GPA挿入成功: subject_id=" + (i + 1) + ", gpa=" + gpaValue);
 								}
 							} catch (NumberFormatException e) {
-								System.out.println("GPA値が不正: " + gpaValues[i]);
+//								System.out.println("GPA値が不正: " + gpaValues[i]);
 							}
 						}
 					}
@@ -273,18 +274,18 @@ public class IndividualResultsDAO {
 
 				// 3. トランザクションをコミット
 				conn.commit();
-				System.out.println("GPA更新完了: " + insertCount + "件");
+//				System.out.println("GPA更新完了: " + insertCount + "件");
 				return insertCount > 0;
 
 			} catch (SQLException e) {
 				// エラー時はロールバック
 				conn.rollback();
-				System.out.println("GPA更新でエラー、ロールバック: " + e.getMessage());
+//				System.out.println("GPA更新でエラー、ロールバック: " + e.getMessage());
 				throw e;
 			}
 
 		} catch (Exception e) {
-			System.out.println("GPA更新エラー: " + e.getMessage());
+//			System.out.println("GPA更新エラー: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -297,7 +298,7 @@ public class IndividualResultsDAO {
 			String[] examSubjects, String[] examScores, String[] examDevs, String[] examAvgs) {
 
 		if (examNames == null || examNames.length == 0) {
-			System.out.println("模試データがありません");
+//			System.out.println("模試データがありません");
 			return true; // エラーではない
 		}
 
@@ -366,11 +367,11 @@ public class IndividualResultsDAO {
 			}
 
 			conn.commit();
-			System.out.println("模試結果登録完了");
+//			System.out.println("模試結果登録完了");
 			return true;
 
 		} catch (Exception e) {
-			System.out.println("模試結果登録エラー: " + e.getMessage());
+//			System.out.println("模試結果登録エラー: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -446,8 +447,8 @@ public class IndividualResultsDAO {
 			ps.setInt(1, studentId);
 			ResultSet rs = ps.executeQuery();
 
-			System.out.println("【模試取得テスト】studentId = " + studentId);
-			int count = 0;
+//			System.out.println("【模試取得テスト】studentId = " + studentId);
+//			int count = 0;
 
 			while (rs.next()) {
 				ExamScore exam = new ExamScore();
@@ -458,10 +459,10 @@ public class IndividualResultsDAO {
 				exam.setDeviationValue(rs.getDouble("deviation_value"));
 				exam.setAverageScore(rs.getDouble("average_score"));
 				list.add(exam);
-				count++;
+//				count++;
 			}
 
-			System.out.println("模試件数: " + count);
+//			System.out.println("模試件数: " + count);
 		}
 
 		return list;

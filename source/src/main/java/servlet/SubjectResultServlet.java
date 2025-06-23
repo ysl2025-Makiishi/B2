@@ -21,15 +21,15 @@ public class SubjectResultServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		System.out.println("=== SubjectResult GET リクエスト ===");
-		System.out.println("クエリ文字列: " + request.getQueryString());
+//		System.out.println("=== SubjectResult GET リクエスト ===");
+//		System.out.println("クエリ文字列: " + request.getQueryString());
 
 		String studentIdStr = request.getParameter("studentId");
 		String subjectIdStr = request.getParameter("subjectId");
 
 		if (studentIdStr == null || !studentIdStr.matches("\\d+") || subjectIdStr == null
 				|| !subjectIdStr.matches("\\d+")) {
-			response.sendRedirect("SearchResultServlet");
+//			response.sendRedirect("SearchResultServlet");
 			return;
 		}
 
@@ -39,7 +39,7 @@ public class SubjectResultServlet extends HttpServlet {
 		// 生徒情報を取得
 		IndividualResults student = IndividualResultsDAO.getStudentInfo(studentId);
 		if (student == null) {
-			response.sendRedirect("SearchResultServlet");
+//			response.sendRedirect("SearchResultServlet");
 			return;
 		}
 
@@ -188,30 +188,31 @@ public class SubjectResultServlet extends HttpServlet {
 	private void updateUnderstanding(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		System.out.println("=== updateUnderstanding 開始 ===");
+//		System.out.println("=== updateUnderstanding 開始 ===");
 
 		String studentIdStr = request.getParameter("studentId");
 		String subjectIdStr = request.getParameter("subjectId");
 		String understanding = request.getParameter("understanding");
 
-		System.out.println("受け取ったパラメータ:");
-		System.out.println("studentId: " + studentIdStr);
-		System.out.println("subjectId: " + subjectIdStr);
-		System.out.println("understanding: " + understanding);
+//		System.out.println("受け取ったパラメータ:");
+//		System.out.println("studentId: " + studentIdStr);
+//		System.out.println("subjectId: " + subjectIdStr);
+//		System.out.println("understanding: " + understanding);
 
 		if (studentIdStr == null || subjectIdStr == null) {
 			System.out.println("ERROR: 必要なパラメータが不足");
-			response.sendRedirect("SearchResultServlet");
+//			response.sendRedirect("SearchResultServlet");
 			return;
 		}
 
 		int studentId = Integer.parseInt(studentIdStr);
 		int subjectId = Integer.parseInt(subjectIdStr);
 
-		boolean success = SubjectResultDAO.updateUnderstandingOnly(studentId, subjectId, understanding);
+//		boolean success = SubjectResultDAO.updateUnderstandingOnly(studentId, subjectId, understanding);
+		SubjectResultDAO.updateUnderstandingOnly(studentId, subjectId, understanding);
 
-		String message = success ? "理解度を更新しました" : "理解度の更新に失敗しました";
-		System.out.println("更新結果: " + message);
+//		String message = success ? "理解度を更新しました" : "理解度の更新に失敗しました";
+//		System.out.println("更新結果: " + message);
 
 		response.sendRedirect("SubjectResultServlet?studentId=" + studentId + "&subjectId=" + subjectId);
 	}
