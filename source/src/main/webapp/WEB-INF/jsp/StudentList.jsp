@@ -35,6 +35,8 @@
 	    <option value="reverse">新しい順</option>
 	    <option value="name-asc">名前：昇順</option>
 	    <option value="name-desc">名前：降順</option>
+	    <option value="updated-asc">更新：昇順</option>
+  		<option value="updated-desc">更新：降順</option>
 	  </select>
   </div>
   
@@ -54,7 +56,8 @@
 	  id: ${s.id},
 	  name: "${fn:escapeXml(s.name)}",
 	  school: "${fn:escapeXml(s.school_name)}",
-	  gender: "${fn:escapeXml(s.gender)}"
+	  gender: "${fn:escapeXml(s.gender)}",
+	  updated_at: "${s.updated_at}"
 	});
 
   </c:forEach>

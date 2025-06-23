@@ -124,7 +124,15 @@ document.getElementById("studentCount").textContent = students.length;
   } else if (value === "name-desc") {
     sortedKey = "name";
     sortDirection = "desc";
+  } 
+    else if (value === "updated-asc") {
+    sortedKey = "updated_at";
+    sortDirection = "asc";
+  } else if (value === "updated-desc") {
+    sortedKey = "updated_at";
+    sortDirection = "desc";
   }
+
 
   currentPage = 1;
   renderGrid();
