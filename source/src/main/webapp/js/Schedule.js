@@ -62,6 +62,8 @@ document.getElementById("schedule_form").addEventListener("submit", function(e) 
     document.getElementById("result").textContent = `結果： ${resultPage}ページ進めよう！`;
     document.getElementById("result").style.display = "block";
     document.getElementById("register_container").style.display = "block";
+    document.getElementById("calculated_page").value = resultPage;
+
 });
 
 

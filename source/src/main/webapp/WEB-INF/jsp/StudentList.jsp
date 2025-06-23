@@ -43,19 +43,20 @@
   <div class="pagination" id="pagination"></div>
       <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'});" >
              ↑ TOP
-       </button>
+      </button>
 <button id="backToHome" onclick="location.href='<c:url value='/HomeServlet' />'">ホームへ戻る</button>
 </div>
 <script>
   const contextPath = "${pageContext.request.contextPath}";
   const students = [];
   <c:forEach var="s" items="${studentList}">
-    students.push({
-      id: "${s.id}",  
-      name: "${fn:escapeXml(s.name)}",
-      school: "${fn:escapeXml(s.school_name)}",
-      gender: "${fn:escapeXml(s.gender)}"
-    });
+  students.push({
+	  id: ${s.id},
+	  name: "${fn:escapeXml(s.name)}",
+	  school: "${fn:escapeXml(s.school_name)}",
+	  gender: "${fn:escapeXml(s.gender)}"
+	});
+
   </c:forEach>
 </script>
 

@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import dto.Schedule;  // Scheduleクラスがdtoパッケージにある想定
+import dto.schedules;
 
 public class ScheduleDAO {
 
@@ -23,15 +23,16 @@ public class ScheduleDAO {
      * @param schedule 登録したいScheduleオブジェクト
      * @return 登録成功ならtrue、失敗ならfalse
      */
-    public boolean insert(Schedule schedule) {
-        String sql = "INSERT INTO schedules (text_id, pages, student_id) VALUES (?, ?, ?)";
+
+    public boolean updatePages(schedules schedule) {
+        String sql = "UPDATE schedules SET pages = ? WHERE student_id = ? AND subject_id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, schedule.getTextId());
-            ps.setInt(2, schedule.getPages());
-            ps.setInt(3, schedule.getStudentId());
+            ps.setInt(1, schedule.getPages());
+            ps.setInt(2, schedule.getStudent_id());
+            ps.setInt(3, schedule.getSubject_id());
 
             int result = ps.executeUpdate();
             return result > 0;
@@ -41,4 +42,6 @@ public class ScheduleDAO {
             return false;
         }
     }
+
+
 }
