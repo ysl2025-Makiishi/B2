@@ -10,7 +10,8 @@
 <title>${subject}の結果|K-Manage</title>
 <link rel="stylesheet" href="<c:url value='/css/K-style.css' />">
 <link rel="stylesheet" href="<c:url value='/css/SubjectResult.css' />">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 
 <body>
@@ -44,11 +45,11 @@
 			<li><a
 				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=2' />">数学</a></li>
 			<li><a
-				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=3' />">英語</a></li>
-			<li><a
 				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=4' />">理科</a></li>
 			<li><a
 				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=5' />">社会</a></li>
+			<li><a
+				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=3' />">英語</a></li>
 			<li><a
 				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=10' />">総合</a></li>
 		</ul>
@@ -128,7 +129,8 @@
 							</c:url>
 							<!-- テキスト選出の有無で条件分岐 -->
 							<c:choose>
-								<c:when test="${not empty subjectData.textSelection and subjectData.textSelection != 'null' and subjectData.textSelection != '未選出'}">
+								<c:when
+									test="${not empty subjectData.textSelection and subjectData.textSelection != 'null' and subjectData.textSelection != '未選出'}">
 									<!-- テキスト選出済み：通常のボタン -->
 									<a href="${scheduleUrl}" class="diag-link-button">スケジュール作成はこちら</a>
 								</c:when>
@@ -177,7 +179,7 @@
 
 				<!-- 保存ボタン -->
 				<div class="section-btn-row">
-					<button type="submit" class="save-btn">更新</button>
+					<button type="submit" class="save-btn">保存</button>
 				</div>
 			</c:if>
 		</form>
@@ -187,12 +189,12 @@
 			<h3>${subject}の模試結果推移</h3>
 			<!-- 模試名選択 -->
 			<div class="exam-selector">
-				<label for="examNameSelect">模試名を選択:</label>
-				<select id="examNameSelect" onchange="updateChart()">
+				<label for="examNameSelect">模試名を選択:</label> <select
+					id="examNameSelect" onchange="updateChart()">
 					<option value="">すべての模試</option>
 				</select>
 			</div>
-			
+
 			<!-- グラフコンテナ -->
 			<div class="chart-container">
 				<canvas id="examChart"></canvas>
@@ -250,27 +252,95 @@
 		style="display: none;"></div>
 
 	<script src="<c:url value='/js/SubjectResult.js' />"></script>
-	
+
+	<!-- JSPファイルの<script>タグ内を以下に置き換える -->
 	<script>
-		// 模試データをJavaScriptに渡す
-		var examData = [];
-		<c:forEach var="exam" items="${subjectData.examResults}">
-			examData.push({
-				examName: "${exam.examName}",
-				examDate: "<fmt:formatDate value='${exam.examDate}' pattern='yyyy-MM-dd' />",
-				score: ${exam.score},
-				deviationValue: ${exam.deviationValue},
-				averageScore: ${exam.averageScore}
-			});
-		</c:forEach>
+    // 模試データをJavaScriptに渡す
+    var examData = [];
+    <c:forEach var="exam" items="${subjectData.examResults}">
+        examData.push({
+            examName: "${fn:escapeXml(exam.examName)}",
+            examDate: "<fmt:formatDate value='${exam.examDate}' pattern='yyyy-MM-dd' />",
+            score: ${exam.score},
+            deviationValue: ${exam.deviationValue},
+            averageScore: ${exam.averageScore}
+        });
+    </c:forEach>
 
-		// 現在の教科名
-		var currentSubject = "${subject}";
+    // 現在の教科名
+    var currentSubject = "${fn:escapeXml(subject)}";
 
-		// ページ読み込み時にチャートを初期化
-		document.addEventListener('DOMContentLoaded', function() {
-			initializeExamChart(examData, currentSubject);
-		});
-	</script>
+    // デバッグ情報の出力
+    console.log('Exam data:', examData);
+    console.log('Current subject:', currentSubject);
+    console.log('Chart.js available:', typeof Chart !== 'undefined');
+
+    // チャート初期化関数の安全な呼び出し
+    function safeInitializeChart() {
+        console.log('Attempting to initialize chart...');
+        
+        // Chart.jsの確認
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js is not loaded');
+            return;
+        }
+        
+        // 必要な要素の確認
+        const chartCanvas = document.getElementById('examChart');
+        const selectElement = document.getElementById('examNameSelect');
+        
+        if (!chartCanvas) {
+            console.error('Chart canvas element not found');
+            return;
+        }
+        
+        if (!selectElement) {
+            console.error('Select element not found');
+            return;
+        }
+        
+        // チャート初期化関数の確認と実行
+        if (typeof initializeExamChart === 'function') {
+            const success = initializeExamChart(examData, currentSubject);
+            if (success) {
+                console.log('Chart initialization successful');
+            } else {
+                console.error('Chart initialization failed');
+            }
+        } else {
+            console.error('initializeExamChart function not found');
+            // 少し待ってから再試行
+            setTimeout(function() {
+                if (typeof initializeExamChart === 'function') {
+                    const success = initializeExamChart(examData, currentSubject);
+                    if (success) {
+                        console.log('Chart initialization successful (retry)');
+                    } else {
+                        console.error('Chart initialization failed (retry)');
+                    }
+                } else {
+                    console.error('initializeExamChart function still not found after retry');
+                }
+            }, 500);
+        }
+    }
+
+    // 複数のタイミングで初期化を試行
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', safeInitializeChart);
+    } else {
+        // DOMが既に読み込まれている場合は即座に実行
+        safeInitializeChart();
+    }
+    
+    // 追加の安全策として、window.onloadでも試行
+    window.addEventListener('load', function() {
+        // チャートが初期化されていない場合のみ実行
+        if (!window.examChartInstance || !window.examChartInstance.chart) {
+            console.log('Retrying chart initialization on window load...');
+            safeInitializeChart();
+        }
+    });
+</script>
 </body>
 </html>

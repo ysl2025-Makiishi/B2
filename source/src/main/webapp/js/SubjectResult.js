@@ -1,4 +1,7 @@
-// SubjectResult.js - JSPから分離されたJavaScript（模試グラフ機能を含む）
+// SubjectResult.js - 修正版（グラフ表示問題を解決）
+
+// グローバル変数の初期化
+window.examChartInstance = null;
 
 // ページ読み込み時にコンテキストデータを取得
 document.addEventListener('DOMContentLoaded', function() {
@@ -156,28 +159,7 @@ function validateExamData(examName, examDate, score, deviationValue, averageScor
     return true;
 }
 
-/**
- * フォーム送信用のヘルパー関数
- * @param {Object} fields - 送信するフィールドのオブジェクト
- */
-function submitForm(fields) {
-    const form = document.createElement('form');
-    form.method = 'post';
-    form.action = window.subjectResultConfig.servletUrl;
-    
-    for (const [key, value] of Object.entries(fields)) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = value;
-        form.appendChild(input);
-    }
-    
-    document.body.appendChild(form);
-    form.submit();
-}
-
-// ========== 模試グラフ機能 ==========
+// ========== 模試グラフ機能（修正版） ==========
 
 class ExamChart {
     constructor() {
@@ -190,18 +172,31 @@ class ExamChart {
 
     // 初期化
     initialize(examData, currentSubject) {
+        console.log('Initializing chart with data:', examData);
+        
         this.examData = examData || [];
         this.currentSubject = currentSubject;
         this.chartContainer = document.getElementById('examChart');
         this.examNameSelect = document.getElementById('examNameSelect');
 
-        if (!this.chartContainer || !this.examNameSelect) {
-            console.error('Chart container or select element not found');
-            return;
+        if (!this.chartContainer) {
+            console.error('Chart container (examChart) not found');
+            return false;
+        }
+
+        if (!this.examNameSelect) {
+            console.error('Exam name select element not found');
+            return false;
+        }
+
+        // Chart.jsの確認
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js is not loaded');
+            return false;
         }
 
         this.setupExamNameOptions();
-        this.initializeChart();
+        return this.initializeChart();
     }
 
     // 模試名の選択肢を設定
@@ -224,132 +219,148 @@ class ExamChart {
 
     // 教科に応じた縦軸の最大値を取得
     getScoreAxisMax() {
-        // subjectId=10が総合、それ以外は個別教科
+        // 総合の場合は500点、それ以外は100点
         return (this.currentSubject === '総合') ? 500 : 100;
     }
 
-    // Chart.js初期化
+    // Chart.js初期化（修正版）
     initializeChart() {
-        if (!this.chartContainer) return;
+        if (!this.chartContainer) return false;
 
-        const ctx = this.chartContainer.getContext('2d');
-        const scoreMax = this.getScoreAxisMax();
-        
-        this.chart = new Chart(ctx, {
-            type: 'bar', // barに変更
-            data: {
-                labels: [],
-                datasets: []
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
+        try {
+            const ctx = this.chartContainer.getContext('2d');
+            const scoreMax = this.getScoreAxisMax();
+            
+            // 既存のチャートがあれば破棄
+            if (this.chart) {
+                this.chart.destroy();
+            }
+            
+            this.chart = new Chart(ctx, {
+                type: 'bar', // メインタイプを棒グラフに設定
+                data: {
+                    labels: [],
+                    datasets: []
                 },
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: '実施日',
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.1)'
-                        }
-                    },
-                    y: {
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        title: {
-                            display: true,
-                            text: '点数・平均点',
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            }
-                        },
-                        min: 0,
-                        max: scoreMax,
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.1)'
-                        }
-                    },
-                    y1: {
-                        type: 'linear',
-                        display: true,
-                        position: 'right',
-                        title: {
-                            display: true,
-                            text: '偏差値',
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            }
-                        },
-                        min: 30,
-                        max: 80,
-                        grid: {
-                            drawOnChartArea: false,
-                        },
-                    }
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: '模試結果推移グラフ',
-                        font: {
-                            size: 16,
-                            weight: 'bold'
-                        }
-                    },
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            usePointStyle: true,
-                            padding: 20
-                        }
-                    },
-                    tooltip: {
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
                         mode: 'index',
                         intersect: false,
-                        callbacks: {
-                            title: function(context) {
-                                return '実施日: ' + context[0].label;
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: '実施日',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
                             },
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: '点数・平均点',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
                                 }
-                                label += context.parsed.y;
-                                
-                                // 偏差値以外は点を追加
-                                if (context.datasetIndex !== 2) {
-                                    label += '点';
+                            },
+                            min: 0,
+                            max: scoreMax,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: '偏差値',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
                                 }
-                                
-                                return label;
+                            },
+                            min: 30,
+                            max: 80,
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '模試結果推移グラフ',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                title: function(context) {
+                                    return '実施日: ' + context[0].label;
+                                },
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += context.parsed.y;
+                                    
+                                    // 偏差値以外は点を追加
+                                    if (context.dataset.label !== '偏差値') {
+                                        label += '点';
+                                    }
+                                    
+                                    return label;
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
 
-        this.updateChart();
+            console.log('Chart created successfully');
+            this.updateChart();
+            return true;
+            
+        } catch (error) {
+            console.error('Error creating chart:', error);
+            return false;
+        }
     }
 
-    // チャート更新
+    // チャート更新（修正版）
     updateChart() {
-        if (!this.chart || !this.examNameSelect) return;
+        if (!this.chart || !this.examNameSelect) {
+            console.error('Chart or select element not available for update');
+            return;
+        }
 
         const selectedExam = this.examNameSelect.value;
         
@@ -359,11 +370,14 @@ class ExamChart {
             filteredData = this.examData.filter(exam => exam.examName === selectedExam);
         }
 
+        console.log('Filtered data:', filteredData);
+
         // データが空の場合
         if (filteredData.length === 0) {
             this.chart.data.labels = [];
             this.chart.data.datasets = [];
             this.chart.update();
+            console.log('No data to display');
             return;
         }
 
@@ -377,15 +391,15 @@ class ExamChart {
         const datasets = [
             {
                 label: '偏差値',
-                data: filteredData.map(exam => exam.deviationValue),
+                data: filteredData.map(exam => parseFloat(exam.deviationValue)),
                 borderColor: 'rgb(34, 139, 34)',
-                backgroundColor: 'rgba(34, 139, 34, 0.8)',
+                backgroundColor: 'rgba(34, 139, 34, 0.1)',
                 borderWidth: 4,
-                pointRadius: 6,
-                pointHoverRadius: 8,
+                pointRadius: 8,
+                pointHoverRadius: 10,
                 pointBackgroundColor: 'rgb(34, 139, 34)',
                 pointBorderColor: 'rgb(255, 255, 255)',
-                pointBorderWidth: 2,
+                pointBorderWidth: 3,
                 yAxisID: 'y1',
                 type: 'line',
                 tension: 0.3,
@@ -394,7 +408,7 @@ class ExamChart {
             },
             {
                 label: '私の点数',
-                data: filteredData.map(exam => exam.score),
+                data: filteredData.map(exam => parseFloat(exam.score)),
                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
                 borderColor: 'rgb(54, 162, 235)',
                 borderWidth: 2,
@@ -404,7 +418,7 @@ class ExamChart {
             },
             {
                 label: '平均点',
-                data: filteredData.map(exam => exam.averageScore),
+                data: filteredData.map(exam => parseFloat(exam.averageScore)),
                 backgroundColor: 'rgba(255, 99, 132, 0.6)',
                 borderColor: 'rgb(255, 99, 132)',
                 borderWidth: 2,
@@ -421,7 +435,9 @@ class ExamChart {
         // チャートを更新
         this.chart.data.labels = labels;
         this.chart.data.datasets = datasets;
-        this.chart.update('active');
+        this.chart.update();
+        
+        console.log('Chart updated successfully');
     }
 
     // チャート破棄
@@ -429,6 +445,7 @@ class ExamChart {
         if (this.chart) {
             this.chart.destroy();
             this.chart = null;
+            console.log('Chart destroyed');
         }
     }
 
@@ -441,22 +458,55 @@ class ExamChart {
     }
 }
 
-// グローバル変数としてチャートインスタンスを保持
-let examChartInstance = null;
-
 // チャート初期化関数（グローバル）
 function initializeExamChart(examData, currentSubject) {
-    if (examChartInstance) {
-        examChartInstance.destroy();
-    }
+    console.log('initializeExamChart called with:', examData, currentSubject);
     
-    examChartInstance = new ExamChart();
-    examChartInstance.initialize(examData, currentSubject);
+    try {
+        // 既存のインスタンスを破棄
+        if (window.examChartInstance) {
+            window.examChartInstance.destroy();
+        }
+        
+        // 新しいインスタンスを作成
+        window.examChartInstance = new ExamChart();
+        const success = window.examChartInstance.initialize(examData, currentSubject);
+        
+        if (success) {
+            console.log('Chart initialized successfully');
+        } else {
+            console.error('Chart initialization failed');
+        }
+        
+        return success;
+    } catch (error) {
+        console.error('Error initializing chart:', error);
+        return false;
+    }
 }
 
 // チャート更新関数（グローバル、select要素のonchangeから呼ばれる）
 function updateChart() {
-    if (examChartInstance) {
-        examChartInstance.updateChart();
+    try {
+        if (window.examChartInstance && window.examChartInstance.chart) {
+            window.examChartInstance.updateChart();
+        } else {
+            console.warn('Chart instance not found for update');
+        }
+    } catch (error) {
+        console.error('Error updating chart:', error);
     }
 }
+
+// Chart.jsが読み込まれているかチェック
+function checkChartJsLoaded() {
+    const loaded = typeof Chart !== 'undefined';
+    console.log('Chart.js loaded:', loaded);
+    return loaded;
+}
+
+// グローバルスコープで関数を確実に利用可能にする
+window.initializeExamChart = initializeExamChart;
+window.updateChart = updateChart;
+window.ExamChart = ExamChart;
+window.checkChartJsLoaded = checkChartJsLoaded;

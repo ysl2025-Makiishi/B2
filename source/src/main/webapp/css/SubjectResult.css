@@ -841,3 +841,32 @@ button[type="submit"].save-btn:active {
         max-width: 250px;
     }
 }
+
+/* グラフ表示用CSS */
+.chart-container {
+    position: relative;
+    height: 400px;
+    width: 100%;
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.exam-selector {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.exam-selector label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.exam-selector select {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
