@@ -112,7 +112,7 @@
 							<a href="${textUrl}" class="diag-link-button">テキスト選出はこちら</a>
 						</div>
 						<div class="field">
-							<label for="schedule">スケジュール作成</label>
+							<label for="schedule">スケジュール作成(先にテキストをお選びください。)</label>
 							<c:choose>
 								<c:when test="${not empty subjectData.schedule}">
 									<span>${subjectData.schedule}</span>
@@ -125,7 +125,17 @@
 								<c:param name="studentId" value="${studentId}" />
 								<c:param name="subjectId" value="${subjectId}" />
 							</c:url>
-							<a href="${scheduleUrl}" class="diag-link-button">スケジュール作成はこちら</a>
+							<!-- テキスト選出の有無で条件分岐 -->
+							<c:choose>
+								<c:when test="${not empty subjectData.textSelection and subjectData.textSelection != 'null' and subjectData.textSelection != '未選出'}">
+									<!-- テキスト選出済み：通常のボタン -->
+									<a href="${scheduleUrl}" class="diag-link-button">スケジュール作成はこちら</a>
+								</c:when>
+								<c:otherwise>
+									<!-- テキスト未選出：無効化ボタン -->
+									<span class="diag-link-button-disabled" title="先にテキストを選出してください">スケジュール作成はこちら</span>
+								</c:otherwise>
+							</c:choose>
 						</div>
 						<div class="field">
 							<label for="homework_pages">宿題ページ数</label>
