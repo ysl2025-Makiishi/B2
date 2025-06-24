@@ -25,41 +25,61 @@ public class ScheduleDAO {
      */
 
     public boolean upsertPages(schedules schedule) {
-        String updateSql = "UPDATE schedules SET pages = ? WHERE student_id = ? AND subject_id = ?";
-        String insertSql = "INSERT INTO schedules (student_id, subject_id, pages) VALUES (?, ?, ?)";
+        String checkSql = "SELECT 1 FROM schedules WHERE student_id = ? AND subject_id = ?";
+        String updateSql = "UPDATE schedules SET pages = ?, text_id = ? WHERE student_id = ? AND subject_id = ?";
+        String insertSql = "INSERT INTO schedules (student_id, subject_id, text_id, pages) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = getConnection()) {
-        	ensureStudentExists(schedule.getStudent_id(), conn);
+            ensureStudentExists(schedule.getStudent_id(), conn);
             ensureSubjectExists(schedule.getSubject_id(), conn);
-            // 1. UPDATE を試みる
-            try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
-                updateStmt.setInt(1, schedule.getPages());
-                updateStmt.setInt(2, schedule.getStudent_id());
-                updateStmt.setInt(3, schedule.getSubject_id());
 
-                int updated = updateStmt.executeUpdate();
+            // 1. レコード存在チェック
+            try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+                checkStmt.setInt(1, schedule.getStudent_id());
+                checkStmt.setInt(2, schedule.getSubject_id());
+                var rs = checkStmt.executeQuery();
+                if (rs.next()) {
+                    // レコードが存在する → UPDATE
+                    try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+                        updateStmt.setInt(1, schedule.getPages());
+                        if (schedule.getText_id() == 0) {
+                            updateStmt.setNull(2, java.sql.Types.INTEGER);
+                        } else {
+                            updateStmt.setInt(2, schedule.getText_id());
+                        }
 
-                // 更新できたら true を返す
-                if (updated > 0) {
-                    return true;
+
+                        updateStmt.setInt(3, schedule.getStudent_id());
+                        updateStmt.setInt(4, schedule.getSubject_id());
+                        int updated = updateStmt.executeUpdate();
+                        return updated > 0;
+                    }
+                } else {
+                    // レコードが存在しない → INSERT
+                    try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+                        insertStmt.setInt(1, schedule.getStudent_id());
+                        insertStmt.setInt(2, schedule.getSubject_id());
+                        if (schedule.getText_id() == 0) {
+                            insertStmt.setNull(3, java.sql.Types.INTEGER); // ← ここ重要！
+                        } else {
+                            insertStmt.setInt(3, schedule.getText_id());
+                        }
+
+
+
+                        insertStmt.setInt(4, schedule.getPages());
+                        int inserted = insertStmt.executeUpdate();
+                        return inserted > 0;
+                    }
                 }
             }
-
-            // 2. UPDATE が 0 行 → INSERT を試みる
-            try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
-                insertStmt.setInt(1, schedule.getStudent_id());
-                insertStmt.setInt(2, schedule.getSubject_id());
-                insertStmt.setInt(3, schedule.getPages());
-
-                int inserted = insertStmt.executeUpdate();
-                return inserted > 0;
-            }
-
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
+            System.err.println("DB登録エラー: " + e.getMessage());
             return false;
         }
     }
+
 
 
 private void ensureStudentExists(int studentId, Connection conn) throws SQLException {
@@ -102,3 +122,4 @@ private void ensureSubjectExists(int subjectId, Connection conn) throws SQLExcep
     }
 }
 }
+

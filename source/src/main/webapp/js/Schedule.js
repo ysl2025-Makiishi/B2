@@ -70,3 +70,6 @@ window.addEventListener('DOMContentLoaded', function() {
     // target_date に最小日付を設定（過去の日は選べなくなる）
     document.getElementById('target_date').min = todayString;
 });
+
+
+
