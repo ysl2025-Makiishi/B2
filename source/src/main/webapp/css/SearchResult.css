@@ -211,6 +211,7 @@ h2 {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
+
 /* 削除ボタンの基本スタイル */
 input[type="submit"][value="削除"] {
     background-color: var(--color-primary);
@@ -247,6 +248,7 @@ input[type="submit"][value="削除"]:active {
     width: 100%;
     }
     .student-card {
+     position: relative; 
 	  border: 1px solid #d1d1d1;
 	  padding: 20px;
 	  background: #ffffff;
