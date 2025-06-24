@@ -26,13 +26,32 @@ public class ScheduleServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
 
-        // ★ テスト的に studentId と subjectId を仮でセットしてみる
-        request.setAttribute("studentId", 1);
-        request.setAttribute("subjectId", 1);
+        // URLパラメータから取得
+        String studentIdStr = request.getParameter("studentId");
+        String subjectIdStr = request.getParameter("subjectId");
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp");
-        dispatcher.forward(request, response);
+        if (studentIdStr == null || subjectIdStr == null) {
+            request.setAttribute("error", "生徒または科目が指定されていません。");
+            request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
+            return;
+        }
+
+        try {
+            int studentId = Integer.parseInt(studentIdStr);
+            int subjectId = Integer.parseInt(subjectIdStr);
+
+            request.setAttribute("studentId", studentId);
+            request.setAttribute("subjectId", subjectId);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp");
+            dispatcher.forward(request, response);
+
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "不正なIDが指定されました。");
+            request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
+        }
     }
+
 
 
     // POSTメソッド（登録処理）
@@ -44,13 +63,17 @@ public class ScheduleServlet extends HttpServlet {
         try {
             int studentId = Integer.parseInt(request.getParameter("studentId"));
             int subjectId = Integer.parseInt(request.getParameter("subjectId"));
-            String pageStr = request.getParameter("page");
 
-            System.out.println("DEBUG: studentId = " + studentId);
-            System.out.println("DEBUG: subjectId = " + subjectId);
-            System.out.println("DEBUG: page = " + pageStr);
+            // JavaScriptで設定された計算済みページ数を取得
+            String calculatedPageStr = request.getParameter("calculated_page");
 
-            int pages = Integer.parseInt(pageStr);
+            if (calculatedPageStr == null || calculatedPageStr.isEmpty()) {
+                request.setAttribute("error", "ページ数が計算されていません。");
+                request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
+                return;
+            }
+
+            int pages = Integer.parseInt(calculatedPageStr);
 
             schedules schedule = new schedules();
             schedule.setStudent_id(studentId);
@@ -59,7 +82,6 @@ public class ScheduleServlet extends HttpServlet {
 
             ScheduleDAO dao = new ScheduleDAO();
             boolean success = dao.upsertPages(schedule);
-
 
             System.out.println("DEBUG: DAO update result = " + success);
 
@@ -76,4 +98,5 @@ public class ScheduleServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
         }
     }
+
 }
