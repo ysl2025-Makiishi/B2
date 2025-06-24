@@ -24,8 +24,8 @@ public class SubjectResultDAO {
 		result.setStudentId(studentId);
 		result.setSubjectId(subjectId);
 
-//		System.out.println("=== SubjectData取得開始 ===");
-//		System.out.println("studentId = " + studentId + ", subjectId = " + subjectId);
+		System.out.println("=== SubjectData取得開始 ===");
+		System.out.println("studentId = " + studentId + ", subjectId = " + subjectId);
 
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 			// reports テーブルから学習データを取得
@@ -75,18 +75,25 @@ public class SubjectResultDAO {
 					SELECT t.text_name
 					FROM schedules s
 					JOIN texts t ON s.text_id = t.id
-					WHERE s.student_id = ? AND s.subject_id = ?
+					WHERE s.student_id = ? AND s.subject_id = ? AND t.subject_id = s.subject_id
 					""";
+			System.out.println("テキスト選出SQL: " + textSql);
+			System.out.println("パラメータ: studentId=" + studentId + ", subjectId=" + subjectId);
+
 			try (PreparedStatement ps = conn.prepareStatement(textSql)) {
 				ps.setInt(1, studentId);
 				ps.setInt(2, subjectId);
 				ResultSet rs = ps.executeQuery();
 				if (rs.next()) {
-					result.setTextSelection(rs.getString("text_name"));
+					String textName = rs.getString("text_name");
+					result.setTextSelection(textName);
+					System.out.println("取得されたテキスト: " + textName);
+				} else {
+					System.out.println("テキストデータなし");
 				}
 				// データがない場合はnullのまま（未選出として表示される）
 			} catch (SQLException e) {
-				// System.out.println("テキスト選出取得エラー: " + e.getMessage());
+				System.out.println("テキスト選出取得エラー: " + e.getMessage());
 			}
 
 			// schedules テーブルからスケジュールを取得
@@ -94,17 +101,23 @@ public class SubjectResultDAO {
 					SELECT t.text_name, s.pages
 					FROM schedules s
 					JOIN texts t ON s.text_id = t.id
-					WHERE s.student_id = ? AND t.subject_id = ?
+					WHERE s.student_id = ? AND s.subject_id = ? AND t.subject_id = s.subject_id
 					""";
+			System.out.println("スケジュールSQL: " + scheduleSql);
+
 			try (PreparedStatement ps = conn.prepareStatement(scheduleSql)) {
 				ps.setInt(1, studentId);
 				ps.setInt(2, subjectId);
 				ResultSet rs = ps.executeQuery();
 				if (rs.next()) {
-					result.setSchedule(rs.getString("text_name") + " " + rs.getInt("pages") + "ページ");
+					String schedule = rs.getString("text_name") + " " + rs.getInt("pages") + "ページ";
+					result.setSchedule(schedule);
+					System.out.println("取得されたスケジュール: " + schedule);
+				} else {
+					System.out.println("スケジュールデータなし");
 				}
 			} catch (SQLException e) {
-//				System.out.println("スケジュール取得エラー: " + e.getMessage());
+				System.out.println("スケジュール取得エラー: " + e.getMessage());
 			}
 
 			// homeworks テーブルから宿題ページ数を取得
@@ -129,11 +142,11 @@ public class SubjectResultDAO {
 			}
 
 		} catch (SQLException e) {
-//			System.out.println("DB接続エラー: " + e.getMessage());
+			System.out.println("DB接続エラー: " + e.getMessage());
 			e.printStackTrace();
 		}
 
-//		System.out.println("=== SubjectData取得完了 ===");
+		System.out.println("=== SubjectData取得完了 ===");
 		return result;
 	}
 
