@@ -44,11 +44,11 @@
 			<li><a
 				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=2' />">数学</a></li>
 			<li><a
+				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=3' />">英語</a></li>
+			<li><a
 				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=4' />">理科</a></li>
 			<li><a
 				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=5' />">社会</a></li>
-			<li><a
-				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=3' />">英語</a></li>
 			<li><a
 				href="<c:url value='/SubjectResultServlet?studentId=${student.id}&subjectId=10' />">総合</a></li>
 		</ul>
