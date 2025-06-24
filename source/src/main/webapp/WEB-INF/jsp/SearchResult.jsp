@@ -52,32 +52,33 @@
         <c:when test="${not empty studentList}">
             <div class="student-grid">
                 <c:forEach var="s" items="${studentList}">
-               <div class="student-card-wrapper">
-  <div class="student-card" style="position: relative;">
-    <a href="${detailUrl}" style="text-decoration: none; color: inherit; display: block;">
-      <p><strong>氏名:</strong> <span class="name">${s.name}</span></p>
-      <p><strong>学校名:</strong> ${s.school_name}</p>
-      <p>
-        <strong>性別:</strong>
-        <c:choose>
-          <c:when test="${s.gender == 'M'}">男</c:when>
-          <c:when test="${s.gender == 'F'}">女</c:when>
-          <c:otherwise>無回答</c:otherwise>
-        </c:choose>
-      </p>
-    </a>
+  <div class="student-card-wrapper">
+    <c:url var="detailUrl" value="/IndividualResultsServlet">
+        <c:param name="studentId" value="${s.id}" />
+    </c:url>
+    <div class="student-card" style="position: relative;">
+      <a href="${detailUrl}" style="text-decoration: none; color: inherit; display: block;">
+        <p><strong>氏名:</strong> <span class="name">${s.name}</span></p>
+        <p><strong>学校名:</strong> ${s.school_name}</p>
+        <p>
+          <strong>性別:</strong>
+          <c:choose>
+            <c:when test="${s.gender == 'M'}">男</c:when>
+            <c:when test="${s.gender == 'F'}">女</c:when>
+            <c:otherwise>無回答</c:otherwise>
+          </c:choose>
+        </p>
+      </a>
 
-    <!-- 削除ボタンをカードの右中央に配置 -->
-    <form action="SearchResultServlet" method="post"
-          onsubmit="return confirm('本当にこの生徒を削除しますか？');"
-          style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); z-index: 1;">
-      <input type="hidden" name="deleteId" value="${s.id}" />
-      <input type="submit" value="削除" />
-    </form>
+      <form action="SearchResultServlet" method="post"
+            onsubmit="return confirm('本当にこの生徒を削除しますか？');"
+            style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); z-index: 1;">
+        <input type="hidden" name="deleteId" value="${s.id}" />
+        <input type="submit" value="削除" />
+      </form>
+    </div>
   </div>
-</div>
-                    
-                </c:forEach>
+</c:forEach>
             </div>
 
             <!-- ページネーション -->
