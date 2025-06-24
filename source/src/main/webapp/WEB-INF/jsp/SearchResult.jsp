@@ -63,8 +63,8 @@
         <p>
           <strong>性別:</strong>
           <c:choose>
-            <c:when test="${s.gender == 'M'}">男</c:when>
-            <c:when test="${s.gender == 'F'}">女</c:when>
+            <c:when test="${s.gender == 'M'}">男性</c:when>
+            <c:when test="${s.gender == 'F'}">女性</c:when>
             <c:otherwise>無回答</c:otherwise>
           </c:choose>
         </p>
