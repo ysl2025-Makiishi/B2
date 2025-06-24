@@ -1,122 +1,15 @@
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const section = btn.closest('section');
-      const inputs = section.querySelectorAll('input, textarea');
-      inputs.forEach(input => {
-        input.removeAttribute('readonly');
-      });
-
-      // 保存ボタンがなければ追加
-      const btnRow = btn.closest('.section-btn-row');
-      if (!btnRow.querySelector('.save-btn')) {
-        const saveBtn = document.createElement('button');
-        saveBtn.type = 'submit';
-        saveBtn.textContent = '保存';
-        saveBtn.classList.add('save-btn');
-        btnRow.appendChild(saveBtn);
-      }
-    });
-  });
-});
-
-function updateUnderstanding() {
-            const understanding = document.getElementById('understanding').value;
-            
-            const form = document.createElement('form');
-            form.method = 'post';
-            form.action = '<c:url value="/SubjectResultServlet" />';
-            
-            const fields = {
-                action: 'updateUnderstanding',
-                understanding: understanding,
-                studentId: '${studentId}',
-                subjectId: '${subjectId}'
-            };
-            
-            for (const [key, value] of Object.entries(fields)) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = value;
-                form.appendChild(input);
-            }
-            
-            document.body.appendChild(form);
-            form.submit();
-        }
-        
-        function updateExam(examId) {
-            const examName = document.getElementById('examName_' + examId).value;
-            const examDate = document.getElementById('examDate_' + examId).value;
-            const score = document.getElementById('score_' + examId).value;
-            const deviationValue = document.getElementById('dev_' + examId).value;
-            const averageScore = document.getElementById('avg_' + examId).value;
-            
-            const form = document.createElement('form');
-            form.method = 'post';
-            form.action = '<c:url value="/SubjectResultServlet" />';
-            
-            const fields = {
-                action: 'updateExam',
-                examId: examId,
-                examName: examName,
-                examDate: examDate,
-                score: score,
-                deviationValue: deviationValue,
-                averageScore: averageScore,
-                studentId: '${studentId}',
-                subjectId: '${subjectId}'
-            };
-            
-            for (const [key, value] of Object.entries(fields)) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = value;
-                form.appendChild(input);
-            }
-            
-            document.body.appendChild(form);
-            form.submit();
-        }
-        
-        function deleteExam(examId) {
-            if (confirm('この模試結果を削除しますか？')) {
-                const form = document.createElement('form');
-                form.method = 'post';
-                form.action = '<c:url value="/SubjectResultServlet" />';
-                
-                const fields = {
-                    action: 'deleteExam',
-                    examId: examId,
-                    studentId: '${studentId}',
-                    subjectId: '${subjectId}'
-                };
-                
-                for (const [key, value] of Object.entries(fields)) {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = key;
-                    input.value = value;
-                    form.appendChild(input);
-                }
-                
-                document.body.appendChild(form);
-                form.submit();
-            }
-        }
-        
-        // SubjectResult.js - JSPから分離されたJavaScript
+// SubjectResult.js - JSPから分離されたJavaScript（模試グラフ機能を含む）
 
 // ページ読み込み時にコンテキストデータを取得
 document.addEventListener('DOMContentLoaded', function() {
     const contextData = document.getElementById('contextData');
-    window.subjectResultConfig = {
-        studentId: contextData.getAttribute('data-student-id'),
-        subjectId: contextData.getAttribute('data-subject-id'),
-        servletUrl: contextData.getAttribute('data-servlet-url')
-    };
+    if (contextData) {
+        window.subjectResultConfig = {
+            studentId: contextData.getAttribute('data-student-id'),
+            subjectId: contextData.getAttribute('data-subject-id'),
+            servletUrl: contextData.getAttribute('data-servlet-url')
+        };
+    }
 });
 
 /**
@@ -243,8 +136,8 @@ function validateExamData(examName, examDate, score, deviationValue, averageScor
     }
     
     const scoreNum = parseFloat(score);
-    if (isNaN(scoreNum) || scoreNum < 0 || scoreNum > 100) {
-        alert('点数は0-100の範囲で入力してください。');
+    if (isNaN(scoreNum) || scoreNum < 0) {
+        alert('点数は0以上の数値で入力してください。');
         return false;
     }
     
@@ -255,8 +148,8 @@ function validateExamData(examName, examDate, score, deviationValue, averageScor
     }
     
     const avgNum = parseFloat(averageScore);
-    if (isNaN(avgNum) || avgNum < 0 || avgNum > 100) {
-        alert('平均点は0-100の範囲で入力してください。');
+    if (isNaN(avgNum) || avgNum < 0) {
+        alert('平均点は0以上の数値で入力してください。');
         return false;
     }
     
@@ -282,4 +175,288 @@ function submitForm(fields) {
     
     document.body.appendChild(form);
     form.submit();
+}
+
+// ========== 模試グラフ機能 ==========
+
+class ExamChart {
+    constructor() {
+        this.chart = null;
+        this.examData = [];
+        this.chartContainer = null;
+        this.examNameSelect = null;
+        this.currentSubject = null;
+    }
+
+    // 初期化
+    initialize(examData, currentSubject) {
+        this.examData = examData || [];
+        this.currentSubject = currentSubject;
+        this.chartContainer = document.getElementById('examChart');
+        this.examNameSelect = document.getElementById('examNameSelect');
+
+        if (!this.chartContainer || !this.examNameSelect) {
+            console.error('Chart container or select element not found');
+            return;
+        }
+
+        this.setupExamNameOptions();
+        this.initializeChart();
+    }
+
+    // 模試名の選択肢を設定
+    setupExamNameOptions() {
+        // 既存のオプションをクリア（初期オプション以外）
+        while (this.examNameSelect.children.length > 1) {
+            this.examNameSelect.removeChild(this.examNameSelect.lastChild);
+        }
+
+        // ユニークな模試名を取得
+        const uniqueExamNames = [...new Set(this.examData.map(exam => exam.examName))];
+        
+        uniqueExamNames.forEach(examName => {
+            const option = document.createElement('option');
+            option.value = examName;
+            option.textContent = examName;
+            this.examNameSelect.appendChild(option);
+        });
+    }
+
+    // 教科に応じた縦軸の最大値を取得
+    getScoreAxisMax() {
+        // subjectId=10が総合、それ以外は個別教科
+        return (this.currentSubject === '総合') ? 500 : 100;
+    }
+
+    // Chart.js初期化
+    initializeChart() {
+        if (!this.chartContainer) return;
+
+        const ctx = this.chartContainer.getContext('2d');
+        const scoreMax = this.getScoreAxisMax();
+        
+        this.chart = new Chart(ctx, {
+            type: 'bar', // barに変更
+            data: {
+                labels: [],
+                datasets: []
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: '実施日',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: '点数・平均点',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        min: 0,
+                        max: scoreMax,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: '偏差値',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        min: 30,
+                        max: 80,
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '模試結果推移グラフ',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    },
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            title: function(context) {
+                                return '実施日: ' + context[0].label;
+                            },
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += context.parsed.y;
+                                
+                                // 偏差値以外は点を追加
+                                if (context.datasetIndex !== 2) {
+                                    label += '点';
+                                }
+                                
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        this.updateChart();
+    }
+
+    // チャート更新
+    updateChart() {
+        if (!this.chart || !this.examNameSelect) return;
+
+        const selectedExam = this.examNameSelect.value;
+        
+        // データをフィルタリング
+        let filteredData = this.examData;
+        if (selectedExam && selectedExam !== '') {
+            filteredData = this.examData.filter(exam => exam.examName === selectedExam);
+        }
+
+        // データが空の場合
+        if (filteredData.length === 0) {
+            this.chart.data.labels = [];
+            this.chart.data.datasets = [];
+            this.chart.update();
+            return;
+        }
+
+        // 日付順にソート
+        filteredData.sort((a, b) => new Date(a.examDate) - new Date(b.examDate));
+
+        // ラベル（実施日）を設定
+        const labels = filteredData.map(exam => exam.examDate);
+
+        // データセットを作成（偏差値を最初に配置して前面に表示）
+        const datasets = [
+            {
+                label: '偏差値',
+                data: filteredData.map(exam => exam.deviationValue),
+                borderColor: 'rgb(34, 139, 34)',
+                backgroundColor: 'rgba(34, 139, 34, 0.8)',
+                borderWidth: 4,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                pointBackgroundColor: 'rgb(34, 139, 34)',
+                pointBorderColor: 'rgb(255, 255, 255)',
+                pointBorderWidth: 2,
+                yAxisID: 'y1',
+                type: 'line',
+                tension: 0.3,
+                fill: false,
+                order: 1 // 描画順序を指定（数字が小さいほど前面）
+            },
+            {
+                label: '私の点数',
+                data: filteredData.map(exam => exam.score),
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgb(54, 162, 235)',
+                borderWidth: 2,
+                yAxisID: 'y',
+                type: 'bar',
+                order: 2
+            },
+            {
+                label: '平均点',
+                data: filteredData.map(exam => exam.averageScore),
+                backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                borderColor: 'rgb(255, 99, 132)',
+                borderWidth: 2,
+                yAxisID: 'y',
+                type: 'bar',
+                order: 3
+            }
+        ];
+
+        // 縦軸の最大値を更新
+        const scoreMax = this.getScoreAxisMax();
+        this.chart.options.scales.y.max = scoreMax;
+
+        // チャートを更新
+        this.chart.data.labels = labels;
+        this.chart.data.datasets = datasets;
+        this.chart.update('active');
+    }
+
+    // チャート破棄
+    destroy() {
+        if (this.chart) {
+            this.chart.destroy();
+            this.chart = null;
+        }
+    }
+
+    // データ更新
+    updateData(newExamData, currentSubject) {
+        this.examData = newExamData || [];
+        this.currentSubject = currentSubject;
+        this.setupExamNameOptions();
+        this.updateChart();
+    }
+}
+
+// グローバル変数としてチャートインスタンスを保持
+let examChartInstance = null;
+
+// チャート初期化関数（グローバル）
+function initializeExamChart(examData, currentSubject) {
+    if (examChartInstance) {
+        examChartInstance.destroy();
+    }
+    
+    examChartInstance = new ExamChart();
+    examChartInstance.initialize(examData, currentSubject);
+}
+
+// チャート更新関数（グローバル、select要素のonchangeから呼ばれる）
+function updateChart() {
+    if (examChartInstance) {
+        examChartInstance.updateChart();
+    }
 }

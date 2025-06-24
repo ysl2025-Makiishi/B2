@@ -232,7 +232,7 @@ LocalDate today = LocalDate.now();
 			
 			<!-- レーダーチャート追加 -->
 			<section class="centered">
-				<h3>成績レーダーチャート</h3>
+				<h3>最新の模試結果：成績レーダーチャート</h3>
 				<div class="radar-chart-container">
 					<div class="chart-header">
 						<h4 id="chartExamName">最新模試結果</h4>
@@ -260,7 +260,7 @@ LocalDate today = LocalDate.now();
 
 			<!-- 最新の模試結果 -->
 			<section class="centered">
-				<h3>最新の模試結果</h3>
+				<h3>模試結果一覧</h3>
 				<table>
 					<thead>
 						<tr>

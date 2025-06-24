@@ -10,6 +10,7 @@
 <title>${subject}の結果|K-Manage</title>
 <link rel="stylesheet" href="<c:url value='/css/K-style.css' />">
 <link rel="stylesheet" href="<c:url value='/css/SubjectResult.css' />">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 
 <body>
@@ -183,6 +184,22 @@
 
 		<!-- 模試結果 -->
 		<section class="centered">
+			<h3>${subject}の模試結果推移</h3>
+			<!-- 模試名選択 -->
+			<div class="exam-selector">
+				<label for="examNameSelect">模試名を選択:</label>
+				<select id="examNameSelect" onchange="updateChart()">
+					<option value="">すべての模試</option>
+				</select>
+			</div>
+			
+			<!-- グラフコンテナ -->
+			<div class="chart-container">
+				<canvas id="examChart"></canvas>
+			</div>
+		</section>
+
+		<section class="centered">
 			<h3>${subject}の模試結果一覧</h3>
 			<table>
 				<thead>
@@ -233,5 +250,27 @@
 		style="display: none;"></div>
 
 	<script src="<c:url value='/js/SubjectResult.js' />"></script>
+	
+	<script>
+		// 模試データをJavaScriptに渡す
+		var examData = [];
+		<c:forEach var="exam" items="${subjectData.examResults}">
+			examData.push({
+				examName: "${exam.examName}",
+				examDate: "<fmt:formatDate value='${exam.examDate}' pattern='yyyy-MM-dd' />",
+				score: ${exam.score},
+				deviationValue: ${exam.deviationValue},
+				averageScore: ${exam.averageScore}
+			});
+		</c:forEach>
+
+		// 現在の教科名
+		var currentSubject = "${subject}";
+
+		// ページ読み込み時にチャートを初期化
+		document.addEventListener('DOMContentLoaded', function() {
+			initializeExamChart(examData, currentSubject);
+		});
+	</script>
 </body>
 </html>
