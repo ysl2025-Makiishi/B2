@@ -58,7 +58,7 @@
                         </c:url>
                         <a href="${detailUrl}" style="text-decoration: none; color: inherit;">
                             <div class="student-card" style="cursor: pointer;">
-                                <p><strong>氏名:</strong> ${s.name}</p>
+                                <p><span class="label">氏名:</span> <span class="name">${s.name}</span></p>
                                 <p><strong>学校名:</strong> ${s.school_name}</p>
                                 <p>
                                     <strong>性別:</strong>
