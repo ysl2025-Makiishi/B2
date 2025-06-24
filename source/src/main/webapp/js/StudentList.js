@@ -34,8 +34,13 @@ document.getElementById("studentCount").textContent = students.length;
     for (const student of displayStudents) {
       const card = document.createElement("div");
       card.className = "student-card";
-      // 性別を「M → 男」「F → 女」に変換
-		let genderDisplay = student.gender === "M" ? "男性" : student.gender === "F" ? "女性" : student.gender;
+      
+		let genderDisplay = 
+		  student.gender === "M" ? "男性" :
+		  student.gender === "F" ? "女性" :
+		  student.gender === "O" ? "無回答" :
+		  student.gender;
+
 		
 		card.innerHTML = `
 		  <div class="student-row"><span class="label">氏名</span><span class="value name">${student.name}</span></div>

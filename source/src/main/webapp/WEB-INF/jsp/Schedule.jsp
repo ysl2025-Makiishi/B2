@@ -92,20 +92,30 @@
         
         <input type="hidden" name="studentId" value="${studentId}">
 		<input type="hidden" name="subjectId" value="${subjectId}">
+        <input type="hidden" name="textId" value="${textId != null ? textId : 1}">
+        
+        
+        
 		<input type="hidden" name="calculated_page" id="calculated_page">
 		
 		<!-- 最初は非表示の結果 -->
         <p id="result" style="display: none;">結果：　ページ進めよう！</p>
 		 <!-- 登録ボタン（非表示） -->
 		<div id="register_container" style="display: none; margin-top: 10px;">
-		    <input type="submit" name="action" value="登録" class="primary-button large-button">
+		    <button type="submit" class="primary-button large-button">登録</button>
 		</div>
+		
         </form>
         </div>
 
         <!-- 戻るボタン -->
         <div style="margin-top: 20px; text-align: left;">
-		  <a href="<c:url value='/IndividualResultsServlet' />" class="primary-button">科目ごと個人結果に戻る</a>
+		  <c:url var="backUrl" value="/SubjectResultServlet">
+			    <c:param name="studentId" value="${param.studentId}" />
+			    <c:param name="subjectId" value="${param.subjectId}" />
+			</c:url>
+			<a href="${backUrl}" class="primary-button">科目ごと個人結果に戻る</a>
+					  
 		</div>
         <!-- メイン（ここまで） -->
         <!-- フッター（ここから） -->
