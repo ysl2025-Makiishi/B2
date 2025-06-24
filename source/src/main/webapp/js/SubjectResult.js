@@ -172,7 +172,7 @@ class ExamChart {
 
     // 初期化
     initialize(examData, currentSubject) {
-        console.log('Initializing chart with data:', examData);
+        //console.log('Initializing chart with data:', examData);
         
         this.examData = examData || [];
         this.currentSubject = currentSubject;
@@ -180,18 +180,18 @@ class ExamChart {
         this.examNameSelect = document.getElementById('examNameSelect');
 
         if (!this.chartContainer) {
-            console.error('Chart container (examChart) not found');
+            //console.error('Chart container (examChart) not found');
             return false;
         }
 
         if (!this.examNameSelect) {
-            console.error('Exam name select element not found');
+            //console.error('Exam name select element not found');
             return false;
         }
 
         // Chart.jsの確認
         if (typeof Chart === 'undefined') {
-            console.error('Chart.js is not loaded');
+            //console.error('Chart.js is not loaded');
             return false;
         }
 
@@ -345,12 +345,12 @@ class ExamChart {
                 }
             });
 
-            console.log('Chart created successfully');
+            //console.log('Chart created successfully');
             this.updateChart();
             return true;
             
         } catch (error) {
-            console.error('Error creating chart:', error);
+            //console.error('Error creating chart:', error);
             return false;
         }
     }
@@ -358,7 +358,7 @@ class ExamChart {
     // チャート更新（修正版）
     updateChart() {
         if (!this.chart || !this.examNameSelect) {
-            console.error('Chart or select element not available for update');
+            //console.error('Chart or select element not available for update');
             return;
         }
 
@@ -370,14 +370,14 @@ class ExamChart {
             filteredData = this.examData.filter(exam => exam.examName === selectedExam);
         }
 
-        console.log('Filtered data:', filteredData);
+        //console.log('Filtered data:', filteredData);
 
         // データが空の場合
         if (filteredData.length === 0) {
             this.chart.data.labels = [];
             this.chart.data.datasets = [];
             this.chart.update();
-            console.log('No data to display');
+            //console.log('No data to display');
             return;
         }
 
@@ -437,7 +437,7 @@ class ExamChart {
         this.chart.data.datasets = datasets;
         this.chart.update();
         
-        console.log('Chart updated successfully');
+        //console.log('Chart updated successfully');
     }
 
     // チャート破棄
@@ -445,7 +445,7 @@ class ExamChart {
         if (this.chart) {
             this.chart.destroy();
             this.chart = null;
-            console.log('Chart destroyed');
+           // console.log('Chart destroyed');
         }
     }
 
@@ -460,7 +460,7 @@ class ExamChart {
 
 // チャート初期化関数（グローバル）
 function initializeExamChart(examData, currentSubject) {
-    console.log('initializeExamChart called with:', examData, currentSubject);
+    //console.log('initializeExamChart called with:', examData, currentSubject);
     
     try {
         // 既存のインスタンスを破棄
@@ -473,14 +473,14 @@ function initializeExamChart(examData, currentSubject) {
         const success = window.examChartInstance.initialize(examData, currentSubject);
         
         if (success) {
-            console.log('Chart initialized successfully');
+            //console.log('Chart initialized successfully');
         } else {
-            console.error('Chart initialization failed');
+            //console.error('Chart initialization failed');
         }
         
         return success;
     } catch (error) {
-        console.error('Error initializing chart:', error);
+       // console.error('Error initializing chart:', error);
         return false;
     }
 }
@@ -491,17 +491,17 @@ function updateChart() {
         if (window.examChartInstance && window.examChartInstance.chart) {
             window.examChartInstance.updateChart();
         } else {
-            console.warn('Chart instance not found for update');
+            //console.warn('Chart instance not found for update');
         }
     } catch (error) {
-        console.error('Error updating chart:', error);
+        //console.error('Error updating chart:', error);
     }
 }
 
 // Chart.jsが読み込まれているかチェック
 function checkChartJsLoaded() {
     const loaded = typeof Chart !== 'undefined';
-    console.log('Chart.js loaded:', loaded);
+    //console.log('Chart.js loaded:', loaded);
     return loaded;
 }
 

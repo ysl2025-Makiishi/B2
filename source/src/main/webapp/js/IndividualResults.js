@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('studentForm');
   if (form) {
     form.addEventListener('submit', () => {
-      console.log("📤 フォーム送信されました");
+      //console.log("📤 フォーム送信されました");
     });
   }
 });
@@ -116,7 +116,7 @@ let radarChart = null;
 function initializeRadarChart(examData) {
     // Chart.jsの読み込み確認
     if (typeof Chart === 'undefined') {
-        console.error('Chart.js is not loaded');
+        //console.error('Chart.js is not loaded');
         showChartError('チャートライブラリの読み込みに失敗しました。');
         return;
     }
@@ -132,7 +132,7 @@ function initializeRadarChart(examData) {
         updateChartInfo(examData);
         updateStatistics(examData);
     } catch (error) {
-        console.error('Chart initialization failed:', error);
+        //console.error('Chart initialization failed:', error);
         showChartError('チャートの初期化に失敗しました。');
     }
 }
@@ -144,7 +144,7 @@ function initializeRadarChart(examData) {
 function createRadarChart(examData) {
     const ctx = document.getElementById('radarChart');
     if (!ctx) {
-        console.error('Canvas element not found');
+        //console.error('Canvas element not found');
         return;
     }
 

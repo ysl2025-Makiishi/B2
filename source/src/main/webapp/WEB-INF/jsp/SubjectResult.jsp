@@ -271,17 +271,17 @@
     var currentSubject = "${fn:escapeXml(subject)}";
 
     // デバッグ情報の出力
-    console.log('Exam data:', examData);
-    console.log('Current subject:', currentSubject);
-    console.log('Chart.js available:', typeof Chart !== 'undefined');
+    //console.log('Exam data:', examData);
+    //console.log('Current subject:', currentSubject);
+    //console.log('Chart.js available:', typeof Chart !== 'undefined');
 
     // チャート初期化関数の安全な呼び出し
     function safeInitializeChart() {
-        console.log('Attempting to initialize chart...');
+        //console.log('Attempting to initialize chart...');
         
         // Chart.jsの確認
         if (typeof Chart === 'undefined') {
-            console.error('Chart.js is not loaded');
+            //console.error('Chart.js is not loaded');
             return;
         }
         
@@ -290,12 +290,12 @@
         const selectElement = document.getElementById('examNameSelect');
         
         if (!chartCanvas) {
-            console.error('Chart canvas element not found');
+            //console.error('Chart canvas element not found');
             return;
         }
         
         if (!selectElement) {
-            console.error('Select element not found');
+            //console.error('Select element not found');
             return;
         }
         
@@ -303,23 +303,23 @@
         if (typeof initializeExamChart === 'function') {
             const success = initializeExamChart(examData, currentSubject);
             if (success) {
-                console.log('Chart initialization successful');
+                //console.log('Chart initialization successful');
             } else {
-                console.error('Chart initialization failed');
+                //console.error('Chart initialization failed');
             }
         } else {
-            console.error('initializeExamChart function not found');
+            //console.error('initializeExamChart function not found');
             // 少し待ってから再試行
             setTimeout(function() {
                 if (typeof initializeExamChart === 'function') {
                     const success = initializeExamChart(examData, currentSubject);
                     if (success) {
-                        console.log('Chart initialization successful (retry)');
+                        //console.log('Chart initialization successful (retry)');
                     } else {
-                        console.error('Chart initialization failed (retry)');
+                        //console.error('Chart initialization failed (retry)');
                     }
                 } else {
-                    console.error('initializeExamChart function still not found after retry');
+                    //console.error('initializeExamChart function still not found after retry');
                 }
             }, 500);
         }
@@ -337,7 +337,7 @@
     window.addEventListener('load', function() {
         // チャートが初期化されていない場合のみ実行
         if (!window.examChartInstance || !window.examChartInstance.chart) {
-            console.log('Retrying chart initialization on window load...');
+            //console.log('Retrying chart initialization on window load...');
             safeInitializeChart();
         }
     });
