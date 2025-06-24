@@ -9,98 +9,86 @@
   <title>テキスト選出システム | K-manage</title>
   <link rel="stylesheet" href="<c:url value='/css/K-style.css' />">
   <style>
-   body {
-  font-family: Arial, sans-serif;
-  padding: 0 40px 40px 40px;
-}
+    body {
+      font-family: Arial, sans-serif;
+      padding: 0 40px 40px 40px;
+    }
 
-/* h1, h2 は中央寄せ */
-h1, h2 {
-  text-align: center;
-}
+    h1, h2 {
+      text-align: center;
+    }
 
-/* label と select の中央寄せ */
-form#searchForm label,
-form#searchForm select {
-  display: block;
-  width: 300px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
+    form#searchForm label,
+    form#searchForm select {
+      display: block;
+      width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
 
-/* 検索フォーム全体は左寄せにしつつ、中央にブロック配置 */
-form#searchForm {
-  text-align: left;
-  margin: 0 auto;
-}
+    form#searchForm {
+      text-align: left;
+      margin: 0 auto;
+    }
 
-/* ボタンの中央寄せ */
-form#searchForm .buttons {
-  text-align: center;
-  margin: 20px 0;
-}
+    form#searchForm .buttons {
+      text-align: center;
+      margin: 20px 0;
+    }
 
-/* 検索結果の親コンテナ中央寄せ */
-#searchResult {
-  max-width: 700px;
-  margin: 30px auto 0 auto;
-  text-align: center;
-}
+    #searchResult {
+      max-width: 700px;
+      margin: 30px auto 0 auto;
+      text-align: center;
+    }
 
-/* カードのコンテナも中央寄せ */
-.card-container {
-  margin: 0 auto;
-  max-width: 700px;
-}
+    .card-container {
+      margin: 0 auto;
+      max-width: 700px;
+    }
 
-/* カード本体 */
-.card {
-  border: 2px solid #1685E6;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-  background-color: #f9f9f9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
+    .card {
+      border: 2px solid #1685E6;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
 
-/* カード内テキスト */
-.card .result-text {
-  font-size: 22px;
-  font-weight: bold;
-  color: #1685E6;
-  margin-bottom: 10px;
-  display: block;
-}
+    .card .result-text {
+      font-size: 22px;
+      font-weight: bold;
+      color: #1685E6;
+      margin-bottom: 10px;
+      display: block;
+    }
 
-/* 汎用ボタンスタイル */
-.modern-button {
-  font-size: 16px;
-  padding: 10px 24px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin: 0 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+    .modern-button {
+      font-size: 16px;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 0 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-/* 検索ボタン（青） */
-.modern-button.primary {
-  background: linear-gradient(135deg, #1685E6, #5dade2);
-  color: white;
-}
+    .modern-button.primary {
+      background: linear-gradient(135deg, #1685E6, #5dade2);
+      color: white;
+    }
 
-.modern-button.primary:hover {
-  background: linear-gradient(135deg, #0f6ac4, #439fd7);
-  transform: translateY(-2px);
-}
-
+    .modern-button.primary:hover {
+      background: linear-gradient(135deg, #0f6ac4, #439fd7);
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 <body>
@@ -118,69 +106,83 @@ form#searchForm .buttons {
       <li><a href="<c:url value='/LogoutServlet' />" onclick="return confirm('本当に実行しますか？');">ログアウト</a></li>
     </ul>
     <div class="content-center">
-     <h2 href="TextServlet?studentId=${student.id}">テキスト選出</h2>
-     
+      <h2>テキスト選出</h2>
+
       <c:if test="${not empty message}">
-    <p style="color: green; font-weight: bold; text-align: center; margin-bottom: 20px;">
-    ${message}
-     </p>
-     </c:if>
-     <form id="searchForm" action="<c:url value='/TextServlet' />" method="post" onsubmit="return validateForm();">
-  <input type="hidden" name="studentId" value="${studentId}" />
+        <p style="color: green; font-weight: bold; text-align: center; margin-bottom: 20px;">
+          ${message}
+        </p>
+      </c:if>
 
-  <label for="subject">学習したい教科</label>
-  <select id="subject" name="subject">
-    <option value="" <c:if test="${subject == null}">selected</c:if>>-- 教科を選んでください --</option>
-    <option value="1" <c:if test="${subject == 1}">selected</c:if>>国語</option>
-    <option value="2" <c:if test="${subject == 2}">selected</c:if>>数学</option>
-    <option value="3" <c:if test="${subject == 3}">selected</c:if>>英語</option>
-    <option value="4" <c:if test="${subject == 4}">selected</c:if>>理科</option>
-    <option value="5" <c:if test="${subject == 5}">selected</c:if>>社会</option>
-  </select>
+      <form id="searchForm" action="<c:url value='/TextServlet' />" method="post" onsubmit="return validateForm();">
+        <input type="hidden" name="studentId" value="${studentId}" />
 
-  <label for="personality">生徒の性格</label>
-  <select id="personality" name="personality">
-    <option value="" <c:if test="${personality == null}">selected</c:if>>-- 性格を選んでください --</option>
-    <option value="1" <c:if test="${personality == 1}">selected</c:if>>開放性</option>
-    <option value="2" <c:if test="${personality == 2}">selected</c:if>>勤勉性</option>
-    <option value="3" <c:if test="${personality == 3}">selected</c:if>>神経症傾向</option>
-    <option value="4" <c:if test="${personality == 4}">selected</c:if>>外向性</option>
-  </select>
+        <label for="subject">学習したい教科</label>
+        <select id="subject" name="subject">
+          <option value="" <c:if test="${subject == null}">selected</c:if>>-- 教科を選んでください --</option>
+          <option value="1" <c:if test="${subject == 1}">selected</c:if>>国語</option>
+          <option value="2" <c:if test="${subject == 2}">selected</c:if>>数学</option>
+          <option value="3" <c:if test="${subject == 3}">selected</c:if>>英語</option>
+          <option value="4" <c:if test="${subject == 4}">selected</c:if>>理科</option>
+          <option value="5" <c:if test="${subject == 5}">selected</c:if>>社会</option>
+        </select>
 
-  <div class="buttons">
-    <button type="submit" class="modern-button primary">検索</button>
-    <button type="reset" class="modern-button primary">リセット</button>
-    <span id="warningMsg" style="color: red; font-size: 12px;"></span>
+        <label for="personality">生徒の性格</label>
+        <select id="personality" name="personality">
+          <option value="" <c:if test="${personality == null}">selected</c:if>>-- 性格を選んでください --</option>
+          <option value="1" <c:if test="${personality == 1}">selected</c:if>>開放性</option>
+          <option value="2" <c:if test="${personality == 2}">selected</c:if>>勤勉性</option>
+          <option value="3" <c:if test="${personality == 3}">selected</c:if>>神経症傾向</option>
+          <option value="4" <c:if test="${personality == 4}">selected</c:if>>外向性</option>
+        </select>
+
+        <div class="buttons">
+          <button type="submit" class="modern-button primary">検索</button>
+          <button type="reset" class="modern-button primary">リセット</button>
+          <span id="warningMsg" style="color: red; font-size: 12px;"></span>
+        </div>
+      </form>
+		<!-- 検索結果表示の上あたりに登録済みテキスト表示を追加 -->
+<c:if test="${not empty registeredText}">
+  <div class="card-container">
+    <div class="card">
+      <span class="result-text">登録済みテキスト：${registeredText.textName}</span>
+      <form action="<c:url value='/TextServlet' />" method="post" style="display:inline-block;">
+        <input type="hidden" name="action" value="update" />
+        <input type="hidden" name="textId" value="${registeredText.id}" />
+        <input type="hidden" name="studentId" value="${studentId}" />
+        <input type="hidden" name="subjectId" value="${subjectId}" />
+        <button type="submit" class="modern-button primary" style="background: linear-gradient(135deg, #E68A00, #f4b942);">更新</button>
+      </form>
+    </div>
   </div>
-</form>
-
-      <!-- 検索結果の表示部分 -->
+</c:if>
+		
       <div id="searchResult">
         <c:if test="${searched}">
           <c:choose>
             <c:when test="${not empty textsList}">
               <div class="card-container">
                 <c:forEach var="text" items="${textsList}">
-                 <!-- テキストごとのカード内 -->
-<div class="card">
-  <span class="result-text">結果：${text.textName} を使おう！</span>
+                  <div class="card">
+                    <span class="result-text">結果：${text.textName} を使おう！</span>
 
-  <!-- 登録ボタン -->
- <form action="<c:url value='/TextServlet' />" method="post" style="display:inline-block;">
-  <input type="hidden" name="action" value="register" />
-  <input type="hidden" name="textId" value="${text.id}" />
-  <input type="hidden" name="studentId" value="${studentId}" />
-  <button type="submit" class="modern-button primary">登録</button>
-</form>
+                    <form action="<c:url value='/TextServlet' />" method="post" style="display:inline-block;">
+                      <input type="hidden" name="action" value="register" />
+                      <input type="hidden" name="textId" value="${text.id}" />
+                      <input type="hidden" name="studentId" value="${studentId}" />
+                      <input type="hidden" name="subjectId" value="${subjectId}" />
+                      <button type="submit" class="modern-button primary">登録</button>
+                    </form>
 
-<form action="<c:url value='/TextServlet' />" method="post" style="display:inline-block;">
-  <input type="hidden" name="action" value="update" />
-  <input type="hidden" name="textId" value="${text.id}" />
-  <input type="hidden" name="studentId" value="${studentId}" />
-  <button type="submit" class="modern-button primary" style="background: linear-gradient(135deg, #E68A00, #f4b942);">更新</button>
-</form>
- 
-</div>                
+                    <form action="<c:url value='/TextServlet' />" method="post" style="display:inline-block;">
+                      <input type="hidden" name="action" value="update" />
+                      <input type="hidden" name="textId" value="${text.id}" />
+                      <input type="hidden" name="studentId" value="${studentId}" />
+                      <input type="hidden" name="subjectId" value="${subjectId}" />
+                      <button type="submit" class="modern-button primary" style="background: linear-gradient(135deg, #E68A00, #f4b942);">更新</button>
+                    </form>
+                  </div>
                 </c:forEach>
               </div>
             </c:when>
@@ -188,25 +190,15 @@ form#searchForm .buttons {
         </c:if>
       </div>
 
-      <!-- 「科目ごと個人結果に戻る」ボタンはsearchResultの外に -->
       <div style="text-align: center; margin-top: 30px;">
         <form action="<c:url value='/SubjectResultServlet' />" method="get">
-         <input type="hidden" name="studentId" value="${studentId}" />
-  	     <input type="hidden" name="subjectId" value="${subjectId}" />
-          <button type="submit" style="
-            background-color: #888;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-          ">
+          <input type="hidden" name="studentId" value="${studentId}" />
+          <input type="hidden" name="subjectId" value="${subjectId}" />
+          <button type="submit" style="background-color: #888; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 8px; cursor: pointer;">
             科目ごと個人結果に戻る
           </button>
         </form>
       </div>
-
     </div>
   </div>
   <script src="<c:url value='/js/Text.js' />"></script>
