@@ -1,19 +1,37 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const huriganaInput = document.getElementById('huriganaInput');
-  const huriganaError = document.getElementById('huriganaError');
+  const furiganaInput = document.getElementById('furiganaInput');
+  const furiganaError = document.getElementById('furiganaError');
+  let isComposing = false; // IME入力中フラグ
 
-  if (huriganaInput) {
-    huriganaInput.addEventListener('input', () => {
-      const original = huriganaInput.value;
+  if (furiganaInput) {
+    // IME入力開始
+    furiganaInput.addEventListener('compositionstart', () => {
+      isComposing = true;
+    });
+
+    // IME入力終了（確定）
+    furiganaInput.addEventListener('compositionend', () => {
+      isComposing = false;
+      filterFurigana(); // 確定後にチェック
+    });
+
+    // 通常の入力
+    furiganaInput.addEventListener('input', () => {
+      if (!isComposing) {
+        filterFurigana();
+      }
+    });
+
+    function filterFurigana() {
+      const original = furiganaInput.value;
       const filtered = original.replace(/[^\u3041-\u3096ー\s]/g, '');
 
       if (original !== filtered) {
-        huriganaError.textContent = 'ひらがなで入力してください';
+        furiganaError.textContent = '※ ひらがなのみ入力できます';
+        furiganaInput.value = filtered;
       } else {
-        huriganaError.textContent = '';
+        furiganaError.textContent = '';
       }
-
-      huriganaInput.value = filtered;
-    });
+    }
   }
 });
