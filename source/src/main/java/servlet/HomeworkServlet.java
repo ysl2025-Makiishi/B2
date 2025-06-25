@@ -21,20 +21,21 @@ public class HomeworkServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-    	
-    	// もしもログインしていなかったらログインサーブレットにリダイレクトする
- 		HttpSession session = request.getSession();
- 		if (session.getAttribute("id") == null) {
- 			response.sendRedirect(request.getContextPath() + "/LoginServlet");
- 			return;
- 		}
- 		
+
+        //  ログインチェック（最初に行う）
+        HttpSession session = request.getSession();
+        if (session.getAttribute("id") == null) {
+            response.sendRedirect(request.getContextPath() + "/LoginServlet");
+            return;
+        }
+
+        //  パラメータの取得とバリデーション
         String studentIdStr = request.getParameter("studentId");
         String subjectIdStr = request.getParameter("subjectId");
 
         if (studentIdStr == null || subjectIdStr == null) {
-            response.getWriter().println("studentId と subjectId をURLに指定してください。");
+            request.setAttribute("errorMessage", "生徒または科目が指定されていません。");
+            request.getRequestDispatcher("/WEB-INF/jsp/Homework.jsp").forward(request, response);
             return;
         }
 
@@ -44,7 +45,7 @@ public class HomeworkServlet extends HttpServlet {
         request.setAttribute("studentId", studentId);
         request.setAttribute("subjectId", subjectId);
 
-        // ここから計算ロジック
+        //  宿題計算処理
         String nextDateStr = request.getParameter("nextDate");
         String totalPagesStr = request.getParameter("totalPages");
 
@@ -63,7 +64,7 @@ public class HomeworkServlet extends HttpServlet {
                     int pagesPerDay = (int) Math.ceil((double) totalPages / daysBetween);
                     request.setAttribute("pagesPerDay", pagesPerDay);
 
-                    // 登録済みチェック
+                    // 既に登録されているか確認
                     HomeworkDAO dao = new HomeworkDAO();
                     boolean isRegistered = dao.existsHomework(studentId, subjectId);
                     request.setAttribute("isRegistered", isRegistered);
@@ -74,28 +75,30 @@ public class HomeworkServlet extends HttpServlet {
             }
         }
 
+        //  JSP にフォワード
         request.getRequestDispatcher("/WEB-INF/jsp/Homework.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
-        
-     // もしもログインしていなかったらログインサーブレットにリダイレクトする
- 		HttpSession session = request.getSession();
- 		if (session.getAttribute("id") == null) {
- 			response.sendRedirect("LoginServlet");
- 			return;
- 		}
+
+        // ログインチェック（最初に行う）
+        HttpSession session = request.getSession();
+        if (session.getAttribute("id") == null) {
+            response.sendRedirect(request.getContextPath() + "/LoginServlet");
+            return;
+        }
 
         try {
             int studentId = Integer.parseInt(request.getParameter("studentId"));
             int subjectId = Integer.parseInt(request.getParameter("subjectId"));
             int pagesPerDay = Integer.parseInt(request.getParameter("pagesPerDay"));
             String action = request.getParameter("action");
+
             HomeworkDAO dao = new HomeworkDAO();
 
             if ("update".equals(action)) {
@@ -104,8 +107,8 @@ public class HomeworkServlet extends HttpServlet {
                 dao.insertHomework(studentId, subjectId, pagesPerDay);
             }
 
-            // 登録後は科目ごと個人結果ページへリダイレクト
-            response.sendRedirect("SubjectResultServlet?studentId=" + studentId + "&subjectId=" + subjectId);
+            // 科目別の個人結果画面にリダイレクト
+            response.sendRedirect(request.getContextPath() + "/SubjectResultServlet?studentId=" + studentId + "&subjectId=" + subjectId);
 
         } catch (Exception e) {
             response.getWriter().println("<h3>エラーが発生しました。</h3>");
