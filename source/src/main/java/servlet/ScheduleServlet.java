@@ -23,11 +23,12 @@ public class ScheduleServlet extends HttpServlet {
     // GETメソッド（画面表示）
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+    	// もしもログインしていなかったらログインサーブレットにリダイレクトする
     	HttpSession session = request.getSession();
-		if (session.getAttribute("id") == null) {
-			response.sendRedirect("LoginServlet");
-			return;
-		}
+    	if (session.getAttribute("id") == null) {
+    		response.sendRedirect(request.getContextPath() + "/LoginServlet");
+    		return;
+    	}
     	
     	String studentIdStr = request.getParameter("studentId");
         String subjectIdStr = request.getParameter("subjectId");
@@ -73,11 +74,12 @@ public class ScheduleServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
         
-        HttpSession session = request.getSession();
-		if (session.getAttribute("id") == null) {
-			response.sendRedirect("LoginServlet");
-			return;
-		}
+        // もしもログインしていなかったらログインサーブレットにリダイレクトする
+    	HttpSession session = request.getSession();
+    	if (session.getAttribute("id") == null) {
+    		response.sendRedirect(request.getContextPath() + "/LoginServlet");
+    		return;
+    	}
 
         //System.out.println("DEBUG: studentId = " + request.getParameter("studentId"));
         //System.out.println("DEBUG: subjectId = " + request.getParameter("subjectId"));
