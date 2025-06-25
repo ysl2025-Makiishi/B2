@@ -111,7 +111,7 @@ public class SubjectResultDAO {
 					ORDER BY s.updated_at DESC
 					LIMIT 1
 					""";
-			System.out.println("スケジュールSQL: " + scheduleSql);
+//			System.out.println("スケジュールSQL: " + scheduleSql);
 
 			try (PreparedStatement ps = conn.prepareStatement(scheduleSql)) {
 				ps.setInt(1, studentId);
