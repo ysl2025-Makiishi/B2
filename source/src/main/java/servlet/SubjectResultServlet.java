@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.IndividualResultsDAO;
 import dao.SubjectResultDAO;
@@ -21,8 +22,25 @@ public class SubjectResultServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-//		System.out.println("=== SubjectResult GET リクエスト ===");
-//		System.out.println("クエリ文字列: " + request.getQueryString());
+		// ★デバッグ用出力
+//		System.out.println("=== SubjectResultServlet GET 開始 ===");
+
+		// もしもログインしていなかったらログインサーブレットにリダイレクトする
+		HttpSession session = request.getSession();
+
+		// ★セッション状態をデバッグ出力
+//		System.out.println("セッションID: " + session.getId());
+//		System.out.println("セッションの'id'属性: [" + session.getAttribute("id") + "]");
+//		System.out.println("セッションの'loginUser'属性: [" + session.getAttribute("loginUser") + "]");
+//		System.out.println("セッションが新規作成?: " + session.isNew());
+
+		if (session.getAttribute("id") == null) {
+//			System.out.println("★★★ ログインしていません。LoginServletにリダイレクトします ★★★");
+			response.sendRedirect("LoginServlet");
+			return;
+		}
+
+//		System.out.println("ログイン確認OK。処理を継続します。");
 
 		String studentIdStr = request.getParameter("studentId");
 		String subjectIdStr = request.getParameter("subjectId");
@@ -62,6 +80,22 @@ public class SubjectResultServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		// ★デバッグ用出力
+//		System.out.println("=== SubjectResultServlet POST 開始 ===");
+
+		// もしもログインしていなかったらログインサーブレットにリダイレクトする
+		HttpSession session = request.getSession();
+
+		// ★セッション状態をデバッグ出力
+//		System.out.println("POSTでのセッションID: " + session.getId());
+//		System.out.println("POSTでのセッションの'id'属性: [" + session.getAttribute("id") + "]");
+
+		if (session.getAttribute("id") == null) {
+//			System.out.println("★★★ POST処理でログインしていません。LoginServletにリダイレクトします ★★★");
+			response.sendRedirect("LoginServlet");
+			return;
+		}
+
 		request.setCharacterEncoding("UTF-8");
 
 		String action = request.getParameter("action");
@@ -69,7 +103,7 @@ public class SubjectResultServlet extends HttpServlet {
 		if ("update".equals(action)) {
 			updateSubjectData(request, response);
 		} else if ("updateUnderstanding".equals(action)) {
-			updateUnderstanding(request, response); // ← 追加
+			updateUnderstanding(request, response);
 		} else if ("deleteExam".equals(action)) {
 			deleteExamResult(request, response);
 		} else if ("updateExam".equals(action)) {
@@ -79,9 +113,7 @@ public class SubjectResultServlet extends HttpServlet {
 		}
 	}
 
-	/**
-	 * 教科別学習データの更新
-	 */
+	// 以下のメソッドは元のまま...
 	private void updateSubjectData(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -103,13 +135,9 @@ public class SubjectResultServlet extends HttpServlet {
 		String message = success ? "データが正常に保存されました" : "データの保存に失敗しました";
 		request.setAttribute("message", message);
 
-		// 更新後のデータを再取得して表示
 		response.sendRedirect("SubjectResultServlet?studentId=" + studentId + "&subjectId=" + subjectId);
 	}
 
-	/**
-	 * 模試結果の削除
-	 */
 	private void deleteExamResult(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -125,12 +153,6 @@ public class SubjectResultServlet extends HttpServlet {
 		response.sendRedirect("SubjectResultServlet?studentId=" + studentId + "&subjectId=" + subjectId);
 	}
 
-	/**
-	 * 模試結果の更新
-	 */
-	/**
-	 * 模試結果の更新（模試名・実施日も含む）
-	 */
 	private void updateExamResult(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -157,13 +179,13 @@ public class SubjectResultServlet extends HttpServlet {
 		case 1:
 			return "国語";
 		case 2:
-			return "数学"; // ← 修正
+			return "数学";
 		case 3:
-			return "英語"; // ← 修正
+			return "英語";
 		case 4:
 			return "理科";
 		case 5:
-			return "社会"; // ← 修正
+			return "社会";
 		case 6:
 			return "保健体育";
 		case 7:
@@ -179,28 +201,14 @@ public class SubjectResultServlet extends HttpServlet {
 		}
 	}
 
-	/**
-	 * 理解度のみ更新
-	 */
-	/**
-	 * 理解度のみ更新
-	 */
 	private void updateUnderstanding(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-//		System.out.println("=== updateUnderstanding 開始 ===");
 
 		String studentIdStr = request.getParameter("studentId");
 		String subjectIdStr = request.getParameter("subjectId");
 		String understanding = request.getParameter("understanding");
 
-//		System.out.println("受け取ったパラメータ:");
-//		System.out.println("studentId: " + studentIdStr);
-//		System.out.println("subjectId: " + subjectIdStr);
-//		System.out.println("understanding: " + understanding);
-
 		if (studentIdStr == null || subjectIdStr == null) {
-//			System.out.println("ERROR: 必要なパラメータが不足");
 			response.sendRedirect("SearchResultServlet");
 			return;
 		}
@@ -208,11 +216,7 @@ public class SubjectResultServlet extends HttpServlet {
 		int studentId = Integer.parseInt(studentIdStr);
 		int subjectId = Integer.parseInt(subjectIdStr);
 
-//		boolean success = SubjectResultDAO.updateUnderstandingOnly(studentId, subjectId, understanding);
 		SubjectResultDAO.updateUnderstandingOnly(studentId, subjectId, understanding);
-
-//		String message = success ? "理解度を更新しました" : "理解度の更新に失敗しました";
-//		System.out.println("更新結果: " + message);
 
 		response.sendRedirect("SubjectResultServlet?studentId=" + studentId + "&subjectId=" + subjectId);
 	}
