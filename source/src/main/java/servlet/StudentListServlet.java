@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.StudentListDAO;
 import dto.students;
@@ -32,27 +33,38 @@ public class StudentListServlet extends HttpServlet {
 	}
 
 	// GET/POST共通処理
-	private void processRequest(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	// servlet/StudentListServlet.java
 
-		request.setCharacterEncoding("UTF-8");
+	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
 
-		// POSTでidを受け取った場合だけ取得、なければ0
-		int id = 0;
-		String idStr = request.getParameter("id");
-		if (idStr != null && idStr.matches("\\d+")) {
-			id = Integer.parseInt(idStr);
+	    request.setCharacterEncoding("UTF-8");
+	    
+	    HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect("LoginServlet");
+			return;
 		}
 
-		// 生徒一覧をDAOから取得
-		StudentListDAO dao = new StudentListDAO();
-		List<students> studentList = dao.findAll();
+	    int id = 0;
+	    String idStr = request.getParameter("id");
+	    if (idStr != null && idStr.matches("\\d+")) {
+	        id = Integer.parseInt(idStr);
+	    }
 
-		// リクエストスコープにセット
-		request.setAttribute("studentList", studentList);
-		request.setAttribute("studentid", id);
+	    // ▼ 並び替えパラメータを取得
+	    String sort = request.getParameter("sort");
 
-		// JSPにフォワード
-		request.getRequestDispatcher("/WEB-INF/jsp/StudentList.jsp").forward(request, response);
+	    // ▼ DAOにソート条件を渡して取得
+	    StudentListDAO dao = new StudentListDAO();
+	    List<students> studentList = dao.findAll(sort);  // ← 修正箇所！
+
+	    request.setAttribute("studentList", studentList);
+	    request.setAttribute("studentid", id);
+	    request.setAttribute("sort", sort);
+
+	    request.getRequestDispatcher("/WEB-INF/jsp/StudentList.jsp").forward(request, response);
 	}
+
+
 }	

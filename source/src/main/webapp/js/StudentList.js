@@ -1,5 +1,5 @@
 // StudentList.js
-console.log(students); // ← JSPで定義された配列がここで使える
+//console.log(students); // ← JSPで定義された配列がここで使える
 
 document.getElementById("studentCount").textContent = students.length;
 // 以下はソートや描画処理だけを書いてOK（すでにstudentsは定義済み）
@@ -29,37 +29,35 @@ document.getElementById("studentCount").textContent = students.length;
     return list.slice(start, start + rowsPerPage);
   }
   function renderGrid() {
-    const displayStudents = getDisplayStudents();
-    studentGrid.innerHTML = "";
-    for (const student of displayStudents) {
-      const card = document.createElement("div");
-      card.className = "student-card";
-      
-		let genderDisplay = 
-		  student.gender === "M" ? "男性" :
-		  student.gender === "F" ? "女性" :
-		  student.gender === "O" ? "無回答" :
-		  student.gender;
+  const displayStudents = getDisplayStudents();
+  studentGrid.innerHTML = "";
+  for (const student of displayStudents) {
+    const card = document.createElement("div");
+    card.className = "student-card";
 
-		
-		card.innerHTML = `
-		  <div class="student-row"><span class="label">氏名</span><span class="value name">${student.name}</span></div>
-		  <div class="student-row"><span class="label">学校名</span><span class="value">${student.school}</span></div>
-		  <div class="student-row"><span class="label">性別</span><span class="value">${genderDisplay}</span></div>
-		`;
+    let genderDisplay = 
+      student.gender === "M" ? "男性" :
+      student.gender === "F" ? "女性" :
+      student.gender === "O" ? "無回答" :
+      student.gender;
 
+    card.innerHTML = `
+      <div class="student-row"><span class="label">氏名</span><span class="value name">${student.name}</span></div>
+      <div class="student-row"><span class="label">学校名</span><span class="value">${student.school}</span></div>
+      <div class="student-row"><span class="label">性別</span><span class="value">${genderDisplay}</span></div>
+    `;
 
-	card.addEventListener("click", () => {
-	  console.log("clicked student id:", student.id);
-	  location.href = `${contextPath}/IndividualResultsServlet?studentId=${student.id}`;
-	});
+    card.addEventListener("click", () => {
+      //console.log("clicked student id:", student.id);
+      location.href = `${contextPath}/IndividualResultsServlet?studentId=${student.id}`;
+    });
 
-
-      
-      studentGrid.appendChild(card);
-    }
-    renderPagination();
+    studentGrid.appendChild(card);
   }
+
+  renderPagination();
+}
+
   
   function renderPagination() {
   const totalPages = Math.ceil(students.length / rowsPerPage);
@@ -88,6 +86,7 @@ document.getElementById("studentCount").textContent = students.length;
   const pageInfo = document.createElement("span");
   pageInfo.className = "page-info";
   pageInfo.textContent = `${currentPage} / ${totalPages}`;
+
   wrapper.appendChild(pageInfo);
 
   // ▼ 4. 「次へ」ボタン
@@ -112,35 +111,8 @@ document.getElementById("studentCount").textContent = students.length;
   });
   renderGrid();
   
- 
-
-  
   document.getElementById("sortSelect").addEventListener("change", (e) => {
-  const value = e.target.value;
-
-  if (value === "default") {
-    sortedKey = null;
-  } else if (value === "reverse") {
-    students.reverse();
-    sortedKey = null;
-  } else if (value === "name-asc") {
-    sortedKey = "name";
-    sortDirection = "asc";
-  } else if (value === "name-desc") {
-    sortedKey = "name";
-    sortDirection = "desc";
-  } 
-    else if (value === "updated-asc") {
-    sortedKey = "updated_at";
-    sortDirection = "asc";
-  } else if (value === "updated-desc") {
-    sortedKey = "updated_at";
-    sortDirection = "desc";
-  }
-
-
-  currentPage = 1;
-  renderGrid();
+  
 });
 
 
@@ -149,4 +121,3 @@ document.getElementById("toggleSortBtn").addEventListener("click", () => {
   const sortOptions = document.getElementById("sortOptions");
   sortOptions.style.display = (sortOptions.style.display === "none") ? "block" : "none";
 });
-

@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.ScheduleDAO;
 import dto.schedules;
@@ -21,7 +22,14 @@ public class ScheduleServlet extends HttpServlet {
 
     // GETメソッド（画面表示）
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String studentIdStr = request.getParameter("studentId");
+        
+    	HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect("LoginServlet");
+			return;
+		}
+    	
+    	String studentIdStr = request.getParameter("studentId");
         String subjectIdStr = request.getParameter("subjectId");
         String textIdStr = request.getParameter("textId");  // ← 追加
 
@@ -43,7 +51,7 @@ public class ScheduleServlet extends HttpServlet {
                     request.setAttribute("textId", textId);  // ← textIdをJSPに渡す
                 } catch (NumberFormatException e) {
                     // textIdが無効なときのログ（あってもなくても可）
-                    System.err.println("無効な textId が渡されました：" + textIdStr);
+                    //System.err.println("無効な textId が渡されました：" + textIdStr);
                 }
             }
 
@@ -64,10 +72,16 @@ public class ScheduleServlet extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
+        
+        HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect("LoginServlet");
+			return;
+		}
 
-        System.out.println("DEBUG: studentId = " + request.getParameter("studentId"));
-        System.out.println("DEBUG: subjectId = " + request.getParameter("subjectId"));
-        System.out.println("DEBUG: calculated_page = " + request.getParameter("calculated_page"));
+        //System.out.println("DEBUG: studentId = " + request.getParameter("studentId"));
+        //System.out.println("DEBUG: subjectId = " + request.getParameter("subjectId"));
+        //System.out.println("DEBUG: calculated_page = " + request.getParameter("calculated_page"));
 
         try {
             int studentId = Integer.parseInt(request.getParameter("studentId"));
@@ -101,7 +115,7 @@ public class ScheduleServlet extends HttpServlet {
             ScheduleDAO dao = new ScheduleDAO();
             boolean success = dao.upsertPages(schedule);
 
-            System.out.println("DEBUG: DAO update result = " + success);
+            //System.out.println("DEBUG: DAO update result = " + success);
 
             if (success) {
                 response.sendRedirect(request.getContextPath() + "/SubjectResultServlet?studentId=" + studentId + "&subjectId=" + subjectId);

@@ -75,7 +75,7 @@ public class ScheduleDAO {
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            System.err.println("DB登録エラー: " + e.getMessage());
+            //System.err.println("DB登録エラー: " + e.getMessage());
             return false;
         }
     }

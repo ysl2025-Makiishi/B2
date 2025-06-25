@@ -29,15 +29,19 @@
  <h1 style="border-bottom: 2px solid #1685E6; padding-bottom: 5px; margin-bottom: 20px;">生徒一覧</h1>
   <div>現在の登録人数： <span id="studentCount">0</span> 人</div>
   <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-	  <select id="sortSelect" style="padding: 5px; font-size: 1rem;">
-	    <option disabled selected>並び替え</option>
-	    <option value="default">登録順</option>
-	    <option value="reverse">新しい順</option>
-	    <option value="name-asc">名前：昇順</option>
-	    <option value="name-desc">名前：降順</option>
-	    <option value="updated-asc">更新：昇順</option>
-  		<option value="updated-desc">更新：降順</option>
-	  </select>
+	  <!-- 並び替え -->
+		<form method="get" action="<c:url value='/StudentListServlet' />" style="text-align: right; margin-top: 10px;">
+		    <select name="sort" onchange="this.form.submit()" style="padding: 5px; font-size: 1rem;">
+		        <option value="" disabled <c:if test="${empty sort}">selected</c:if>>並び替え</option>
+		        <option value="createdDesc" <c:if test="${sort eq 'createdDesc'}">selected</c:if>>登録順（新しい順）</option>
+		        <option value="createdAsc" <c:if test="${sort eq 'createdAsc'}">selected</c:if>>登録順（古い順）</option>
+		        <option value="updatedDesc" <c:if test="${sort eq 'updatedDesc'}">selected</c:if>>更新順（新しい順）</option>
+		        <option value="updatedAsc" <c:if test="${sort eq 'updatedAsc'}">selected</c:if>>更新順（古い順）</option>
+		        <option value="nameAsc" <c:if test="${sort eq 'nameAsc'}">selected</c:if>>名前順（昇順）</option>
+		        <option value="nameDesc" <c:if test="${sort eq 'nameDesc'}">selected</c:if>>名前順（降順）</option>
+		    </select>
+		</form>
+	  
   </div>
   
   <!-- 生徒カード表示 -->
