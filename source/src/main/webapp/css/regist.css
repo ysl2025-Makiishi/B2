@@ -74,7 +74,7 @@ body {
 }
 /* ——— 見出し ——— */
 h2 {
-    color: blue;
+    color: var(--color-text) !important;
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
     border-bottom: 2px solid var(--color-accent);
