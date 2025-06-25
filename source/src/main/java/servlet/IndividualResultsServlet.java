@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.IndividualResultsDAO;
 import dto.IndividualResults;
@@ -18,6 +19,13 @@ public class IndividualResultsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		// もしもログインしていなかったらログインサーブレットにリダイレクトする
+		HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect("LoginServlet");
+			return;
+		}
+
 		request.setCharacterEncoding("UTF-8");
 
 		// === デバッグ情報 ===
@@ -48,6 +56,7 @@ public class IndividualResultsServlet extends HttpServlet {
 			response.sendRedirect("SearchResultServlet");
 			return;
 		}
+
 		request.setAttribute("student", student);
 		request.getRequestDispatcher("/WEB-INF/jsp/IndividualResults.jsp").forward(request, response);
 	}
@@ -55,6 +64,13 @@ public class IndividualResultsServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		// もしもログインしていなかったらログインサーブレットにリダイレクトする
+		HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect("LoginServlet");
+			return;
+		}
+
 		request.setCharacterEncoding("UTF-8");
 
 		// リクエストパラメータからIDを取得
