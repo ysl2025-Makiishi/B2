@@ -35,8 +35,10 @@ LocalDate today = LocalDate.now();
 		</ul>
 
 		<h2>個人結果</h2>
-		<a href="<c:url value='/SearchResultServlet' />"
-			class="diag-link-button">検索結果に戻る</a>
+		<!--
+		<a href="<c:url value='/StudentListServlet' />"
+			class="diag-link-button">生徒一覧に戻る</a>
+			-->
 
 		<ul class="subject-nav">
 			<li><a
