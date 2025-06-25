@@ -11,7 +11,7 @@ import java.util.List;
 import dto.students;
 
 public class SearchDAO {
-    private final String JDBC_URL = "jdbc:mysql://localhost:3306/webapp2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9";
+    private final String JDBC_URL = "jdbc:mysql://localhost:3306/b2?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9";
     private final String DB_USER = "root";
     private final String DB_PASS = "password";
 

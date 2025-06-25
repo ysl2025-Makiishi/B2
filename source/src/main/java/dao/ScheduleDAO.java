@@ -12,7 +12,7 @@ public class ScheduleDAO {
     private Connection getConnection() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/B2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo",
+            "jdbc:mysql://localhost:3306/b2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo",
             "root",
             "password"  // パスワードは適宜変更してください
         );
