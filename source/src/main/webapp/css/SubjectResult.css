@@ -24,7 +24,233 @@ h2, h3 {
 section {
   background: #fff;
   border: 1px solid #e0e4ea;
-  border-radius: 8px;
+  border-radius: 8px;/* 学習計画セクションの横一列レイアウト修正 */
+
+/* 学習計画の3つのフィールド（テキスト選出、スケジュール作成、宿題ページ数）を横一列に配置 */
+.flex-row[style*="justify-content: center"] {
+    display: flex;
+    flex-wrap: nowrap !important; /* 改行を防ぐ */
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    justify-content: space-between; /* 均等配置 */
+    width: 100%;
+}
+
+/* 学習計画の各フィールドの幅を調整 */
+.flex-row[style*="justify-content: center"] .field {
+    flex: 1; /* 均等な幅を確保 */
+    min-width: 0; /* フレックスアイテムの最小幅をリセット */
+    max-width: calc(33.33% - 0.67rem); /* 3分割から余白を引いた幅 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* ラベルのスタイル調整 */
+.flex-row[style*="justify-content: center"] .field label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-size: 0.9rem; /* 少し小さめに */
+    line-height: 1.3;
+    text-align: left;
+    word-wrap: break-word; /* 長いテキストを改行 */
+    hyphens: auto; /* 自動ハイフネーション */
+}
+
+/* span要素（表示内容）のスタイル */
+.flex-row[style*="justify-content: center"] .field span {
+    padding: 0.45em 0.6em;
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    min-height: 1.2em;
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem; /* 文字サイズを少し小さく */
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* 診断リンクボタンのスタイル調整 */
+.flex-row[style*="justify-content: center"] .field .diag-link-button {
+    background: linear-gradient(135deg, #FF9800, #F57C00) !important;
+    color: white !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    padding: 6px 12px !important; /* パディングを少し小さく */
+    border-radius: 4px !important;
+    font-size: 0.75rem !important; /* フォントサイズを小さく */
+    font-weight: bold !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3) !important;
+    text-transform: none !important; /* 大文字変換を無効 */
+    letter-spacing: 0.3px !important;
+    margin: 0 !important;
+    width: 100% !important; /* ボタンを親要素の幅に合わせる */
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important; /* 長いテキストは省略記号で */
+}
+
+.flex-row[style*="justify-content: center"] .field .diag-link-button:hover {
+    background: linear-gradient(135deg, #F57C00, #E65100) !important;
+    color: white !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4) !important;
+    text-decoration: none !important;
+}
+
+/* 無効化されたボタンのスタイル */
+.flex-row[style*="justify-content: center"] .field .diag-link-button-disabled {
+    background: #cccccc !important;
+    color: #666666 !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    padding: 6px 12px !important;
+    border-radius: 4px !important;
+    font-size: 0.75rem !important;
+    font-weight: bold !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    opacity: 0.7;
+}
+
+/* 理解度フィールドは中央配置のまま */
+.flex-row[style*="justify-content: center"]:first-of-type .field {
+    align-items: center;
+    text-align: center;
+    max-width: none;
+    flex: none;
+}
+
+.flex-row[style*="justify-content: center"]:first-of-type .field label {
+    text-align: center;
+    font-size: 1rem; /* 理解度のラベルは通常サイズ */
+}
+
+.flex-row[style*="justify-content: center"]:first-of-type .field input {
+    text-align: center;
+    max-width: 120px;
+}
+
+/* タブレット・小さめデスクトップでの調整 */
+@media (max-width: 1024px) {
+    .flex-row[style*="justify-content: center"] {
+        gap: 0.5rem;
+    }
+    
+    .flex-row[style*="justify-content: center"] .field {
+        max-width: calc(33.33% - 0.33rem);
+    }
+    
+    .flex-row[style*="justify-content: center"] .field label {
+        font-size: 0.8rem;
+    }
+    
+    .flex-row[style*="justify-content: center"] .field span {
+        font-size: 0.8rem;
+        padding: 0.3em 0.4em;
+    }
+    
+    .flex-row[style*="justify-content: center"] .field .diag-link-button {
+        font-size: 0.7rem !important;
+        padding: 5px 8px !important;
+    }
+}
+
+/* モバイルサイズでは縦積みに戻す */
+@media (max-width: 768px) {
+    .flex-row[style*="justify-content: center"] {
+        flex-direction: column !important;
+        flex-wrap: wrap !important;
+        align-items: stretch;
+        gap: 1rem;
+    }
+    
+    .flex-row[style*="justify-content: center"] .field {
+        max-width: 100%;
+        flex: none;
+    }
+    
+    .flex-row[style*="justify-content: center"] .field label {
+        font-size: 0.9rem;
+    }
+    
+    .flex-row[style*="justify-content: center"] .field span {
+        font-size: 0.85rem;
+    }
+    
+    .flex-row[style*="justify-content: center"] .field .diag-link-button {
+        font-size: 0.8rem !important;
+        padding: 8px 16px !important;
+    }
+}
+
+/* 非常に小さい画面での最終調整 */
+@media (max-width: 480px) {
+    .flex-row[style*="justify-content: center"] .field .diag-link-button {
+        font-size: 0.75rem !important;
+        padding: 6px 12px !important;
+        white-space: normal !important; /* 小さい画面では改行を許可 */
+    }
+}
+
+/* 基本情報セクションのテキストボックス（氏名・ふりがな）を元のサイズに戻す */
+section h3:contains("基本情報") + .flex-row .field span,
+.centered h3:contains("基本情報") ~ .flex-row .field span,
+h3:contains("基本情報") ~ .flex-row .field span {
+    padding: 0.45em 0.6em !important;
+    background: #f9f9f9 !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 4px !important;
+    min-height: 1.2em !important;
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 1rem !important; /* 通常のフォントサイズ */
+    line-height: 1.6 !important; /* 通常の行間 */
+    max-width: 400px !important; /* 通常の最大幅 */
+}
+
+/* 基本情報セクション全体のフィールドスタイルをリセット */
+section:has(h3:contains("基本情報")) .flex-row .field,
+.centered:has(h3:contains("基本情報")) .flex-row .field {
+    min-width: 180px !important; /* 元の最小幅 */
+    max-width: none !important; /* 最大幅制限を解除 */
+    flex: none !important; /* フレックス設定をリセット */
+}
+
+/* CSS:has()が対応していないブラウザ用の代替スタイル */
+.basic-info-section .flex-row .field span {
+    padding: 0.45em 0.6em !important;
+    background: #f9f9f9 !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 4px !important;
+    min-height: 1.2em !important;
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+    max-width: 400px !important;
+}
+
+.basic-info-section .flex-row .field {
+    min-width: 180px !important;
+    max-width: none !important;
+    flex: none !important;
+}
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -869,4 +1095,247 @@ button[type="submit"].save-btn:active {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
+}
+
+/* 学習計画セクションの横一列レイアウト修正 */
+
+/* 学習計画の3つのフィールド（テキスト選出、スケジュール作成、宿題ページ数）を横一列に配置 */
+.flex-row[style*="justify-content: center"] {
+    display: flex;
+    flex-wrap: nowrap !important; /* 改行を防ぐ */
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    justify-content: space-between; /* 均等配置 */
+    width: 100%;
+}
+
+/* 学習計画の各フィールドの幅を調整 */
+.flex-row[style*="justify-content: center"] .field {
+    flex: 1; /* 均等な幅を確保 */
+    min-width: 0; /* フレックスアイテムの最小幅をリセット */
+    max-width: calc(33.33% - 0.67rem); /* 3分割から余白を引いた幅 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* ラベルのスタイル調整 */
+.flex-row[style*="justify-content: center"] .field label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-size: 0.9rem; /* 少し小さめに */
+    line-height: 1.3;
+    text-align: left;
+    word-wrap: break-word; /* 長いテキストを改行 */
+    hyphens: auto; /* 自動ハイフネーション */
+}
+
+/* span要素（表示内容）のスタイル */
+.flex-row[style*="justify-content: center"] .field span {
+    padding: 0.45em 0.6em;
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    min-height: 1.2em;
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem; /* 文字サイズを少し小さく */
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* 診断リンクボタンのスタイル調整 */
+.flex-row[style*="justify-content: center"] .field .diag-link-button {
+    background: linear-gradient(135deg, #FF9800, #F57C00) !important;
+    color: white !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    padding: 6px 12px !important; /* パディングを少し小さく */
+    border-radius: 4px !important;
+    font-size: 0.75rem !important; /* フォントサイズを小さく */
+    font-weight: bold !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3) !important;
+    text-transform: none !important; /* 大文字変換を無効 */
+    letter-spacing: 0.3px !important;
+    margin: 0 !important;
+    width: 100% !important; /* ボタンを親要素の幅に合わせる */
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important; /* 長いテキストは省略記号で */
+}
+
+.flex-row[style*="justify-content: center"] .field .diag-link-button:hover {
+    background: linear-gradient(135deg, #F57C00, #E65100) !important;
+    color: white !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4) !important;
+    text-decoration: none !important;
+}
+
+/* 無効化されたボタンのスタイル */
+.flex-row[style*="justify-content: center"] .field .diag-link-button-disabled {
+    background: #cccccc !important;
+    color: #666666 !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    padding: 6px 12px !important;
+    border-radius: 4px !important;
+    font-size: 0.75rem !important;
+    font-weight: bold !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    opacity: 0.7;
+}
+
+/* 理解度フィールドは中央配置のまま */
+.flex-row[style*="justify-content: center"]:first-of-type .field {
+    align-items: center;
+    text-align: center;
+    max-width: none;
+    flex: none;
+}
+
+.flex-row[style*="justify-content: center"]:first-of-type .field label {
+    text-align: center;
+    font-size: 1rem; /* 理解度のラベルは通常サイズ */
+}
+
+.flex-row[style*="justify-content: center"]:first-of-type .field input {
+    text-align: center;
+    max-width: 120px;
+}
+
+/* タブレット・小さめデスクトップでの調整 */
+@media (max-width: 1024px) {
+    .flex-row[style*="justify-content: center"] {
+        gap: 0.5rem;
+    }
+    
+    .flex-row[style*="justify-content: center"] .field {
+        max-width: calc(33.33% - 0.33rem);
+    }
+    
+    .flex-row[style*="justify-content: center"] .field label {
+        font-size: 0.8rem;
+    }
+    
+    .flex-row[style*="justify-content: center"] .field span {
+        font-size: 0.8rem;
+        padding: 0.3em 0.4em;
+    }
+    
+    .flex-row[style*="justify-content: center"] .field .diag-link-button {
+        font-size: 0.7rem !important;
+        padding: 5px 8px !important;
+    }
+}
+
+/* モバイルサイズでは縦積みに戻す */
+@media (max-width: 768px) {
+    .flex-row[style*="justify-content: center"] {
+        flex-direction: column !important;
+        flex-wrap: wrap !important;
+        align-items: stretch;
+        gap: 1rem;
+    }
+    
+    .flex-row[style*="justify-content: center"] .field {
+        max-width: 100%;
+        flex: none;
+    }
+    
+    .flex-row[style*="justify-content: center"] .field label {
+        font-size: 0.9rem;
+    }
+    
+    .flex-row[style*="justify-content: center"] .field span {
+        font-size: 0.85rem;
+    }
+    
+    .flex-row[style*="justify-content: center"] .field .diag-link-button {
+        font-size: 0.8rem !important;
+        padding: 8px 16px !important;
+    }
+}
+
+/* 非常に小さい画面での最終調整 */
+@media (max-width: 480px) {
+    .flex-row[style*="justify-content: center"] .field .diag-link-button {
+        font-size: 0.75rem !important;
+        padding: 6px 12px !important;
+        white-space: normal !important; /* 小さい画面では改行を許可 */
+    }
+}
+
+/* 基本情報セクションのテキストボックス（氏名・ふりがな）を大きくする */
+/* より具体的なセレクタを使用 */
+section.basic-info-section .flex-row .field span,
+section.centered:nth-of-type(1) .flex-row .field span,
+.centered .flex-row .field span:not(.flex-row[style*="justify-content: center"] .field span) {
+    padding: 1em !important; /* パディングを大きく */
+    background: #f9f9f9 !important;
+    border: 2px solid #007bff !important; /* ボーダーを太く、色を変更して確認しやすく */
+    border-radius: 8px !important; /* 角をもっと丸く */
+    min-height: 60px !important; /* 高さを明確に指定 */
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 1rem !important;
+    font-size: 1.4rem !important; /* フォントサイズをさらに大きく */
+    line-height: 1.8 !important;
+    max-width: 600px !important; /* 最大幅をさらに広く */
+    font-weight: bold !important; /* 太字にして見やすく */
+}
+
+/* 基本情報のラベルも大きくする */
+section.basic-info-section .flex-row .field label,
+section.centered:nth-of-type(1) .flex-row .field label {
+    font-size: 1.2rem !important;
+    font-weight: bold !important;
+    color: #007bff !important;
+    margin-bottom: 0.8rem !important;
+}
+
+/* 基本情報セクション全体のフィールドスタイルを調整 */
+section.basic-info-section .flex-row .field,
+section.centered:nth-of-type(1) .flex-row .field {
+    min-width: 250px !important; /* 最小幅をさらに広く */
+    max-width: none !important;
+    flex: none !important;
+}
+
+/* 学習計画セクションには影響しないように除外 */
+section h3:contains("学習計画") ~ .flex-row .field span {
+    padding: 0.45em 0.6em !important;
+    border: 1px solid #e0e0e0 !important;
+    font-size: 0.85rem !important;
+    min-height: 1.2em !important;
+    font-weight: normal !important;
+}
+
+/* より強力なセレクタで基本情報のみを対象にする */
+.wrapper > form > section.centered:first-of-type .flex-row .field span {
+    padding: 1em !important;
+    background: #f9f9f9 !important;
+    border: 2px solid #007bff !important;
+    border-radius: 8px !important;
+    min-height: 60px !important;
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 1rem !important;
+    font-size: 1.4rem !important;
+    line-height: 1.8 !important;
+    max-width: 600px !important;
+    font-weight: bold !important;
 }

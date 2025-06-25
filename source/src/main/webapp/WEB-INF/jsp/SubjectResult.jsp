@@ -67,7 +67,7 @@
 				type="hidden" name="subjectId" value="${subjectId}" />
 
 			<!-- 基本情報 -->
-			<section class="centered">
+			<section class="centered basic-info-section">
 				<h3>基本情報</h3>
 				<div class="flex-row" style="justify-content: center;">
 					<div class="field">
@@ -114,7 +114,7 @@
 							<a href="${textUrl}" class="diag-link-button">テキスト選出はこちら</a>
 						</div>
 						<div class="field">
-							<label for="schedule">スケジュール作成(先にテキストをお選びください。)</label>
+							<label for="schedule">スケジュール作成(テキスト選出を先に)</label>
 							<c:choose>
 								<c:when test="${not empty subjectData.schedule}">
 									<span>${subjectData.schedule}</span>
