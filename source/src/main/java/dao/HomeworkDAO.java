@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 
 public class HomeworkDAO {
 
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/B2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo";
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/b2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo";
     private static final String DB_USER = "root";
     private static final String DB_PASS = "password"; 
     
