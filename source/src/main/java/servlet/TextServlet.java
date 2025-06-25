@@ -56,10 +56,10 @@ public class TextServlet extends HttpServlet {
         String studentIdStr = request.getParameter("studentId");
         String subjectIdStr = request.getParameter("subjectId");
 
-        System.out.println("[TextServlet POST] action=" + action
+       /*System.out.println("[TextServlet POST] action=" + action
             + ", textId=" + textIdStr
             + ", studentId=" + studentIdStr
-            + ", subjectId=" + subjectIdStr);
+            + ", subjectId=" + subjectIdStr);*/
         // ▲ ここまで追加 ▲
         int studentId = parseIntOrDefault(studentIdStr, 0);
         int subjectId = parseIntOrDefault(subjectIdStr, 0);
