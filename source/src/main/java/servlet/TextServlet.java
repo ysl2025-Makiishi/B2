@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.TextDAO;
 import dto.texts;
@@ -18,10 +19,31 @@ public class TextServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    // 初期表示（GET）
+    // 数字変換補助メソッド
+    private int parseIntOrDefault(String str, int defaultValue) {
+        try {
+            return (str != null) ? Integer.parseInt(str) : defaultValue;
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    // ログインチェック（メソッド化）
+    private boolean checkLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect("LoginServlet");
+            return false;
+        }
+        return true;
+    }
+
+    // GET: 初期表示
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        if (!checkLogin(request, response)) return;
 
         // パラメータ取得
         String studentIdStr = request.getParameter("studentId");
@@ -37,30 +59,25 @@ public class TextServlet extends HttpServlet {
         request.setAttribute("personality", "");
         request.setAttribute("searched", false);
 
-        // 表示
+        // フォワード
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/Text.jsp");
         dispatcher.forward(request, response);
     }
 
-    // POST（検索 or 登録 or 更新）
+    // POST: 検索・登録・更新処理
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        if (!checkLogin(request, response)) return;
+
         request.setCharacterEncoding("UTF-8");
 
-
-        // ▼ ここからログ出力追加 ▼
         String action = request.getParameter("action");
         String textIdStr = request.getParameter("textId");
         String studentIdStr = request.getParameter("studentId");
         String subjectIdStr = request.getParameter("subjectId");
 
-       /*System.out.println("[TextServlet POST] action=" + action
-            + ", textId=" + textIdStr
-            + ", studentId=" + studentIdStr
-            + ", subjectId=" + subjectIdStr);*/
-        // ▲ ここまで追加 ▲
         int studentId = parseIntOrDefault(studentIdStr, 0);
         int subjectId = parseIntOrDefault(subjectIdStr, 0);
 
@@ -159,13 +176,5 @@ public class TextServlet extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/Text.jsp");
         dispatcher.forward(request, response);
     }
-
-    // 数字変換補助メソッド
-    private int parseIntOrDefault(String str, int defaultValue) {
-        try {
-            return (str != null) ? Integer.parseInt(str) : defaultValue;
-        } catch (NumberFormatException e) {
-            return defaultValue;
-        }
-    }
-} 
+ // 
+}
