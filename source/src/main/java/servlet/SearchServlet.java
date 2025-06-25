@@ -25,10 +25,9 @@ public class SearchServlet extends HttpServlet {
         // ログインチェック
         HttpSession session = request.getSession();
 		if (session.getAttribute("id") == null) {
-			response.sendRedirect("LoginServlet");
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
 			return;
 		}
-
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/search.jsp");
         dispatcher.forward(request, response);
     }
@@ -42,7 +41,7 @@ public class SearchServlet extends HttpServlet {
         // ログインチェック
         HttpSession session = request.getSession();
 		if (session.getAttribute("id") == null) {
-			response.sendRedirect("LoginServlet");
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
 			return;
 		}
         // パラメータ取得（null対策済み）
