@@ -1,6 +1,10 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,129 +13,140 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import dao.ScheduleDAO;
-import dto.schedules;
-
 @WebServlet("/ScheduleServlet")
 public class ScheduleServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public ScheduleServlet() {
-        super();
-    }
+	public ScheduleServlet() {
+		super();
+	}
 
-    // GETメソッド（画面表示）
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-    	// もしもログインしていなかったらログインサーブレットにリダイレクトする
-    	HttpSession session = request.getSession();
-    	if (session.getAttribute("id") == null) {
-    		response.sendRedirect(request.getContextPath() + "/LoginServlet");
-    		return;
-    	}
-    	
-    	String studentIdStr = request.getParameter("studentId");
-        String subjectIdStr = request.getParameter("subjectId");
-        String textIdStr = request.getParameter("textId");  // ← 追加
+	// GETメソッド（画面表示）
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        if (studentIdStr == null || subjectIdStr == null) {
-            request.setAttribute("error", "生徒または科目が指定されていません。");
-            request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
-            return;
-        }
+		// もしもログインしていなかったらログインサーブレットにリダイレクトする
+		HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
+			return;
+		}
 
-        try {
-            int studentId = Integer.parseInt(studentIdStr);
-            int subjectId = Integer.parseInt(subjectIdStr);
-            request.setAttribute("studentId", studentId);
-            request.setAttribute("subjectId", subjectId);
+		String studentIdStr = request.getParameter("studentId");
+		String subjectIdStr = request.getParameter("subjectId");
+		String textIdStr = request.getParameter("textId"); // ← 追加
 
-            if (textIdStr != null && !textIdStr.isEmpty()) {
-                try {
-                    int textId = Integer.parseInt(textIdStr);
-                    request.setAttribute("textId", textId);  // ← textIdをJSPに渡す
-                } catch (NumberFormatException e) {
-                    // textIdが無効なときのログ（あってもなくても可）
-                    //System.err.println("無効な textId が渡されました：" + textIdStr);
-                }
-            }
+		if (studentIdStr == null || subjectIdStr == null) {
+			request.setAttribute("error", "生徒または科目が指定されていません。");
+			request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
+			return;
+		}
 
-            request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
+		try {
+			int studentId = Integer.parseInt(studentIdStr);
+			int subjectId = Integer.parseInt(subjectIdStr);
+			request.setAttribute("studentId", studentId);
+			request.setAttribute("subjectId", subjectId);
 
-        } catch (NumberFormatException e) {
-            request.setAttribute("error", "不正なIDが指定されました。");
-            request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
-        }
-    }
+			if (textIdStr != null && !textIdStr.isEmpty()) {
+				try {
+					int textId = Integer.parseInt(textIdStr);
+					request.setAttribute("textId", textId); // ← textIdをJSPに渡す
+				} catch (NumberFormatException e) {
+					// textIdが無効なときのログ（あってもなくても可）
+					// System.err.println("無効な textId が渡されました：" + textIdStr);
+				}
+			}
 
+			request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
 
+		} catch (NumberFormatException e) {
+			request.setAttribute("error", "不正なIDが指定されました。");
+			request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
+		}
+	}
 
+	// ScheduleServlet.java の doPost メソッドを修正
 
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-    // POSTメソッド（登録処理）
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 
-        request.setCharacterEncoding("UTF-8");
-        
-        // もしもログインしていなかったらログインサーブレットにリダイレクトする
-    	HttpSession session = request.getSession();
-    	if (session.getAttribute("id") == null) {
-    		response.sendRedirect(request.getContextPath() + "/LoginServlet");
-    		return;
-    	}
+		HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
+			return;
+		}
 
-        //System.out.println("DEBUG: studentId = " + request.getParameter("studentId"));
-        //System.out.println("DEBUG: subjectId = " + request.getParameter("subjectId"));
-        //System.out.println("DEBUG: calculated_page = " + request.getParameter("calculated_page"));
+		try {
+			int studentId = Integer.parseInt(request.getParameter("studentId"));
+			int subjectId = Integer.parseInt(request.getParameter("subjectId"));
+//			String textIdStr = request.getParameter("textId");
+			String calculatedPageStr = request.getParameter("calculated_page");
 
-        try {
-            int studentId = Integer.parseInt(request.getParameter("studentId"));
-            int subjectId = Integer.parseInt(request.getParameter("subjectId"));
-            String textIdStr = request.getParameter("textId");
-            int textId = 0; // 0を「未指定」の意味にする
+//			System.out.println("=== ScheduleServlet POST デバッグ ===");
+//			System.out.println("studentId: " + studentId);
+//			System.out.println("subjectId: " + subjectId);
+//			System.out.println("textIdStr: " + textIdStr);
+//			System.out.println("calculatedPageStr: " + calculatedPageStr);
+//			System.out.println("=====================================");
 
-            if (textIdStr != null && !textIdStr.isEmpty()) {
-                try {
-                    textId = Integer.parseInt(textIdStr);
-                } catch (NumberFormatException e) {
-                    textId = 0; // 無効なら0にする
-                }
-            }
+			if (calculatedPageStr == null || calculatedPageStr.isEmpty()) {
+				request.setAttribute("error", "ページ数が計算されていません。");
+				request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
+				return;
+			}
 
+			int pages = Integer.parseInt(calculatedPageStr);
 
-            String calculatedPageStr = request.getParameter("calculated_page");
-            if (calculatedPageStr == null || calculatedPageStr.isEmpty()) {
-                request.setAttribute("error", "ページ数が計算されていません。");
-                request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
-                return;
-            }
+			// ★ 修正：IndividualResultsDAOのupdateScheduleメソッドを使用
+			// 既存のスケジュールのtext_idを取得
+			int existingTextId = getExistingTextId(studentId, subjectId);
 
-            int pages = Integer.parseInt(calculatedPageStr);
+			if (existingTextId > 0) {
+				// 既存のスケジュールが存在する場合、text_idを保持してpagesのみ更新
+				boolean success = dao.IndividualResultsDAO.updateSchedule(studentId, subjectId, existingTextId, pages);
+//				System.out.println("既存スケジュール更新結果: " + success);
 
-            schedules schedule = new schedules();
-            schedule.setStudent_id(studentId);
-            schedule.setSubject_id(subjectId);
-            schedule.setPages(pages);
-            schedule.setText_id(textId);
-            ScheduleDAO dao = new ScheduleDAO();
-            boolean success = dao.upsertPages(schedule);
+				if (success) {
+					response.sendRedirect(request.getContextPath() + "/SubjectResultServlet?studentId=" + studentId
+							+ "&subjectId=" + subjectId);
+				} else {
+					request.setAttribute("error", "スケジュールの更新に失敗しました。");
+					request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
+				}
+			} else {
+				// 既存のスケジュールが存在しない場合はエラー
+				request.setAttribute("error", "先にテキストを選出してください。");
+				request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
+			}
 
-            //System.out.println("DEBUG: DAO update result = " + success);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			request.setAttribute("error", "数字の形式が正しくありません。");
+			request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
+		}
+	}
 
-            if (success) {
-                response.sendRedirect(request.getContextPath() + "/SubjectResultServlet?studentId=" + studentId + "&subjectId=" + subjectId);
-            } else {
-                request.setAttribute("error", "登録に失敗しました。");
-                request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
-            }
+	// ★ 新規追加：既存のtext_idを取得するメソッド
+	private int getExistingTextId(int studentId, int subjectId) {
+		try (Connection conn = DriverManager.getConnection(
+				"jdbc:mysql://localhost:3306/b2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo", "root",
+				"password")) {
 
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            request.setAttribute("error", "数字の形式が正しくありません。");
-            request.getRequestDispatcher("/WEB-INF/jsp/Schedule.jsp").forward(request, response);
-        }
-    }
-
-
+			String sql = "SELECT text_id FROM schedules WHERE student_id = ? AND subject_id = ?";
+			try (PreparedStatement ps = conn.prepareStatement(sql)) {
+				ps.setInt(1, studentId);
+				ps.setInt(2, subjectId);
+				ResultSet rs = ps.executeQuery();
+				if (rs.next()) {
+					return rs.getInt("text_id");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0; // 見つからない場合は0を返す
+	}
 }

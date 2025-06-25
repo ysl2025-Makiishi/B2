@@ -4,7 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 個人結果表示専用 DTO - 生徒基本情報 - 志望校情報 - 学校・性格 - 各教科のGPA（9教科） - 模試結果リスト
+ * 個人結果表示専用 DTO - 生徒基本情報 - 志望校情報 - 学校・性格 - 各教科のGPA（9教科） - 模試結果リスト -
+ * スケジュール（テキスト選出）データ
  */
 public class IndividualResults {
 	// === 基本情報 ===
@@ -42,6 +43,11 @@ public class IndividualResults {
 	private List<ExamScore> examResults;
 	private List<Gpa> gpaList;
 
+	// === スケジュール（テキスト選出）関連 ===
+	private List<Schedule> schedules;
+
+	// ========== Getter / Setter ==========
+
 	public List<Gpa> getGpaList() {
 		return gpaList;
 	}
@@ -50,7 +56,13 @@ public class IndividualResults {
 		this.gpaList = gpaList;
 	}
 
-	// ========== Getter / Setter ==========
+	public List<Schedule> getSchedules() {
+		return schedules;
+	}
+
+	public void setSchedules(List<Schedule> schedules) {
+		this.schedules = schedules;
+	}
 
 	public int getId() {
 		return id;
@@ -228,6 +240,88 @@ public class IndividualResults {
 		this.examResults = examResults;
 	}
 
+	// ========================================
+	// === スケジュール（テキスト選出）の内部クラス ===
+	// ========================================
+	public static class Schedule {
+		private int id;
+		private int studentId;
+		private int subjectId;
+		private int textId;
+		private int pages;
+		private String subjectName;
+		private String textName;
+		private int totalPages;
+
+		// getter/setter
+		public int getId() {
+			return id;
+		}
+
+		public void setId(int id) {
+			this.id = id;
+		}
+
+		public int getStudentId() {
+			return studentId;
+		}
+
+		public void setStudentId(int studentId) {
+			this.studentId = studentId;
+		}
+
+		public int getSubjectId() {
+			return subjectId;
+		}
+
+		public void setSubjectId(int subjectId) {
+			this.subjectId = subjectId;
+		}
+
+		public int getTextId() {
+			return textId;
+		}
+
+		public void setTextId(int textId) {
+			this.textId = textId;
+		}
+
+		public int getPages() {
+			return pages;
+		}
+
+		public void setPages(int pages) {
+			this.pages = pages;
+		}
+
+		public String getSubjectName() {
+			return subjectName;
+		}
+
+		public void setSubjectName(String subjectName) {
+			this.subjectName = subjectName;
+		}
+
+		public String getTextName() {
+			return textName;
+		}
+
+		public void setTextName(String textName) {
+			this.textName = textName;
+		}
+
+		public int getTotalPages() {
+			return totalPages;
+		}
+
+		public void setTotalPages(int totalPages) {
+			this.totalPages = totalPages;
+		}
+	}
+
+	// ========================================
+	// === 既存の内部クラス ===
+	// ========================================
 	public static class Gpa {
 		private String subjectName;
 		private int gpa;

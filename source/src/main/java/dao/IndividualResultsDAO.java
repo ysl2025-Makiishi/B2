@@ -11,13 +11,14 @@ import java.util.List;
 import dto.IndividualResults;
 import dto.IndividualResults.ExamScore;
 import dto.IndividualResults.Gpa;
+import dto.IndividualResults.Schedule;
 
 public class IndividualResultsDAO {
 	private static final String JDBC_URL = "jdbc:mysql://localhost:3306/b2?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Tokyo";
 	private static final String DB_USER = "root";
 	private static final String DB_PASS = "password";
 
-	// 既存のgetStudentInfoメソッドはそのまま...
+	// 既存のgetStudentInfoメソッドを修正
 	public static IndividualResults getStudentInfo(int studentId) {
 		IndividualResults result = null;
 
@@ -53,10 +54,8 @@ public class IndividualResultsDAO {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, studentId);
 			ResultSet rs = ps.executeQuery();
-//			System.out.println("getStudentInfo: studentId = " + studentId);
 
 			if (rs.next()) {
-//				System.out.println("該当生徒あり：DBから取得成功");
 				result = new IndividualResults();
 				result.setId(rs.getInt("id"));
 				result.setName(rs.getString("name"));
@@ -77,23 +76,17 @@ public class IndividualResultsDAO {
 				result.setGpaAr(rs.getInt("gpa_ar"));
 				result.setGpaPe(rs.getInt("gpa_pe"));
 				result.setGpaTe(rs.getInt("gpa_te"));
-			} else {
-//				System.out.println("該当生徒なし：IDに一致するデータがDBにない");
 			}
 
 			if (result != null) {
 				try {
-//					System.out.println("=== 模試結果取得開始 ===");
 					result.setGpaList(getGpaList(conn, studentId));
-//					System.out.println("GPA取得完了");
+					result.setExamResults(getExamResults(conn, studentId));
 
-					List<ExamScore> examResults = getExamResults(conn, studentId);
-//					System.out.println("取得した模試結果の件数: " + examResults.size());
-					result.setExamResults(examResults);
+					// ★ 追加：スケジュール（テキスト選出）データを取得
+					result.setSchedules(getSchedules(conn, studentId));
 
-//					System.out.println("=== 模試結果取得完了 ===");
 				} catch (Exception e) {
-//					System.out.println("模試取得でエラー発生: " + e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -107,9 +100,6 @@ public class IndividualResultsDAO {
 
 	// === 新規追加：更新メソッド ===
 
-	/**
-	 * 生徒の基本情報を更新
-	 */
 	/**
 	 * 生徒の基本情報を更新（学校名・志望校も含む）
 	 */
@@ -170,12 +160,10 @@ public class IndividualResultsDAO {
 
 				int result = ps.executeUpdate();
 				conn.commit();
-//				System.out.println("基本情報更新結果: " + result + "件");
 				return result > 0;
 			}
 
 		} catch (SQLException e) {
-//			System.out.println("基本情報更新エラー: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -246,9 +234,6 @@ public class IndividualResultsDAO {
 	}
 
 	/**
-	 * GPAデータを更新（INSERT ON DUPLICATE KEY UPDATE）
-	 */
-	/**
 	 * GPAデータを更新（DELETE + INSERT方式）
 	 */
 	public static boolean updateGPA(int studentId, String gpaJp, String gpaSs, String gpaMa, String gpaSc, String gpaEn,
@@ -264,9 +249,7 @@ public class IndividualResultsDAO {
 				String deleteSql = "DELETE FROM gpas WHERE student_id = ?";
 				try (PreparedStatement deletePs = conn.prepareStatement(deleteSql)) {
 					deletePs.setInt(1, studentId);
-//					int deleted = deletePs.executeUpdate();
 					deletePs.executeUpdate();
-//					System.out.println("既存GPA削除: " + deleted + "件");
 				}
 
 				// 2. 新しいGPAデータを挿入
@@ -285,10 +268,9 @@ public class IndividualResultsDAO {
 								int result = insertPs.executeUpdate(); // 1件ずつ実行
 								if (result > 0) {
 									insertCount++;
-//									System.out.println("GPA挿入成功: subject_id=" + (i + 1) + ", gpa=" + gpaValue);
 								}
 							} catch (NumberFormatException e) {
-//								System.out.println("GPA値が不正: " + gpaValues[i]);
+								// GPA値が不正な場合はスキップ
 							}
 						}
 					}
@@ -296,18 +278,15 @@ public class IndividualResultsDAO {
 
 				// 3. トランザクションをコミット
 				conn.commit();
-//				System.out.println("GPA更新完了: " + insertCount + "件");
 				return insertCount > 0;
 
 			} catch (SQLException e) {
 				// エラー時はロールバック
 				conn.rollback();
-//				System.out.println("GPA更新でエラー、ロールバック: " + e.getMessage());
 				throw e;
 			}
 
 		} catch (Exception e) {
-//			System.out.println("GPA更新エラー: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -320,7 +299,6 @@ public class IndividualResultsDAO {
 			String[] examSubjects, String[] examScores, String[] examDevs, String[] examAvgs) {
 
 		if (examNames == null || examNames.length == 0) {
-//			System.out.println("模試データがありません");
 			return true; // エラーではない
 		}
 
@@ -389,11 +367,9 @@ public class IndividualResultsDAO {
 			}
 
 			conn.commit();
-//			System.out.println("模試結果登録完了");
 			return true;
 
 		} catch (Exception e) {
-//			System.out.println("模試結果登録エラー: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -429,7 +405,7 @@ public class IndividualResultsDAO {
 		}
 	}
 
-	// 既存のプライベートメソッドはそのまま...
+	// 既存のプライベートメソッド
 	private static List<Gpa> getGpaList(Connection conn, int studentId) throws SQLException {
 		List<Gpa> list = new ArrayList<>();
 		String sql = """
@@ -469,9 +445,6 @@ public class IndividualResultsDAO {
 			ps.setInt(1, studentId);
 			ResultSet rs = ps.executeQuery();
 
-//			System.out.println("【模試取得テスト】studentId = " + studentId);
-//			int count = 0;
-
 			while (rs.next()) {
 				ExamScore exam = new ExamScore();
 				exam.setExamName(rs.getString("exam_name"));
@@ -481,12 +454,91 @@ public class IndividualResultsDAO {
 				exam.setDeviationValue(rs.getDouble("deviation_value"));
 				exam.setAverageScore(rs.getDouble("average_score"));
 				list.add(exam);
-//				count++;
 			}
-
-//			System.out.println("模試件数: " + count);
 		}
 
 		return list;
+	}
+
+	// ★ 新規追加：スケジュール（テキスト選出）データ取得メソッド
+	private static List<Schedule> getSchedules(Connection conn, int studentId) throws SQLException {
+		List<Schedule> list = new ArrayList<>();
+
+		String sql = """
+					SELECT sch.id, sch.student_id, sch.subject_id, sch.text_id, sch.pages,
+					       sub.subject_name, t.text_name, t.pages as total_pages
+					FROM schedules sch
+					LEFT JOIN subjects sub ON sch.subject_id = sub.id
+					LEFT JOIN texts t ON sch.text_id = t.id
+					WHERE sch.student_id = ?
+					ORDER BY sch.subject_id ASC
+				""";
+
+		try (PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setInt(1, studentId);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Schedule schedule = new Schedule();
+				schedule.setId(rs.getInt("id"));
+				schedule.setStudentId(rs.getInt("student_id"));
+				schedule.setSubjectId(rs.getInt("subject_id"));
+				schedule.setTextId(rs.getInt("text_id"));
+				schedule.setPages(rs.getInt("pages"));
+				schedule.setSubjectName(rs.getString("subject_name"));
+				schedule.setTextName(rs.getString("text_name"));
+				schedule.setTotalPages(rs.getInt("total_pages"));
+				list.add(schedule);
+			}
+		}
+
+		return list;
+	}
+
+	// ★ 新規追加：スケジュール更新メソッド
+	public static boolean updateSchedule(int studentId, int subjectId, int textId, int pages) {
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+			String sql = """
+						INSERT INTO schedules (student_id, subject_id, text_id, pages, created_at, updated_at)
+						VALUES (?, ?, ?, ?, NOW(), NOW())
+						ON DUPLICATE KEY UPDATE
+						text_id = VALUES(text_id),
+						pages = VALUES(pages),
+						updated_at = NOW()
+					""";
+
+			try (PreparedStatement ps = conn.prepareStatement(sql)) {
+				ps.setInt(1, studentId);
+				ps.setInt(2, subjectId);
+				ps.setInt(3, textId);
+				ps.setInt(4, pages);
+
+				int result = ps.executeUpdate();
+				return result > 0;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	// ★ 新規追加：スケジュール削除メソッド
+	public static boolean deleteSchedule(int studentId, int subjectId) {
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+			String sql = "DELETE FROM schedules WHERE student_id = ? AND subject_id = ?";
+
+			try (PreparedStatement ps = conn.prepareStatement(sql)) {
+				ps.setInt(1, studentId);
+				ps.setInt(2, subjectId);
+
+				int result = ps.executeUpdate();
+				return result > 0;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

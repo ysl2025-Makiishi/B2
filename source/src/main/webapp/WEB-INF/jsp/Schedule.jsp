@@ -92,7 +92,7 @@
         
         <input type="hidden" name="studentId" value="${studentId}">
 		<input type="hidden" name="subjectId" value="${subjectId}">
-        <input type="hidden" name="textId" value="${textId != null ? textId : 1}">
+        <input type="hidden" name="textId" value="${textId != null ? textId : ''}">
         
         
         
