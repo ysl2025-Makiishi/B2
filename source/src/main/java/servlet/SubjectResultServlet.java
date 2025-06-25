@@ -25,18 +25,16 @@ public class SubjectResultServlet extends HttpServlet {
 		// ★デバッグ用出力
 //		System.out.println("=== SubjectResultServlet GET 開始 ===");
 
-		// もしもログインしていなかったらログインサーブレットにリダイレクトする
-		HttpSession session = request.getSession();
-
 		// ★セッション状態をデバッグ出力
 //		System.out.println("セッションID: " + session.getId());
 //		System.out.println("セッションの'id'属性: [" + session.getAttribute("id") + "]");
 //		System.out.println("セッションの'loginUser'属性: [" + session.getAttribute("loginUser") + "]");
 //		System.out.println("セッションが新規作成?: " + session.isNew());
 
+		// もしもログインしていなかったらログインサーブレットにリダイレクトする
+		HttpSession session = request.getSession();
 		if (session.getAttribute("id") == null) {
-//			System.out.println("★★★ ログインしていません。LoginServletにリダイレクトします ★★★");
-			response.sendRedirect("LoginServlet");
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
 			return;
 		}
 
@@ -83,16 +81,14 @@ public class SubjectResultServlet extends HttpServlet {
 		// ★デバッグ用出力
 //		System.out.println("=== SubjectResultServlet POST 開始 ===");
 
-		// もしもログインしていなかったらログインサーブレットにリダイレクトする
-		HttpSession session = request.getSession();
-
 		// ★セッション状態をデバッグ出力
 //		System.out.println("POSTでのセッションID: " + session.getId());
 //		System.out.println("POSTでのセッションの'id'属性: [" + session.getAttribute("id") + "]");
 
+		// もしもログインしていなかったらログインサーブレットにリダイレクトする
+		HttpSession session = request.getSession();
 		if (session.getAttribute("id") == null) {
-//			System.out.println("★★★ POST処理でログインしていません。LoginServletにリダイレクトします ★★★");
-			response.sendRedirect("LoginServlet");
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
 			return;
 		}
 
