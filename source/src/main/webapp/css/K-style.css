@@ -141,7 +141,7 @@ h2.help-title {
 
 /* ヘルプ本文全体 */
 .help-content {
-  max-width: 700px;
+  max-width: 720px;
   margin: 0 auto;  /* 中央寄せ */
   text-align: left; /* 文章は左揃え */
   line-height: 1.7; /* 行間を広めにして読みやすく */
@@ -173,4 +173,13 @@ h2.help-title {
   margin-bottom: 0.8rem;
 }
 
+.help-content ul li {
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
 
+.help-content ul {
+  margin-bottom: 2.3rem; 
+}
