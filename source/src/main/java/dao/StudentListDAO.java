@@ -27,32 +27,31 @@ public class StudentListDAO {
          // デフォルトはID順
          String orderBy = "s.id ASC";
 
-         // 並び替え条件に応じてSQLのORDER BY句を切り替える
+      // 並び替え条件に応じてSQLのORDER BY句を切り替える
          if (sort != null) {
-        	// dao/StudentListDAO.java の該当箇所
-        	 switch (sort) {
-        	     case "createdAsc":
-        	         orderBy = "s.created_at ASC";
-        	         break;
-        	     case "createdDesc":
-        	         orderBy = "s.created_at DESC";
-        	         break;
-        	     case "updatedAsc":
-        	         orderBy = "s.updated_at ASC";
-        	         break;
-        	     case "updatedDesc":
-        	         orderBy = "s.updated_at DESC";
-        	         break;
-        	     case "nameAsc":
-        	         orderBy = "s.furigana COLLATE utf8mb4_ja_0900_as_cs ASC";  // ← 変更
-        	         break;
-        	     case "nameDesc":
-        	         orderBy = "s.furigana COLLATE utf8mb4_ja_0900_as_cs DESC"; // ← 変更
-        	         break;
-        	 }
+             switch (sort) {
+                 case "createdAsc":
+                     orderBy = "s.created_at ASC";
+                     break;
+                 case "createdDesc":
+                     orderBy = "s.created_at DESC";
+                     break;
+                 case "updatedAsc":
+                     orderBy = "s.updated_at ASC";
+                     break;
+                 case "updatedDesc":
+                     orderBy = "s.updated_at DESC";
+                     break;
 
-
+                 case "nameAsc":
+                     orderBy = "s.furigana COLLATE utf8mb4_unicode_ci ASC";
+                     break;
+                 case "nameDesc":
+                     orderBy = "s.furigana COLLATE utf8mb4_unicode_ci DESC";
+                     break;
+             }
          }
+
 
          // SQL文（並び順を変える）
          String sql = "SELECT s.id, s.name, s.furigana, s.gender, sc.school_name " +
