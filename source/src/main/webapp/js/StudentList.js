@@ -111,13 +111,13 @@ document.getElementById("studentCount").textContent = students.length;
   });
   renderGrid();
   
-  document.getElementById("sortSelect").addEventListener("change", (e) => {
+  //document.getElementById("sortSelect").addEventListener("change", (e) => {
   
-});
+//});
 
 
 // 並び替えボタンのクリックでプルダウン表示／非表示
-document.getElementById("toggleSortBtn").addEventListener("click", () => {
-  const sortOptions = document.getElementById("sortOptions");
-  sortOptions.style.display = (sortOptions.style.display === "none") ? "block" : "none";
-});
+//document.getElementById("toggleSortBtn").addEventListener("click", () => {
+ // const sortOptions = document.getElementById("sortOptions");
+ // sortOptions.style.display = (sortOptions.style.display === "none") ? "block" : "none";
+//});
