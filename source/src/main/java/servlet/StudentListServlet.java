@@ -40,11 +40,12 @@ public class StudentListServlet extends HttpServlet {
 
 	    request.setCharacterEncoding("UTF-8");
 	    
-	    HttpSession session = request.getSession();
-		if (session.getAttribute("id") == null) {
-			response.sendRedirect("LoginServlet");
-			return;
-		}
+	    // もしもログインしていなかったらログインサーブレットにリダイレクトする
+    	HttpSession session = request.getSession();
+    	if (session.getAttribute("id") == null) {
+    		response.sendRedirect(request.getContextPath() + "/LoginServlet");
+    		return;
+    	}
 
 	    int id = 0;
 	    String idStr = request.getParameter("id");

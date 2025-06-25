@@ -32,8 +32,8 @@ public class TextServlet extends HttpServlet {
     private boolean checkLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
     	HttpSession session = request.getSession();
 		if (session.getAttribute("id") == null) {
-			response.sendRedirect("LoginServlet");
-            return false;
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
+			return false;
         }
         return true;
     }
@@ -42,8 +42,9 @@ public class TextServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	
 
-        if (!checkLogin(request, response)) return;
+       // if (!checkLogin(request, response)) return;
 
         // パラメータ取得
         String studentIdStr = request.getParameter("studentId");
