@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (input) {
       input.addEventListener('input', () => {
         const v = input.value.trim();
-        if (!/^[1-5]$/.test(v)) {
+        if (!/^[0-5]$/.test(v)) {
           input.value = '';
         }
         calculateNaishin();
