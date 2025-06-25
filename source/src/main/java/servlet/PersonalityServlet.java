@@ -20,11 +20,11 @@ public class PersonalityServlet extends HttpServlet {
             throws ServletException, IOException {
     	
     	//もしもログインしていなかったらログインサーブレットにリダイレクトする
-    			HttpSession session = request.getSession();
-    			if (session.getAttribute("id") == null) {
-    				response.sendRedirect(request.getContextPath() + "/LoginServlet");
-    				return;
-    			}
+    	HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
+			return;
+		}
     			
     	//ここにいれる
     	request.setCharacterEncoding("UTF-8");
@@ -64,11 +64,11 @@ public class PersonalityServlet extends HttpServlet {
             throws ServletException, IOException {
     	
     	//もしもログインしていなかったらログインサーブレットにリダイレクトする
-    			HttpSession session = request.getSession();
-    			if (session.getAttribute("id") == null) {
-    				response.sendRedirect(request.getContextPath() + "/LoginServlet");
-    				return;
-    			}
+    	HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
+			return;
+		}
     			
     	//ここにいれる
     	request.setCharacterEncoding("UTF-8");
