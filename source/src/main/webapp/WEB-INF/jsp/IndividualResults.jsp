@@ -15,8 +15,6 @@ LocalDate today = LocalDate.now();
 <link rel="stylesheet" href="<c:url value='/css/K-style.css' />" />
 <link rel="stylesheet"
 	href="<c:url value='/css/IndividualResults.css' />" />
-<link rel="stylesheet"
-	href="<c:url value='/css/RadarChart.css' />" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
@@ -296,7 +294,6 @@ LocalDate today = LocalDate.now();
 	</div>
 
 	<script src="<c:url value='/js/IndividualResults.js' />"></script>
-	<script src="<c:url value='/js/RadarChart.js' />"></script>
 
 	<script type="text/javascript">
 	// サーバーサイドデータをJavaScriptに渡す
