@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.HomeworkDAO;
 
@@ -21,6 +22,14 @@ public class HomeworkServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+    	
+    	// もしもログインしていなかったらログインサーブレットにリダイレクトする
+ 		HttpSession session = request.getSession();
+ 		if (session.getAttribute("id") == null) {
+ 			response.sendRedirect("LoginServlet");
+ 			return;
+ 		}
+ 		
         String studentIdStr = request.getParameter("studentId");
         String subjectIdStr = request.getParameter("subjectId");
 
@@ -74,6 +83,13 @@ public class HomeworkServlet extends HttpServlet {
         
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
+        
+     // もしもログインしていなかったらログインサーブレットにリダイレクトする
+ 		HttpSession session = request.getSession();
+ 		if (session.getAttribute("id") == null) {
+ 			response.sendRedirect("LoginServlet");
+ 			return;
+ 		}
 
         try {
             int studentId = Integer.parseInt(request.getParameter("studentId"));

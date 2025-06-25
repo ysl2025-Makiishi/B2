@@ -38,9 +38,9 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("pw");
 
 		// ★デバッグ用出力
-		System.out.println("=== ログイン処理開始 ===");
-		System.out.println("受信したuserIdの生値: [" + userId + "]");
-		System.out.println("受信したpasswordの生値: [" + password + "]");
+//		System.out.println("=== ログイン処理開始 ===");
+//		System.out.println("受信したuserIdの生値: [" + userId + "]");
+//		System.out.println("受信したpasswordの生値: [" + password + "]");
 
 		if (userId != null) {
 			userId = userId.trim();
@@ -50,12 +50,12 @@ public class LoginServlet extends HttpServlet {
 		}
 
 		// ★デバッグ用出力
-		System.out.println("トリム後のuserId: [" + userId + "]");
-		System.out.println("トリム後のpassword: [" + password + "]");
+//		System.out.println("トリム後のuserId: [" + userId + "]");
+//		System.out.println("トリム後のpassword: [" + password + "]");
 
 		// ★空文字やnullチェックを追加
 		if (userId == null || userId.isEmpty() || password == null || password.isEmpty()) {
-			System.out.println("ERROR: userIdまたはpasswordが空です");
+//			System.out.println("ERROR: userIdまたはpasswordが空です");
 			Result result = new Result("ログイン失敗！", "ID またはパスワードを入力してください。", request.getContextPath() + "/LoginServlet");
 			request.setAttribute("result", result);
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");
@@ -68,25 +68,25 @@ public class LoginServlet extends HttpServlet {
 		IdPw cred = new IdPw(userId, password);
 		boolean loginOK = dao.isLoginOK(cred);
 
-		System.out.println("認証結果: " + loginOK);
+//		System.out.println("認証結果: " + loginOK);
 
 		if (loginOK) { // ===== 認証成功 =====
 			HttpSession session = request.getSession();
 
 			// ★セッションに設定する前にデバッグ出力
-			System.out.println("セッションに設定するuserId: [" + userId + "]");
+//			System.out.println("セッションに設定するuserId: [" + userId + "]");
 
 			session.setAttribute("loginUser", new LoginUser(userId));
 			session.setAttribute("id", userId);
 
 			// ★設定後の確認
-			System.out.println("セッションに設定されたid: [" + session.getAttribute("id") + "]");
-			System.out.println("セッションに設定されたloginUser: [" + session.getAttribute("loginUser") + "]");
+//			System.out.println("セッションに設定されたid: [" + session.getAttribute("id") + "]");
+//			System.out.println("セッションに設定されたloginUser: [" + session.getAttribute("loginUser") + "]");
 
 			// ホーム画面へリダイレクト
 			response.sendRedirect(request.getContextPath() + "/HomeServlet");
 		} else { // ===== 認証失敗 =====
-			System.out.println("認証失敗: ID またはパスワードが間違っています");
+//			System.out.println("認証失敗: ID またはパスワードが間違っています");
 			Result result = new Result("ログイン失敗！", "ID またはパスワードが間違っています。", request.getContextPath() + "/LoginServlet");
 			request.setAttribute("result", result);
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");

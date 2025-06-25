@@ -10,46 +10,54 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/SearchServlet")
 public class SearchServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    // GETリクエスト：検索フォームを表示
+    // GET：検索フォームを表示
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	 request.setCharacterEncoding("UTF-8");
+
+        request.setCharacterEncoding("UTF-8");
+
+        // ログインチェック
+        HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect("LoginServlet");
+			return;
+		}
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/search.jsp");
         dispatcher.forward(request, response);
     }
 
-    // POSTリクエスト：検索実行 → 検索結果画面にリダイレクト
+    // POST：検索処理を実行しリダイレクト
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
 
-        // パラメータ取得（null対策付き）
+        // ログインチェック
+        HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect("LoginServlet");
+			return;
+		}
+        // パラメータ取得（null対策済み）
         String name = getSafeParam(request.getParameter("name"));
         String furigana = getSafeParam(request.getParameter("furigana"));
         String schoolName = getSafeParam(request.getParameter("schoolName"));
-        
-        /*String name = request.getParameter("name");
-        String furigana = request.getParameter("furigana");
-        String school = request.getParameter("school");*/
-        
-     // nullチェックして空文字にする
-        name = name == null ? "" : name;
-        furigana = furigana == null ? "" : furigana;
-        schoolName = schoolName == null ? "" : schoolName;
-
 
         try {
-            // URLエンコードして検索結果画面にリダイレクト
-        	String redirectUrl = "SearchResultServlet?name=" + URLEncoder.encode(name, StandardCharsets.UTF_8)
-            + "&furigana=" + URLEncoder.encode(furigana, StandardCharsets.UTF_8)
-            + "&schoolName=" + URLEncoder.encode(schoolName, StandardCharsets.UTF_8); // ← ここ！
+            // URLエンコードしてリダイレクト
+            String redirectUrl = "SearchResultServlet?name=" + URLEncoder.encode(name, StandardCharsets.UTF_8)
+                    + "&furigana=" + URLEncoder.encode(furigana, StandardCharsets.UTF_8)
+                    + "&schoolName=" + URLEncoder.encode(schoolName, StandardCharsets.UTF_8);
+
             response.sendRedirect(redirectUrl);
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "検索結果の遷移中にエラーが発生しました。");
@@ -57,7 +65,7 @@ public class SearchServlet extends HttpServlet {
         }
     }
 
-    // null を安全な空文字に変換するヘルパーメソッド
+    // null → 空文字にするヘルパー
     private String getSafeParam(String param) {
         return param != null ? param : "";
     }

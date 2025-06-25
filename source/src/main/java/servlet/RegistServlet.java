@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.RegistDAO;
 import dto.aspiration_schools;
@@ -30,12 +31,12 @@ public class RegistServlet extends HttpServlet{
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		
-		// もしもログインしていなかったらログインサーブレットにリダイレクトする
-//		HttpSession session = request.getSession();
-//		if (session.getAttribute("id") == null) {
-//			response.sendRedirect("/webapp/LoginServlet");
-//			return;
-//		}
+		 //もしもログインしていなかったらログインサーブレットにリダイレクトする
+		HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
+			return;
+		}
 
 		// 登録ページにフォワードする
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/regist.jsp");
@@ -51,11 +52,11 @@ public class RegistServlet extends HttpServlet{
 		request.setCharacterEncoding("UTF-8");
 		
 		// もしもログインしていなかったらログインサーブレットにリダイレクトする
-//		HttpSession session = request.getSession();
-//		if (session.getAttribute("id") == null) {
-//			response.sendRedirect("/webapp/LoginServlet");
-//			return;
-//		}
+		HttpSession session = request.getSession();
+		if (session.getAttribute("id") == null) {
+			response.sendRedirect(request.getContextPath() + "/LoginServlet");
+			return;
+		}
 		
 		//生年月日を受け取る
 		String birthdayStr = request.getParameter("birthday");
@@ -140,3 +141,4 @@ public class RegistServlet extends HttpServlet{
 		response.sendRedirect(request.getContextPath() + "/StudentListServlet");
 	}
 }
+	
