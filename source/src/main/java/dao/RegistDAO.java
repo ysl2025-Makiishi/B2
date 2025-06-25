@@ -25,7 +25,7 @@ public class RegistDAO {
 	        }
 	    }
 	private Connection  getConnection() throws SQLException {
-		String url = "jdbc:mysql://localhost:3306/B2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Tokyo";
+		String url = "jdbc:mysql://localhost:3306/b2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Tokyo";
 		String user = "root";
 		String password = "password";
 		return DriverManager.getConnection(url, user, password);
