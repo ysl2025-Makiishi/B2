@@ -179,7 +179,7 @@
 
 				<!-- 保存ボタン -->
 				<div class="section-btn-row">
-					<button type="submit" class="save-btn">保存</button>
+					<button type="submit" class="save-btn">更新</button>
 				</div>
 			</c:if>
 		</form>
