@@ -63,7 +63,7 @@ public class HomeworkServlet extends HttpServlet {
                 } else {
                     int pagesPerDay = (int) Math.ceil((double) totalPages / daysBetween);
                     request.setAttribute("pagesPerDay", pagesPerDay);
-
+                    
                     // 既に登録されているか確認
                     HomeworkDAO dao = new HomeworkDAO();
                     boolean isRegistered = dao.existsHomework(studentId, subjectId);
@@ -85,7 +85,7 @@ public class HomeworkServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
-
+        
         // ログインチェック（最初に行う）
         HttpSession session = request.getSession();
         if (session.getAttribute("id") == null) {
@@ -98,18 +98,18 @@ public class HomeworkServlet extends HttpServlet {
             int subjectId = Integer.parseInt(request.getParameter("subjectId"));
             int pagesPerDay = Integer.parseInt(request.getParameter("pagesPerDay"));
             String action = request.getParameter("action");
-
+            
             HomeworkDAO dao = new HomeworkDAO();
-
+            
             if ("update".equals(action)) {
                 dao.updateHomework(studentId, subjectId, pagesPerDay);
             } else {
                 dao.insertHomework(studentId, subjectId, pagesPerDay);
             }
-
+            
             // 科目別の個人結果画面にリダイレクト
             response.sendRedirect(request.getContextPath() + "/SubjectResultServlet?studentId=" + studentId + "&subjectId=" + subjectId);
-
+            
         } catch (Exception e) {
             response.getWriter().println("<h3>エラーが発生しました。</h3>");
             response.getWriter().println("<pre>");
