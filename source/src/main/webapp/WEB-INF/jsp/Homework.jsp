@@ -64,6 +64,7 @@
 
         <div class="submit-btn">
           <button type="submit">提案を表示</button>
+           <button type="reset" style="margin-left: 10px;">リセット</button>
         </div>
       </form>
 
