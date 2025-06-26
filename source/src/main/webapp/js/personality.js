@@ -18,7 +18,7 @@ let personality = "";
             val = parseInt(document.querySelector(`input[name="q6"]:checked`).value);       //これでq6のvalueを取得。
             Openness += val;
 
-            console.log("Openness:" + Openness);   //テスト用
+            //console.log("Openness:" + Openness);   //テスト用
 
             //勤勉性を計算
             val = parseInt(document.querySelector(`input[name="q2"]:checked`).value);   
@@ -27,7 +27,7 @@ let personality = "";
             val = parseInt(document.querySelector(`input[name="q7"]:checked`).value);       
             Diligence += val;
 
-            console.log("Diligence:" + Diligence);   //テスト用
+            //console.log("Diligence:" + Diligence);   //テスト用
         
             //神経症傾向を計算
             val = parseInt(document.querySelector(`input[name="q3"]:checked`).value);   
@@ -36,7 +36,7 @@ let personality = "";
             val = parseInt(document.querySelector(`input[name="q8"]:checked`).value);       
             Neuroticism += val;
 
-            console.log("Neuroticism:" + Neuroticism);   //テスト用
+            //console.log("Neuroticism:" + Neuroticism);   //テスト用
 
             //外向性を計算
             val = parseInt(document.querySelector(`input[name="q4"]:checked`).value);   
@@ -45,7 +45,7 @@ let personality = "";
             val = parseInt(document.querySelector(`input[name="q5"]:checked`).value);       
             Extraversion += val;
 
-            console.log("Extraversion:" + Extraversion);   //テスト用
+            //console.log("Extraversion:" + Extraversion);   //テスト用
 
             //性格タイプを決定する関数
             personality = decisionPersonality(Openness, Diligence, Neuroticism, Extraversion);  //性格を格納するpersonality
@@ -133,7 +133,7 @@ let personality = "";
                 //ここで乱数　1~countまでの乱数を生成
                 var random = Math.floor(Math.random() * count) + 1;
 
-                console.log(random);
+                //console.log(random);
 
                 if(random === 1) {
                     return personality;
